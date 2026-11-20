@@ -12,6 +12,7 @@ using FinancialTransactions.Infrastructure.Options;
 using FinancialTransactions.Infrastructure.Outbox;
 using FinancialTransactions.Infrastructure.Persistence;
 using FinancialTransactions.Infrastructure.Persistence.Seeding;
+using FinancialTransactions.Application.Reports.Queries;
 using FinancialTransactions.Application.Transactions.Queries;
 using FinancialTransactions.Infrastructure.Queries;
 using FinancialTransactions.Infrastructure.Repositories;
@@ -66,6 +67,7 @@ public static class DependencyInjection
         services.AddScoped<ICustomerQueries, CustomerQueries>();
         services.AddScoped<IAuditLogQueries, AuditLogQueries>();
         services.AddScoped<ITransactionQueries, TransactionQueries>();
+        services.AddScoped<IReportQueries, ReportQueries>();
         services.AddScoped<DatabaseInitializer>();
 
         return services;
