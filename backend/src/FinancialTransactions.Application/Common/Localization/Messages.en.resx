@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="VALIDATION_ERROR" xml:space="preserve">
+    <value>The submitted information is invalid</value>
+  </data>
+  <data name="NOT_FOUND" xml:space="preserve">
+    <value>The requested resource was not found</value>
+  </data>
+  <data name="UNAUTHORIZED" xml:space="preserve">
+    <value>You must sign in to perform this action</value>
+  </data>
+  <data name="FORBIDDEN" xml:space="preserve">
+    <value>You are not allowed to perform this action</value>
+  </data>
+  <data name="TOO_MANY_REQUESTS" xml:space="preserve">
+    <value>Too many requests, please wait a moment</value>
+  </data>
+  <data name="INTERNAL_ERROR" xml:space="preserve">
+    <value>An unexpected error occurred</value>
+  </data>
+  <data name="CUSTOMER_NOT_FOUND" xml:space="preserve">
+    <value>Customer not found</value>
+  </data>
+  <data name="ACCOUNT_NOT_FOUND" xml:space="preserve">
+    <value>Account not found</value>
+  </data>
+  <data name="ACCOUNT_INACTIVE" xml:space="preserve">
+    <value>The account is not active</value>
+  </data>
+  <data name="INSUFFICIENT_BALANCE" xml:space="preserve">
+    <value>Insufficient balance</value>
+  </data>
+  <data name="SAME_ACCOUNT_TRANSFER" xml:space="preserve">
+    <value>You cannot transfer to the same account</value>
+  </data>
+  <data name="AMOUNT_LIMIT_EXCEEDED" xml:space="preserve">
+    <value>The amount exceeds the transaction limit</value>
+  </data>
+  <data name="DUPLICATE_CUSTOMER" xml:space="preserve">
+    <value>A customer with this national ID or email already exists</value>
+  </data>
+  <data name="IDEMPOTENCY_CONFLICT" xml:space="preserve">
+    <value>This idempotency key was used with a different request</value>
+  </data>
+</root>

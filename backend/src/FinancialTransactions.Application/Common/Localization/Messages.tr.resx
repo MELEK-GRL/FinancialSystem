@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="VALIDATION_ERROR" xml:space="preserve">
+    <value>Gönderilen bilgiler geçersiz</value>
+  </data>
+  <data name="NOT_FOUND" xml:space="preserve">
+    <value>Aradığınız kayıt bulunamadı</value>
+  </data>
+  <data name="UNAUTHORIZED" xml:space="preserve">
+    <value>Bu işlem için giriş yapmalısınız</value>
+  </data>
+  <data name="FORBIDDEN" xml:space="preserve">
+    <value>Bu işlem için yetkiniz yok</value>
+  </data>
+  <data name="TOO_MANY_REQUESTS" xml:space="preserve">
+    <value>Çok fazla istek gönderildi, lütfen biraz bekleyin</value>
+  </data>
+  <data name="INTERNAL_ERROR" xml:space="preserve">
+    <value>Beklenmeyen bir hata oluştu</value>
+  </data>
+  <data name="CUSTOMER_NOT_FOUND" xml:space="preserve">
+    <value>Müşteri bulunamadı</value>
+  </data>
+  <data name="ACCOUNT_NOT_FOUND" xml:space="preserve">
+    <value>Hesap bulunamadı</value>
+  </data>
+  <data name="ACCOUNT_INACTIVE" xml:space="preserve">
+    <value>Hesap aktif değil</value>
+  </data>
+  <data name="INSUFFICIENT_BALANCE" xml:space="preserve">
+    <value>Yetersiz bakiye</value>
+  </data>
+  <data name="SAME_ACCOUNT_TRANSFER" xml:space="preserve">
+    <value>Aynı hesaba transfer yapılamaz</value>
+  </data>
+  <data name="AMOUNT_LIMIT_EXCEEDED" xml:space="preserve">
+    <value>İşlem tutarı limiti aşıyor</value>
+  </data>
+  <data name="DUPLICATE_CUSTOMER" xml:space="preserve">
+    <value>Bu TCKN veya e-posta ile kayıtlı bir müşteri var</value>
+  </data>
+  <data name="IDEMPOTENCY_CONFLICT" xml:space="preserve">
+    <value>Bu işlem anahtarı farklı bir istekle kullanılmış</value>
+  </data>
+</root>

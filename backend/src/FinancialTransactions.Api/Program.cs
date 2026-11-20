@@ -1,3 +1,4 @@
+using FinancialTransactions.Api.ErrorHandling;
 using FinancialTransactions.Api.Middleware;
 using FinancialTransactions.Application;
 using FinancialTransactions.Infrastructure;
@@ -22,6 +23,9 @@ builder.Services.AddHttpLogging(options =>
     options.CombineLogs = true;
 });
 
+builder.Services.AddLocalization();
+builder.Services.AddApiProblemDetails();
+
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 
@@ -31,7 +35,13 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 app.UseMiddleware<CorrelationIdMiddleware>();
+app.UseRequestLocalization(options => options
+    .SetDefaultCulture("tr")
+    .AddSupportedCultures("tr", "en")
+    .AddSupportedUICultures("tr", "en"));
 app.UseHttpLogging();
+app.UseExceptionHandler();
+app.UseStatusCodePages();
 
 if (app.Environment.IsDevelopment())
 {
