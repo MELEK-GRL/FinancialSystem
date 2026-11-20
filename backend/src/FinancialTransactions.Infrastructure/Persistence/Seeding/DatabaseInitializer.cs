@@ -1,5 +1,7 @@
+using FinancialTransactions.Application.Accounts;
 using FinancialTransactions.Application.Common.Interfaces;
 using FinancialTransactions.Application.Users;
+using FinancialTransactions.Domain.Accounts;
 using FinancialTransactions.Domain.Users;
 using FinancialTransactions.Infrastructure.Options;
 using MediatR;
@@ -12,6 +14,7 @@ namespace FinancialTransactions.Infrastructure.Persistence.Seeding;
 public sealed class DatabaseInitializer(
     AppDbContext dbContext,
     IUserRepository users,
+    IAccountRepository accounts,
     IPasswordHasher passwordHasher,
     IUnitOfWork unitOfWork,
     ISender sender,
@@ -60,15 +63,37 @@ public sealed class DatabaseInitializer(
 
     private async Task SeedDemoCustomersAsync(CancellationToken cancellationToken)
     {
-        foreach (var customer in DemoCustomers.All)
+        foreach (var demo in DemoCustomers.All)
         {
-            var exists = await dbContext.Customers.AnyAsync(c => c.NationalId == customer.NationalId, cancellationToken);
+            var customerId = await dbContext.Customers
+                .Where(customer => customer.NationalId == demo.Registration.NationalId)
+                .Select(customer => (Guid?)customer.Id)
+                .SingleOrDefaultAsync(cancellationToken)
+                ?? (await sender.Send(demo.Registration, cancellationToken)).CustomerId;
 
-            if (!exists)
-            {
-                await sender.Send(customer, cancellationToken);
-                logger.LogInformation("Demo customer created");
-            }
+            await SeedDemoAccountsAsync(customerId, demo.AccountCount, cancellationToken);
         }
+
+        logger.LogInformation("Demo customers and accounts are ready");
+    }
+
+    private async Task SeedDemoAccountsAsync(Guid customerId, int accountCount, CancellationToken cancellationToken)
+    {
+        var existing = await dbContext.Accounts.CountAsync(account => account.CustomerId == customerId, cancellationToken);
+
+        if (existing >= accountCount)
+        {
+            return;
+        }
+
+        await unitOfWork.ExecuteInTransactionAsync(_ =>
+        {
+            for (var index = existing; index < accountCount; index++)
+            {
+                accounts.Add(Account.Open(customerId));
+            }
+
+            return Task.CompletedTask;
+        }, cancellationToken);
     }
 }

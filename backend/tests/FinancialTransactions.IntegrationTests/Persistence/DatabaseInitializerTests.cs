@@ -39,7 +39,7 @@ public class DatabaseInitializerTests : IClassFixture<ApiFactory>
         var client = factory.CreateClient();
 
         var admin = await LoginAsync(client, AdminEmail, AdminPassword);
-        var demoCustomer = await LoginAsync(client, DemoCustomers.All[0].Email, DemoCustomers.Password);
+        var demoCustomer = await LoginAsync(client, DemoCustomers.All[0].Registration.Email, DemoCustomers.Password);
 
         Assert.Equal(AppRoles.Admin, admin.GetProperty("role").GetString());
         Assert.Equal(AppRoles.Customer, demoCustomer.GetProperty("role").GetString());
@@ -52,10 +52,16 @@ public class DatabaseInitializerTests : IClassFixture<ApiFactory>
         await InitializeAsync();
 
         await using var dbContext = database.CreateDbContext();
-        var demoNationalIds = DemoCustomers.All.Select(customer => customer.NationalId).ToList();
+        var demoNationalIds = DemoCustomers.All.Select(demo => demo.Registration.NationalId).ToList();
+        var demoCustomerIds = await dbContext.Customers
+            .Where(customer => demoNationalIds.Contains(customer.NationalId))
+            .Select(customer => customer.Id)
+            .ToListAsync();
 
         Assert.Equal(1, await dbContext.Users.CountAsync(user => user.Role == UserRole.Admin));
-        Assert.Equal(DemoCustomers.All.Count, await dbContext.Customers.CountAsync(customer => demoNationalIds.Contains(customer.NationalId)));
+        Assert.Equal(DemoCustomers.All.Count, demoCustomerIds.Count);
+        Assert.Equal(DemoCustomers.All.Sum(demo => demo.AccountCount), await dbContext.Accounts.CountAsync(account => demoCustomerIds.Contains(account.CustomerId)));
+        Assert.True(await dbContext.Accounts.Where(account => demoCustomerIds.Contains(account.CustomerId)).AllAsync(account => account.Balance == 0m));
     }
 
     private async Task InitializeAsync()
