@@ -69,4 +69,7 @@
   <data name="PASSWORD_WEAK" xml:space="preserve">
     <value>Şifre en az bir harf ve bir rakam içermeli</value>
   </data>
+  <data name="INVALID_CREDENTIALS" xml:space="preserve">
+    <value>E-posta veya şifre hatalı</value>
+  </data>
 </root>

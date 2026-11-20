@@ -1,12 +1,15 @@
+using FinancialTransactions.Application.Auth.Queries.GetMe;
 using FinancialTransactions.Application.Common.Interfaces;
 using FinancialTransactions.Application.Customers;
 using FinancialTransactions.Application.Users;
 using FinancialTransactions.Infrastructure.Options;
 using FinancialTransactions.Infrastructure.Persistence;
+using FinancialTransactions.Infrastructure.Queries;
 using FinancialTransactions.Infrastructure.Repositories;
 using FinancialTransactions.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace FinancialTransactions.Infrastructure;
@@ -40,6 +43,9 @@ public static class DependencyInjection
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddSingleton<IPasswordHasher, BcryptPasswordHasher>();
+        services.TryAddSingleton(TimeProvider.System);
+        services.AddSingleton<IJwtTokenService, JwtTokenService>();
+        services.AddScoped<IUserQueries, UserQueries>();
 
         return services;
     }

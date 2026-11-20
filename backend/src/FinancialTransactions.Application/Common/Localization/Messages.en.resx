@@ -69,4 +69,7 @@
   <data name="PASSWORD_WEAK" xml:space="preserve">
     <value>Password must contain at least one letter and one digit</value>
   </data>
+  <data name="INVALID_CREDENTIALS" xml:space="preserve">
+    <value>Email or password is incorrect</value>
+  </data>
 </root>

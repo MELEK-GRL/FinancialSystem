@@ -3,6 +3,7 @@ using FinancialTransactions.Api.ErrorHandling;
 using FinancialTransactions.Api.Health;
 using FinancialTransactions.Api.Middleware;
 using FinancialTransactions.Api.OpenApi;
+using FinancialTransactions.Api.Security;
 using FinancialTransactions.Api.Services;
 using FinancialTransactions.Application;
 using FinancialTransactions.Application.Common.Interfaces;
@@ -36,6 +37,7 @@ builder.Services.AddInfrastructure();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
+builder.Services.AddApiAuthentication();
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddControllers()
@@ -56,6 +58,7 @@ app.UseStatusCodePages();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapApiHealthChecks();

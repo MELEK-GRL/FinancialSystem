@@ -10,5 +10,8 @@ public sealed class UserRepository(AppDbContext dbContext) : IUserRepository
     public Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken) =>
         dbContext.Users.AnyAsync(user => user.Email == email, cancellationToken);
 
+    public Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken) =>
+        dbContext.Users.SingleOrDefaultAsync(user => user.Email == email, cancellationToken);
+
     public void Add(User user) => dbContext.Users.Add(user);
 }
