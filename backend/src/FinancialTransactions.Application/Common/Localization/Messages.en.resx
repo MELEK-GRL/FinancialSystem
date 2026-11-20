@@ -162,4 +162,7 @@
   <data name="Field.Sort" xml:space="preserve">
     <value>Sort</value>
   </data>
+  <data name="PASSWORD_TOO_LONG" xml:space="preserve">
+    <value>Password is too long: at most 72 bytes (non-English letters count as 2 bytes)</value>
+  </data>
 </root>

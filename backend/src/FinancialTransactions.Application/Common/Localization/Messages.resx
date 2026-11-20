@@ -162,4 +162,7 @@
   <data name="Field.Sort" xml:space="preserve">
     <value>Sıralama</value>
   </data>
+  <data name="PASSWORD_TOO_LONG" xml:space="preserve">
+    <value>Şifre çok uzun: en fazla 72 byte olabilir (Türkçe harfler 2 byte sayılır)</value>
+  </data>
 </root>

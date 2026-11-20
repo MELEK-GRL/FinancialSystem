@@ -1,3 +1,4 @@
+using System.Text;
 using FinancialTransactions.Application.Common.Localization;
 using FinancialTransactions.Domain.Customers;
 using FluentValidation;
@@ -10,7 +11,7 @@ public static class CustomerRules
     public const int NameMaxLength = 50;
     public const int EmailMaxLength = 254;
     public const int PasswordMinLength = 8;
-    public const int PasswordMaxLength = 72;
+    public const int PasswordMaxBytes = 72;
 
     public static IRuleBuilderOptions<T, string> MustBeValidName<T>(this IRuleBuilder<T, string> rule) =>
         rule.NotEmpty().Length(NameMinLength, NameMaxLength);
@@ -27,7 +28,9 @@ public static class CustomerRules
     public static IRuleBuilderOptions<T, string> MustBeStrongPassword<T>(this IRuleBuilder<T, string> rule) =>
         rule
             .NotEmpty()
-            .Length(PasswordMinLength, PasswordMaxLength)
+            .MinimumLength(PasswordMinLength)
+            .Must(password => Encoding.UTF8.GetByteCount(password) <= PasswordMaxBytes)
+            .WithMessage(_ => Messages.Get(Messages.PasswordTooLong))
             .Matches("[A-Za-z]").WithMessage(_ => Messages.Get(Messages.PasswordWeak))
             .Matches("[0-9]").WithMessage(_ => Messages.Get(Messages.PasswordWeak));
 }

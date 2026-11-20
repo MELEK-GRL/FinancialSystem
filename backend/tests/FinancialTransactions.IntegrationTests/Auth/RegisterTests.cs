@@ -71,6 +71,16 @@ public class RegisterTests(ApiFactory factory) : IClassFixture<ApiFactory>
     }
 
     [Fact]
+    public async Task Register_WithPasswordOver72Bytes_Returns400()
+    {
+        var response = await client.PostAsJsonAsync(Url, NewRequest() with { Password = new string('ş', 40) + "Gizli1" });
+        var errors = (await response.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("errors");
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.StartsWith("Şifre çok uzun", errors.GetProperty("password")[0].GetString());
+    }
+
+    [Fact]
     public async Task Register_WithEmptyBody_ReturnsOneLocalizedErrorPerField()
     {
         var response = await client.PostAsync(Url, JsonContent.Create(new { }));

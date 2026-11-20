@@ -10,6 +10,7 @@ public sealed class Messages
     public const string NationalIdInvalid = "NATIONAL_ID_INVALID";
     public const string PhoneInvalid = "PHONE_INVALID";
     public const string PasswordWeak = "PASSWORD_WEAK";
+    public const string PasswordTooLong = "PASSWORD_TOO_LONG";
     public const string InvalidValue = "INVALID_VALUE";
     public const string AccountNoInvalid = "ACCOUNT_NO_INVALID";
     public const string IdempotencyKeyInvalid = "IDEMPOTENCY_KEY_INVALID";

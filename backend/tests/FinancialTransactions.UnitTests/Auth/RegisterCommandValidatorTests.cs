@@ -38,6 +38,25 @@ public class RegisterCommandValidatorTests
         Assert.Contains(result.Errors, error => error.PropertyName == field);
     }
 
+    [Fact]
+    public void PasswordUpTo72Bytes_Passes()
+    {
+        Assert.True(validator.Validate(ValidCommand() with { Password = new string('a', 71) + "1" }).IsValid);
+        Assert.True(validator.Validate(ValidCommand() with { Password = new string('ş', 34) + "Ab1" }).IsValid);
+    }
+
+    [Theory]
+    [InlineData(73, 'a')]
+    [InlineData(40, 'ş')]
+    public void PasswordOver72Bytes_FailsWithClearMessage(int repeat, char letter)
+    {
+        var result = validator.Validate(ValidCommand() with { Password = new string(letter, repeat) + "Gizli1" });
+
+        var error = Assert.Single(result.Errors);
+        Assert.Equal(nameof(RegisterCommand.Password), error.PropertyName);
+        Assert.StartsWith("Şifre çok uzun", error.ErrorMessage);
+    }
+
     private static RegisterCommand ValidCommand() =>
         new("Ayşe", "Yılmaz", "12345678950", "ayse@example.com", "5321234567", "Sifre1234");
 }
