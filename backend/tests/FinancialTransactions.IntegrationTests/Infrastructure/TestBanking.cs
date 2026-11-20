@@ -6,10 +6,14 @@ namespace FinancialTransactions.IntegrationTests.Infrastructure;
 
 public static class TestBanking
 {
-    public static async Task<Guid> OpenAccountAsync(this TestCustomer customer)
+    public static async Task<Guid> OpenAccountAsync(this TestCustomer customer) =>
+        (await customer.OpenAccountWithNumberAsync()).Id;
+
+    public static async Task<(Guid Id, string AccountNo)> OpenAccountWithNumberAsync(this TestCustomer customer)
     {
         var response = await customer.Client.PostAsync("/api/v1/accounts", null);
-        return (await response.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("id").GetGuid();
+        var account = await response.Content.ReadFromJsonAsync<JsonElement>();
+        return (account.GetProperty("id").GetGuid(), account.GetProperty("accountNo").GetString()!);
     }
 
     public static async Task DepositAsync(this TestCustomer customer, Guid accountId, decimal amount)

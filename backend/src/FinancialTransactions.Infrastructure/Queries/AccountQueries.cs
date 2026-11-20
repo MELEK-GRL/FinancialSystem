@@ -19,6 +19,10 @@ public sealed class AccountQueries(AppDbContext dbContext) : IAccountQueries
         Project(dbContext.Accounts.AsNoTracking().Where(account => account.Id == accountId))
             .SingleOrDefaultAsync(cancellationToken);
 
+    public Task<AccountDto?> GetByAccountNoAsync(string accountNo, CancellationToken cancellationToken) =>
+        Project(dbContext.Accounts.AsNoTracking().Where(account => account.AccountNo == accountNo))
+            .SingleOrDefaultAsync(cancellationToken);
+
     public Task<AccountOwnerRow?> GetOwnerByAccountNoAsync(string accountNo, CancellationToken cancellationToken) =>
         (from account in dbContext.Accounts.AsNoTracking()
          join customer in dbContext.Customers.AsNoTracking() on account.CustomerId equals customer.Id

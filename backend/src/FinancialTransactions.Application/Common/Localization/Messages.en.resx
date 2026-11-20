@@ -111,4 +111,7 @@
   <data name="Field.AccountNo" xml:space="preserve">
     <value>Account number</value>
   </data>
+  <data name="Field.TargetAccountNo" xml:space="preserve">
+    <value>Recipient account number</value>
+  </data>
 </root>

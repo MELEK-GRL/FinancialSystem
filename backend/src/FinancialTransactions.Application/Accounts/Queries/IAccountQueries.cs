@@ -6,5 +6,7 @@ public interface IAccountQueries
 
     Task<AccountDto?> GetByIdAsync(Guid accountId, CancellationToken cancellationToken);
 
+    Task<AccountDto?> GetByAccountNoAsync(string accountNo, CancellationToken cancellationToken);
+
     Task<AccountOwnerRow?> GetOwnerByAccountNoAsync(string accountNo, CancellationToken cancellationToken);
 }
