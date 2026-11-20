@@ -10,6 +10,9 @@ public sealed class CustomerRepository(AppDbContext dbContext) : ICustomerReposi
     public Task<bool> ExistsAsync(string nationalId, string email, CancellationToken cancellationToken) =>
         dbContext.Customers.AnyAsync(customer => customer.NationalId == nationalId || customer.Email == email, cancellationToken);
 
+    public Task<bool> EmailTakenByOtherAsync(string email, Guid customerId, CancellationToken cancellationToken) =>
+        dbContext.Customers.AnyAsync(customer => customer.Email == email && customer.Id != customerId, cancellationToken);
+
     public Task<Customer?> GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
         dbContext.Customers.SingleOrDefaultAsync(customer => customer.Id == id, cancellationToken);
 

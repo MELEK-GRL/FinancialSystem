@@ -3,6 +3,7 @@ using FinancialTransactions.Application.Accounts.Queries;
 using FinancialTransactions.Application.Auth.Queries.GetMe;
 using FinancialTransactions.Application.Common.Interfaces;
 using FinancialTransactions.Application.Customers;
+using FinancialTransactions.Application.Customers.Queries;
 using FinancialTransactions.Application.Users;
 using FinancialTransactions.Infrastructure.Options;
 using FinancialTransactions.Infrastructure.Persistence;
@@ -53,6 +54,7 @@ public static class DependencyInjection
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IUserQueries, UserQueries>();
         services.AddScoped<IAccountQueries, AccountQueries>();
+        services.AddScoped<ICustomerQueries, CustomerQueries>();
         services.AddScoped<DatabaseInitializer>();
 
         return services;

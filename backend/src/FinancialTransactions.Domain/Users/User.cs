@@ -36,4 +36,6 @@ public sealed class User
             PasswordHash = passwordHash,
             Role = UserRole.Admin,
         };
+
+    public void ChangeEmail(string email) => Email = email.Trim().ToLowerInvariant();
 }
