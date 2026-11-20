@@ -1,5 +1,4 @@
 using FinancialTransactions.Application.Common.Interfaces;
-using FinancialTransactions.Application.Common.Security;
 using FinancialTransactions.Domain.Transactions;
 using MediatR;
 
@@ -15,11 +14,25 @@ public sealed class GetTransactionQueryHandler(ICurrentUser currentUser, ITransa
         var referenceNo = query.ReferenceNo.Trim().ToUpperInvariant();
         var found = await transactionQueries.GetByReferenceNoAsync(referenceNo, cancellationToken);
 
-        if (found is null || !found.InvolvedCustomerIds.Any(currentUser.CanAccessCustomer))
+        if (found is null || !CanSee(found))
         {
             throw new TransactionNotFoundException();
         }
 
         return found.Transaction;
+    }
+
+    private bool CanSee(TransactionWithOwners found)
+    {
+        if (currentUser.IsAdmin)
+        {
+            return true;
+        }
+
+        var customerId = currentUser.CustomerId;
+
+        return customerId == found.InitiatedByCustomerId
+            || customerId == found.SourceCustomerId
+            || (customerId == found.TargetCustomerId && found.Transaction.Status == TransactionStatus.Success);
     }
 }

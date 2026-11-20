@@ -1,6 +1,7 @@
 using FinancialTransactions.Application.Common.Paging;
 using FinancialTransactions.Application.Transactions;
 using FinancialTransactions.Application.Transactions.Queries;
+using FinancialTransactions.Domain.Transactions;
 using FinancialTransactions.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,8 +40,11 @@ public sealed class TransactionQueries(AppDbContext dbContext) : ITransactionQue
         PageRequest page,
         CancellationToken cancellationToken)
     {
+        var accountOwner = dbContext.Accounts.Where(account => account.Id == accountId).Select(account => account.CustomerId);
         var transactions = dbContext.Transactions.AsNoTracking()
-            .Where(transaction => transaction.SourceAccountId == accountId || transaction.TargetAccountId == accountId);
+            .Where(transaction => transaction.SourceAccountId == accountId
+                || (transaction.TargetAccountId == accountId
+                    && (transaction.Status == TransactionStatus.Success || accountOwner.Contains(transaction.InitiatedByCustomerId))));
 
         if (filter.CreatedFrom is { } createdFrom)
         {

@@ -18,8 +18,4 @@ public sealed record TransactionWithOwners(
     TransactionDto Transaction,
     Guid InitiatedByCustomerId,
     Guid? SourceCustomerId,
-    Guid? TargetCustomerId)
-{
-    public IEnumerable<Guid> InvolvedCustomerIds =>
-        new[] { InitiatedByCustomerId, SourceCustomerId, TargetCustomerId }.OfType<Guid>();
-}
+    Guid? TargetCustomerId);

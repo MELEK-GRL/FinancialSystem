@@ -18,9 +18,10 @@ public class GetTransactionQueryHandlerTests
 
     public GetTransactionQueryHandlerTests()
     {
-        var transaction = TransactionDto.From(Transaction.CreateTransfer(ReferenceNo, Guid.NewGuid(), Guid.NewGuid(), 10m, null, Initiator, null));
+        var transfer = Transaction.CreateTransfer(ReferenceNo, Guid.NewGuid(), Guid.NewGuid(), 10m, null, Initiator, null);
+        transfer.MarkSucceeded();
         transactionQueries.GetByReferenceNoAsync(ReferenceNo, Arg.Any<CancellationToken>())
-            .Returns(new TransactionWithOwners(transaction, Initiator, Initiator, Receiver));
+            .Returns(new TransactionWithOwners(TransactionDto.From(transfer), Initiator, Initiator, Receiver));
         handler = new GetTransactionQueryHandler(currentUser, transactionQueries);
     }
 
@@ -48,5 +49,20 @@ public class GetTransactionQueryHandlerTests
         currentUser.CustomerId.Returns(Guid.NewGuid());
 
         await Assert.ThrowsAsync<TransactionNotFoundException>(() => handler.Handle(new GetTransactionQuery(ReferenceNo), CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task Receiver_CannotSeeFailedTransfer_ButSenderCan()
+    {
+        var failed = Transaction.CreateTransfer("TX2026112000000002", Guid.NewGuid(), Guid.NewGuid(), 10m, null, Initiator, null);
+        failed.MarkFailed("INSUFFICIENT_BALANCE");
+        transactionQueries.GetByReferenceNoAsync(failed.ReferenceNo, Arg.Any<CancellationToken>())
+            .Returns(new TransactionWithOwners(TransactionDto.From(failed), Initiator, Initiator, Receiver));
+
+        currentUser.CustomerId.Returns(Receiver);
+        await Assert.ThrowsAsync<TransactionNotFoundException>(() => handler.Handle(new GetTransactionQuery(failed.ReferenceNo), CancellationToken.None));
+
+        currentUser.CustomerId.Returns(Initiator);
+        Assert.Equal("INSUFFICIENT_BALANCE", (await handler.Handle(new GetTransactionQuery(failed.ReferenceNo), CancellationToken.None)).FailureReason);
     }
 }
