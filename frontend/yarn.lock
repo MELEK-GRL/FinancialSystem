@@ -278,6 +278,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@remix-run/route-pattern@npm:^0.22.1":
+  version: 0.22.1
+  resolution: "@remix-run/route-pattern@npm:0.22.1"
+  checksum: a1c2237dedf5fccc2d64ad3b8919ae262cd01446e9bb0f2c041c8e952b7c0c8aaaf67468bc56818d269569bc18b8e915b32bd014bdeda051e011caf1d079046f
+  languageName: node
+  linkType: hard
+
 "@rolldown/binding-android-arm-eabi@npm:1.2.19":
   version: 1.2.19
   resolution: "@rolldown/binding-android-arm-eabi@npm:1.2.19"
@@ -776,6 +783,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"clsx@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "clsx@npm:2.1.1"
+  checksum: acd3e1ab9d8a433ecb3cc2f6a05ab95fe50b4a3cfc5ba47abb6cbf3754585fcb87b84e90c822a1f256c4198e3b41c7f6c391577ffc8678ad587fc0976b24fd57
+  languageName: node
+  linkType: hard
+
+"cookie-es@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "cookie-es@npm:3.1.1"
+  checksum: 2b196bf591a177a3602c26eb5a7253b6e08176262158d02c7dedb30903b7ffda83943b9099c25c739acedfaed143add2a39209522712b59e5b447e28c7c21469
+  languageName: node
+  linkType: hard
+
 "csstype@npm:^3.2.2":
   version: 3.2.4
   resolution: "csstype@npm:3.2.4"
@@ -835,10 +856,14 @@ __metadata:
     "@types/react": ^19.3.0
     "@types/react-dom": ^19.3.0
     "@vitejs/plugin-react": ^6.1.2
+    clsx: ^2.1.1
+    lucide-react: ^1.77.0
     oxlint: ^1.90.0
     prettier: ^3.10.1
     react: ^19.3.1
     react-dom: ^19.3.1
+    react-router: ^8.5.2
+    sonner: ^2.0.8
     tailwindcss: ^4.3.5
     typescript: ~7.0.2
     vite: ^8.3.6
@@ -1004,6 +1029,19 @@ __metadata:
     lightningcss-win32-x64-msvc:
       optional: true
   checksum: abc78c1ce931b10da1168cfbe0a3539bcc164fca23f9fa909d06546ea6f6f874ec5008644b7031aebab061be276620e0821983745ae586931b4f563942a64da3
+  languageName: node
+  linkType: hard
+
+"lucide-react@npm:^1.77.0":
+  version: 1.77.0
+  resolution: "lucide-react@npm:1.77.0"
+  peerDependencies:
+    "@types/react": "*"
+    react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 5bbd5efdbd00af0e8b2b1b9fdd48daee33d924274f41e9bdf730d25a28d4d873cc2faf833cf28b0805e0d20f0ba651217c48c2e4702c037ac466fa8f9e5c387d
   languageName: node
   linkType: hard
 
@@ -1200,6 +1238,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-router@npm:^8.5.2":
+  version: 8.5.2
+  resolution: "react-router@npm:8.5.2"
+  dependencies:
+    "@remix-run/route-pattern": ^0.22.1
+    cookie-es: ^3.1.1
+  peerDependencies:
+    "@types/react": ">=19.2.0"
+    "@types/react-dom": ">=19.2.0"
+    react: ">=19.2.7"
+    react-dom: ">=19.2.7"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    "@types/react-dom":
+      optional: true
+    react-dom:
+      optional: true
+  checksum: cf37c5b1e9e6aeb5993649670bda062ace142237f7df4db009ca054e089dac2aaaeac833ce1b7332e1d61d77c5d2899d7db67cf483292b834c6655d41900788c
+  languageName: node
+  linkType: hard
+
 "react@npm:^19.3.1":
   version: 19.3.1
   resolution: "react@npm:19.3.1"
@@ -1281,6 +1341,20 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: de2584488f915435406d8e4bafda2c2b80ad42493f5ca355f30867264e3a81dc501bd59a173f304f8f40d6fb9be48b95c2de483b945a4ef3544806e28955f03b
+  languageName: node
+  linkType: hard
+
+"sonner@npm:^2.0.8":
+  version: 2.0.8
+  resolution: "sonner@npm:2.0.8"
+  peerDependencies:
+    "@types/react": ^18.0.0 || ^19.0.0
+    react: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+    react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 494270b1c223728c4a6d4d19883854b0dc4122deb4f269dcce8268e496d184cb48862e3e9a0ead5c13de26dda01eda4da648f413022935d0949535386c1db748
   languageName: node
   linkType: hard
 

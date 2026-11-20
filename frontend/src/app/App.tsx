@@ -1,7 +1,13 @@
+import { Toaster } from 'sonner'
+import { Heading } from '@/shared/ui'
+
 export function App() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-neutral-50">
-      <h1 className="text-2xl font-semibold text-neutral-900">Finansal İşlem Sistemi</h1>
-    </main>
+    <>
+      <main className="flex min-h-screen items-center justify-center">
+        <Heading>Finansal İşlem Sistemi</Heading>
+      </main>
+      <Toaster position="top-right" closeButton />
+    </>
   )
 }
