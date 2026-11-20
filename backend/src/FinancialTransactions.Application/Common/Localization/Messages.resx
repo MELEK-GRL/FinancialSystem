@@ -129,4 +129,7 @@
   <data name="PROCESSING_ERROR" xml:space="preserve">
     <value>İşlem tamamlanamadı, para hareketi olmadı. Lütfen tekrar deneyin</value>
   </data>
+  <data name="TRANSACTION_NOT_FOUND" xml:space="preserve">
+    <value>İşlem bulunamadı</value>
+  </data>
 </root>

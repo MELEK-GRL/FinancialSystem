@@ -129,4 +129,7 @@
   <data name="PROCESSING_ERROR" xml:space="preserve">
     <value>The transaction could not be completed and no money was moved. Please try again</value>
   </data>
+  <data name="TRANSACTION_NOT_FOUND" xml:space="preserve">
+    <value>Transaction not found</value>
+  </data>
 </root>

@@ -14,6 +14,7 @@ public static class ErrorCodes
     public const string CustomerInactive = "CUSTOMER_INACTIVE";
     public const string AccountNotFound = "ACCOUNT_NOT_FOUND";
     public const string AccountInactive = "ACCOUNT_INACTIVE";
+    public const string TransactionNotFound = "TRANSACTION_NOT_FOUND";
     public const string InsufficientBalance = "INSUFFICIENT_BALANCE";
     public const string SameAccountTransfer = "SAME_ACCOUNT_TRANSFER";
     public const string AmountLimitExceeded = "AMOUNT_LIMIT_EXCEEDED";
