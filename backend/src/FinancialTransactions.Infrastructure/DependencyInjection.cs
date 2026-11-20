@@ -1,3 +1,4 @@
+using FinancialTransactions.Application.Common.Interfaces;
 using FinancialTransactions.Infrastructure.Options;
 using FinancialTransactions.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,8 @@ public static class DependencyInjection
                     .MigrationsHistoryTable("__ef_migrations_history"))
                 .UseSnakeCaseNamingConvention();
         });
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }

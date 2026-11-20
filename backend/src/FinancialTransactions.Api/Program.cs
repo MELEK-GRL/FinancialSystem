@@ -3,7 +3,9 @@ using FinancialTransactions.Api.ErrorHandling;
 using FinancialTransactions.Api.Health;
 using FinancialTransactions.Api.Middleware;
 using FinancialTransactions.Api.OpenApi;
+using FinancialTransactions.Api.Services;
 using FinancialTransactions.Application;
+using FinancialTransactions.Application.Common.Interfaces;
 using FinancialTransactions.Infrastructure;
 using Microsoft.AspNetCore.HttpLogging;
 
@@ -31,6 +33,9 @@ builder.Services.AddApiProblemDetails();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddControllers()
