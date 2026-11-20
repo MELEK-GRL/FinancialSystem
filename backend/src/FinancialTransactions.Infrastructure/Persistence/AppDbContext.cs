@@ -1,4 +1,5 @@
 using FinancialTransactions.Domain.Accounts;
+using FinancialTransactions.Domain.Audit;
 using FinancialTransactions.Domain.Customers;
 using FinancialTransactions.Domain.Users;
 using FinancialTransactions.Infrastructure.Persistence.Configurations;
@@ -13,6 +14,8 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<User> Users => Set<User>();
 
     public DbSet<Account> Accounts => Set<Account>();
+
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

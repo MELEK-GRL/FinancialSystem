@@ -98,6 +98,75 @@ namespace FinancialTransactions.Infrastructure.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FinancialTransactions.Domain.Audit.AuditLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("account_id");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)")
+                        .HasColumnName("action");
+
+                    b.Property<string>("CorrelationId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("correlation_id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<string>("NewStatus")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
+                        .HasColumnName("new_status");
+
+                    b.Property<string>("OldStatus")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
+                        .HasColumnName("old_status");
+
+                    b.Property<Guid>("PerformedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("performed_by");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("reason");
+
+                    b.HasKey("Id")
+                        .HasName("pk_audit_logs");
+
+                    b.HasIndex("PerformedBy")
+                        .HasDatabaseName("ix_audit_logs_performed_by");
+
+                    b.HasIndex("AccountId", "CreatedAt")
+                        .IsDescending(false, true)
+                        .HasDatabaseName("ix_audit_logs_account_id_created_at");
+
+                    b.ToTable("audit_logs", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_audit_logs_action", "action IN ('AccountActivated', 'AccountDeactivated')");
+
+                            t.HasCheckConstraint("ck_audit_logs_status_changed", "old_status <> new_status");
+                        });
+                });
+
             modelBuilder.Entity("FinancialTransactions.Domain.Customers.Customer", b =>
                 {
                     b.Property<Guid>("Id")
@@ -246,6 +315,23 @@ namespace FinancialTransactions.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_accounts_customers_customer_id");
+                });
+
+            modelBuilder.Entity("FinancialTransactions.Domain.Audit.AuditLog", b =>
+                {
+                    b.HasOne("FinancialTransactions.Domain.Accounts.Account", null)
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_audit_logs_accounts_account_id");
+
+                    b.HasOne("FinancialTransactions.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("PerformedBy")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_audit_logs_users_performed_by");
                 });
 
             modelBuilder.Entity("FinancialTransactions.Domain.Users.User", b =>
