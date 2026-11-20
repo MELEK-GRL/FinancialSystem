@@ -60,4 +60,13 @@
   <data name="AMOUNT_TOO_MANY_DECIMALS" xml:space="preserve">
     <value>Tutar en fazla 2 ondalık basamak içerebilir</value>
   </data>
+  <data name="NATIONAL_ID_INVALID" xml:space="preserve">
+    <value>Geçerli bir T.C. kimlik numarası girin</value>
+  </data>
+  <data name="PHONE_INVALID" xml:space="preserve">
+    <value>Telefon 5XXXXXXXXX biçiminde olmalı</value>
+  </data>
+  <data name="PASSWORD_WEAK" xml:space="preserve">
+    <value>Şifre en az bir harf ve bir rakam içermeli</value>
+  </data>
 </root>

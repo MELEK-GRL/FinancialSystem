@@ -60,4 +60,13 @@
   <data name="AMOUNT_TOO_MANY_DECIMALS" xml:space="preserve">
     <value>Amount can have at most 2 decimal places</value>
   </data>
+  <data name="NATIONAL_ID_INVALID" xml:space="preserve">
+    <value>Enter a valid Turkish national ID number</value>
+  </data>
+  <data name="PHONE_INVALID" xml:space="preserve">
+    <value>Phone must be in 5XXXXXXXXX format</value>
+  </data>
+  <data name="PASSWORD_WEAK" xml:space="preserve">
+    <value>Password must contain at least one letter and one digit</value>
+  </data>
 </root>

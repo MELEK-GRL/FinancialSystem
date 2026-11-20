@@ -1,4 +1,7 @@
+using FinancialTransactions.Application.Common.Exceptions;
 using FinancialTransactions.Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace FinancialTransactions.Infrastructure.Persistence;
 
@@ -21,6 +24,11 @@ public sealed class UnitOfWork(AppDbContext dbContext) : IUnitOfWork
             await dbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
             return result;
+        }
+        catch (DbUpdateException exception) when (exception.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation } postgres)
+        {
+            dbContext.ChangeTracker.Clear();
+            throw new UniqueConstraintViolationException(postgres.ConstraintName, exception);
         }
         catch
         {
