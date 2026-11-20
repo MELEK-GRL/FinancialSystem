@@ -37,29 +37,7 @@ public sealed class ReportQueries(AppDbContext dbContext) : IReportQueries
         };
 
         var query = customerId is { } customer
-            ? dbContext.Database.SqlQuery<PeriodTotals>($"""
-                WITH flows AS (
-                    SELECT
-                        t.created_at,
-                        CASE WHEN target.customer_id = {customer} AND source.customer_id IS DISTINCT FROM {customer} THEN t.amount ELSE 0 END AS inflow,
-                        CASE WHEN source.customer_id = {customer} AND target.customer_id IS DISTINCT FROM {customer} THEN t.amount ELSE 0 END AS outflow
-                    FROM transactions t
-                    LEFT JOIN accounts source ON source.id = t.source_account_id
-                    LEFT JOIN accounts target ON target.id = t.target_account_id
-                    WHERE t.status = 'Success'
-                      AND (source.customer_id = {customer} OR target.customer_id = {customer})
-                      AND ({createdFrom}::timestamptz IS NULL OR t.created_at >= {createdFrom})
-                      AND ({createdBefore}::timestamptz IS NULL OR t.created_at < {createdBefore})
-                )
-                SELECT
-                    date_trunc({unit}, created_at AT TIME ZONE 'Europe/Istanbul')::date AS period_start,
-                    SUM(inflow) AS total_inflow,
-                    SUM(outflow) AS total_outflow,
-                    COUNT(*) AS transaction_count
-                FROM flows
-                WHERE inflow > 0 OR outflow > 0
-                GROUP BY 1
-                """)
+            ? CustomerPeriodicQuery(unit, createdFrom, createdBefore, await OwnAccountIdsAsync(customer, cancellationToken))
             : dbContext.Database.SqlQuery<PeriodTotals>($"""
                 SELECT
                     date_trunc({unit}, created_at AT TIME ZONE 'Europe/Istanbul')::date AS period_start,
@@ -140,4 +118,39 @@ public sealed class ReportQueries(AppDbContext dbContext) : IReportQueries
             .OrderByDescending(reason => reason.Count)
             .ThenBy(reason => reason.Reason)
             .ToListAsync(cancellationToken);
+
+    private IQueryable<PeriodTotals> CustomerPeriodicQuery(
+        string unit,
+        DateTimeOffset? createdFrom,
+        DateTimeOffset? createdBefore,
+        Guid[] ownAccounts) =>
+        dbContext.Database.SqlQuery<PeriodTotals>($"""
+            WITH flows AS (
+                SELECT
+                    created_at,
+                    CASE WHEN target_account_id = ANY({ownAccounts}) AND NOT COALESCE(source_account_id = ANY({ownAccounts}), false)
+                         THEN amount ELSE 0 END AS inflow,
+                    CASE WHEN source_account_id = ANY({ownAccounts}) AND NOT COALESCE(target_account_id = ANY({ownAccounts}), false)
+                         THEN amount ELSE 0 END AS outflow
+                FROM transactions
+                WHERE status = 'Success'
+                  AND (source_account_id = ANY({ownAccounts}) OR target_account_id = ANY({ownAccounts}))
+                  AND ({createdFrom}::timestamptz IS NULL OR created_at >= {createdFrom})
+                  AND ({createdBefore}::timestamptz IS NULL OR created_at < {createdBefore})
+            )
+            SELECT
+                date_trunc({unit}, created_at AT TIME ZONE 'Europe/Istanbul')::date AS period_start,
+                SUM(inflow) AS total_inflow,
+                SUM(outflow) AS total_outflow,
+                COUNT(*) AS transaction_count
+            FROM flows
+            WHERE inflow > 0 OR outflow > 0
+            GROUP BY 1
+            """);
+
+    private Task<Guid[]> OwnAccountIdsAsync(Guid customerId, CancellationToken cancellationToken) =>
+        dbContext.Accounts
+            .Where(account => account.CustomerId == customerId)
+            .Select(account => account.Id)
+            .ToArrayAsync(cancellationToken);
 }

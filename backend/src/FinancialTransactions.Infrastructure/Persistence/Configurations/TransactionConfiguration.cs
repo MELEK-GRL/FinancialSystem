@@ -51,6 +51,7 @@ public sealed class TransactionConfiguration : IEntityTypeConfiguration<Transact
         builder.HasIndex(transaction => new { transaction.InitiatedByCustomerId, transaction.IdempotencyKey })
             .IsUnique()
             .HasFilter("idempotency_key IS NOT NULL");
+        builder.HasIndex(transaction => new { transaction.InitiatedByCustomerId, transaction.CreatedAt });
         builder.HasIndex(transaction => new { transaction.SourceAccountId, transaction.CreatedAt }).IsDescending(false, true);
         builder.HasIndex(transaction => new { transaction.TargetAccountId, transaction.CreatedAt }).IsDescending(false, true);
         builder.HasIndex(transaction => new { transaction.Status, transaction.CreatedAt });
