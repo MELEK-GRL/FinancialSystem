@@ -105,4 +105,10 @@
   <data name="CUSTOMER_INACTIVE" xml:space="preserve">
     <value>The customer is not active</value>
   </data>
+  <data name="ACCOUNT_NO_INVALID" xml:space="preserve">
+    <value>Account number must be 12 characters starting with TR</value>
+  </data>
+  <data name="Field.AccountNo" xml:space="preserve">
+    <value>Account number</value>
+  </data>
 </root>

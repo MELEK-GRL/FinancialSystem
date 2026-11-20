@@ -105,4 +105,10 @@
   <data name="CUSTOMER_INACTIVE" xml:space="preserve">
     <value>Müşteri aktif değil</value>
   </data>
+  <data name="ACCOUNT_NO_INVALID" xml:space="preserve">
+    <value>Hesap numarası TR ile başlayan 12 karakter olmalı</value>
+  </data>
+  <data name="Field.AccountNo" xml:space="preserve">
+    <value>Hesap numarası</value>
+  </data>
 </root>

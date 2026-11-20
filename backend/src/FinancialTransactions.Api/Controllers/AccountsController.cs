@@ -25,6 +25,13 @@ public sealed class AccountsController(ISender sender) : ApiControllerBase
     public Task<IReadOnlyList<AccountDto>> List([FromQuery] Guid? customerId, CancellationToken cancellationToken) =>
         sender.Send(new ListAccountsQuery(customerId), cancellationToken);
 
+    [Authorize(Policy = AuthorizationPolicies.CustomerOnly)]
+    [HttpGet("lookup")]
+    [ProducesResponseType<AccountLookupDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, "application/problem+json")]
+    public Task<AccountLookupDto> Lookup([FromQuery] string accountNo, CancellationToken cancellationToken) =>
+        sender.Send(new LookupAccountQuery(accountNo), cancellationToken);
+
     [HttpGet("{id:guid}")]
     [ProducesResponseType<AccountDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, "application/problem+json")]
