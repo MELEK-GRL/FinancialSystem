@@ -3,6 +3,8 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using FinancialTransactions.Domain.Common;
 using FinancialTransactions.IntegrationTests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace FinancialTransactions.IntegrationTests.History;
 
@@ -200,6 +202,100 @@ public class AccountHistoryTests(ApiFactory factory) : IClassFixture<ApiFactory>
 
         var message = problem.GetProperty("errors").EnumerateObject().Single().Value[0].GetString();
         Assert.Equal("Sıralama şunlardan biri olmalı: createdAt_desc, createdAt_asc, amount_desc, amount_asc", message);
+    }
+
+    [Fact]
+    public async Task FilterAndPaging_TotalCountReflectsTheFilter()
+    {
+        var (customer, accountId) = await CreateAccountWithDepositsAsync(12);
+
+        var page = await customer.Client.GetFromJsonAsync<JsonElement>(
+            $"/api/v1/accounts/{accountId}/transactions?minAmount=5&sort=amount_asc&page=2&size=3");
+
+        Assert.Equal(8, page.GetProperty("totalCount").GetInt32());
+        Assert.Equal(3, page.GetProperty("totalPages").GetInt32());
+        Assert.Equal([8m, 9m, 10m], page.GetProperty("items").EnumerateArray().Select(item => item.GetProperty("amount").GetDecimal()));
+    }
+
+    [Fact]
+    public async Task PendingTransaction_IsVisibleInHistory()
+    {
+        var customer = await factory.RegisterCustomerAsync();
+        var accountId = await customer.OpenAccountAsync();
+        JsonElement pending;
+
+        await using (var locker = factory.CreateDbContext())
+        {
+            await using var lockTransaction = await locker.Database.BeginTransactionAsync();
+            await locker.Database.ExecuteSqlAsync($"SELECT 1 FROM accounts WHERE id = {accountId} FOR NO KEY UPDATE");
+
+            var deposit = customer.Client.PostAsJsonAsync("/api/v1/transactions/deposit", new { accountId, amount = 10m });
+            pending = await WaitForSingleAsync(customer.Client, accountId, "status=Pending");
+            await lockTransaction.RollbackAsync();
+
+            Assert.Equal(HttpStatusCode.Created, (await deposit).StatusCode);
+        }
+
+        Assert.Equal("Pending", pending.GetProperty("status").GetString());
+        Assert.Equal(JsonValueKind.Null, pending.GetProperty("completedAt").ValueKind);
+        Assert.Equal("Success", Assert.Single(await GetItemsAsync(customer.Client, accountId)).GetProperty("status").GetString());
+    }
+
+    [Fact]
+    public async Task PassiveAccount_HistoryIsStillVisible()
+    {
+        var customer = await factory.RegisterCustomerAsync();
+        var accountId = await customer.OpenAccountAsync();
+        await customer.DepositAsync(accountId, 10m);
+        var admin = await factory.CreateAdminClientAsync();
+        await admin.PatchAsJsonAsync($"/api/v1/accounts/{accountId}/status", new { status = "Passive", reason = "Hesap kapatma talebi" });
+
+        Assert.Single(await GetItemsAsync(customer.Client, accountId));
+    }
+
+    [Fact]
+    public async Task HistoryQuery_CanUseTheAccountIndexes()
+    {
+        await using var dbContext = factory.CreateDbContext();
+        await using var transaction = await dbContext.Database.BeginTransactionAsync();
+        await dbContext.Database.ExecuteSqlRawAsync("SET LOCAL enable_seqscan = off");
+
+        var command = dbContext.Database.GetDbConnection().CreateCommand();
+        command.Transaction = transaction.GetDbTransaction();
+        command.CommandText = """
+            EXPLAIN SELECT id FROM transactions
+            WHERE source_account_id = '00000000-0000-0000-0000-000000000001'
+               OR target_account_id = '00000000-0000-0000-0000-000000000001'
+            ORDER BY created_at DESC LIMIT 20
+            """;
+
+        var plan = new List<string>();
+        await using (var reader = await command.ExecuteReaderAsync())
+        {
+            while (await reader.ReadAsync())
+            {
+                plan.Add(reader.GetString(0));
+            }
+        }
+
+        var text = string.Join('\n', plan);
+        Assert.Contains("ix_transactions_source_account_id_created_at", text);
+        Assert.Contains("ix_transactions_target_account_id_created_at", text);
+    }
+
+    private static async Task<JsonElement> WaitForSingleAsync(HttpClient client, Guid accountId, string filter)
+    {
+        for (var attempt = 0; attempt < 20; attempt++)
+        {
+            if (await GetItemsAsync(client, accountId, filter) is [var item])
+            {
+                return item;
+            }
+
+            await Task.Delay(100);
+        }
+
+        throw new TimeoutException($"No transaction matched {filter}");
     }
 
     private async Task<(TestCustomer Customer, Guid AccountId)> CreateAccountWithDepositsAsync(int count)
