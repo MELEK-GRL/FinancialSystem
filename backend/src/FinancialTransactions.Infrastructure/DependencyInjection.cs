@@ -8,6 +8,7 @@ using FinancialTransactions.Application.Customers;
 using FinancialTransactions.Application.Customers.Queries;
 using FinancialTransactions.Application.Users;
 using FinancialTransactions.Infrastructure.Options;
+using FinancialTransactions.Infrastructure.Outbox;
 using FinancialTransactions.Infrastructure.Persistence;
 using FinancialTransactions.Infrastructure.Persistence.Seeding;
 using FinancialTransactions.Infrastructure.Queries;
@@ -48,6 +49,7 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IOutbox, EfOutbox>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
