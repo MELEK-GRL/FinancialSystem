@@ -1,0 +1,41 @@
+{
+  "common": {
+    "appName": "Finansal İşlem Sistemi",
+    "close": "Kapat",
+    "cancel": "Vazgeç",
+    "confirm": "Onayla",
+    "retry": "Tekrar dene",
+    "loading": "Yükleniyor...",
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "pageSummary": "Sayfa {{page}} / {{total}}"
+  },
+  "language": {
+    "label": "Dil",
+    "tr": "Türkçe",
+    "en": "English"
+  },
+  "errors": {
+    "VALIDATION_ERROR": "Girilen bilgileri kontrol edin",
+    "NOT_FOUND": "Kayıt bulunamadı",
+    "UNAUTHORIZED": "Oturumunuz sona erdi, tekrar giriş yapın",
+    "FORBIDDEN": "Bu işlem için yetkiniz yok",
+    "TOO_MANY_REQUESTS": "Çok fazla istek gönderildi, biraz bekleyin",
+    "INTERNAL_ERROR": "Beklenmeyen bir hata oluştu",
+    "INVALID_CREDENTIALS": "E-posta veya şifre hatalı",
+    "CUSTOMER_NOT_FOUND": "Müşteri bulunamadı",
+    "CUSTOMER_INACTIVE": "Müşteri pasif durumda",
+    "ACCOUNT_NOT_FOUND": "Hesap bulunamadı",
+    "ACCOUNT_INACTIVE": "Hesap pasif durumda",
+    "INSUFFICIENT_BALANCE": "Yetersiz bakiye",
+    "SAME_ACCOUNT_TRANSFER": "Aynı hesaba transfer yapılamaz",
+    "AMOUNT_LIMIT_EXCEEDED": "İşlem tutarı limiti aşıyor",
+    "DUPLICATE_CUSTOMER": "Bu TCKN veya e-posta ile kayıtlı bir müşteri var",
+    "IDEMPOTENCY_CONFLICT": "Bu işlem anahtarı farklı bir istekle kullanılmış",
+    "IDEMPOTENCY_IN_PROGRESS": "İşlem şu anda sürüyor, birazdan tekrar deneyin",
+    "LOCK_TIMEOUT": "Hesap şu anda yoğun, işlem gerçekleşmedi. Lütfen tekrar deneyin",
+    "PROCESSING_ERROR": "İşlem tamamlanamadı, para hareketi olmadı. Lütfen tekrar deneyin",
+    "TRANSACTION_NOT_FOUND": "İşlem bulunamadı",
+    "NETWORK_ERROR": "Sunucuya ulaşılamadı, bağlantınızı kontrol edin"
+  }
+}

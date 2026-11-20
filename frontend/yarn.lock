@@ -857,11 +857,13 @@ __metadata:
     "@types/react-dom": ^19.3.0
     "@vitejs/plugin-react": ^6.1.2
     clsx: ^2.1.1
+    i18next: ^27.2.2
     lucide-react: ^1.77.0
     oxlint: ^1.90.0
     prettier: ^3.10.1
     react: ^19.3.1
     react-dom: ^19.3.1
+    react-i18next: ^18.0.3
     react-router: ^8.5.2
     sonner: ^2.0.8
     tailwindcss: ^4.3.5
@@ -893,6 +895,25 @@ __metadata:
   version: 4.2.12
   resolution: "graceful-fs@npm:4.2.12"
   checksum: 67cc73b400cb557ec8851d2a15475604288fab6f811d0e2c3ca3f66837e0e86a71d1e60b56f9d7ac40957f40c35942dc24144d96f2254a891a790fc478626d53
+  languageName: node
+  linkType: hard
+
+"html-parse-stringify@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "html-parse-stringify@npm:4.0.1"
+  checksum: 190d96883f6849098ca3fcbb76637f3a4f923d0ae902417d86db2ad2279b9ce19e4789945794ae2365a6a9e41da2dcf7c56b3f2dca67142487e51411eb1bf3ec
+  languageName: node
+  linkType: hard
+
+"i18next@npm:^27.2.2":
+  version: 27.2.2
+  resolution: "i18next@npm:27.2.2"
+  peerDependencies:
+    typescript: ^5 || ^6 || ^7
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: bfe7c691477cab281a077322630fa17ec3da8ae1e93f4eda438e8dc60c17f79a9b55fb7120ea933363289f0062613a58c19b40a7a4f14a33539b64789ab5ebbb
   languageName: node
   linkType: hard
 
@@ -1235,6 +1256,25 @@ __metadata:
   peerDependencies:
     react: ^19.3.1
   checksum: f00ab3c46a938720e66850f211cbbc37db4eda120210f468e3f728a1cd40d28e2a7bb6f3fd8b68099a1138ba45c474c9efa3c3ee4154194aff983c9f80f6cf81
+  languageName: node
+  linkType: hard
+
+"react-i18next@npm:^18.0.3":
+  version: 18.0.3
+  resolution: "react-i18next@npm:18.0.3"
+  dependencies:
+    html-parse-stringify: ^4.0.1
+  peerDependencies:
+    "@types/react": "*"
+    i18next: ">= 27.0.1"
+    react: ">= 18.0.0"
+    typescript: ^5 || ^6 || ^7
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    typescript:
+      optional: true
+  checksum: 6b409ae0acb67cc4d605cee16d100bf13248d8f4b1552465a54d80d07bf972a6c59cd150a4718c08b35afc9fad4639ae884cb19b59fb68d32e785eddb0822c07
   languageName: node
   linkType: hard
 

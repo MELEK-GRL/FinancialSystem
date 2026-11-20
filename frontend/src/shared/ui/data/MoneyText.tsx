@@ -1,21 +1,16 @@
 import clsx from 'clsx'
-import { DEFAULT_LOCALE, formatMoney } from '@/shared/lib/format'
+import { useLocale } from '@/shared/hooks/useLocale'
+import { formatMoney } from '@/shared/lib/format'
 
 export type MoneyTextProps = {
   amount: number
   direction?: 'in' | 'out'
-  locale?: string
   size?: 'md' | 'lg'
   className?: string
 }
 
-export function MoneyText({
-  amount,
-  direction,
-  locale = DEFAULT_LOCALE,
-  size = 'md',
-  className,
-}: MoneyTextProps) {
+export function MoneyText({ amount, direction, size = 'md', className }: MoneyTextProps) {
+  const locale = useLocale()
   const sign = direction === 'in' ? '+ ' : direction === 'out' ? '− ' : ''
   return (
     <span

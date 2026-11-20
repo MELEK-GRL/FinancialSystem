@@ -1,0 +1,41 @@
+{
+  "common": {
+    "appName": "Financial Transaction System",
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "retry": "Try again",
+    "loading": "Loading...",
+    "previous": "Previous",
+    "next": "Next",
+    "pageSummary": "Page {{page}} of {{total}}"
+  },
+  "language": {
+    "label": "Language",
+    "tr": "Türkçe",
+    "en": "English"
+  },
+  "errors": {
+    "VALIDATION_ERROR": "Please check the information you entered",
+    "NOT_FOUND": "Record not found",
+    "UNAUTHORIZED": "Your session has expired, please sign in again",
+    "FORBIDDEN": "You are not allowed to do this",
+    "TOO_MANY_REQUESTS": "Too many requests, please wait a moment",
+    "INTERNAL_ERROR": "An unexpected error occurred",
+    "INVALID_CREDENTIALS": "Email or password is incorrect",
+    "CUSTOMER_NOT_FOUND": "Customer not found",
+    "CUSTOMER_INACTIVE": "Customer is inactive",
+    "ACCOUNT_NOT_FOUND": "Account not found",
+    "ACCOUNT_INACTIVE": "Account is inactive",
+    "INSUFFICIENT_BALANCE": "Insufficient balance",
+    "SAME_ACCOUNT_TRANSFER": "You cannot transfer to the same account",
+    "AMOUNT_LIMIT_EXCEEDED": "Amount exceeds the transaction limit",
+    "DUPLICATE_CUSTOMER": "A customer with this national ID or email already exists",
+    "IDEMPOTENCY_CONFLICT": "This idempotency key was used with a different request",
+    "IDEMPOTENCY_IN_PROGRESS": "This request is still being processed, please try again shortly",
+    "LOCK_TIMEOUT": "The account is busy, the transaction was not completed. Please try again",
+    "PROCESSING_ERROR": "The transaction could not be completed and no money was moved. Please try again",
+    "TRANSACTION_NOT_FOUND": "Transaction not found",
+    "NETWORK_ERROR": "Cannot reach the server, check your connection"
+  }
+}
