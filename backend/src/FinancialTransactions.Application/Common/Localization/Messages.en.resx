@@ -102,4 +102,7 @@
   <data name="Field.Size" xml:space="preserve">
     <value>Page size</value>
   </data>
+  <data name="CUSTOMER_INACTIVE" xml:space="preserve">
+    <value>The customer is not active</value>
+  </data>
 </root>

@@ -11,6 +11,7 @@ public static class ErrorCodes
     public const string InternalError = "INTERNAL_ERROR";
 
     public const string CustomerNotFound = "CUSTOMER_NOT_FOUND";
+    public const string CustomerInactive = "CUSTOMER_INACTIVE";
     public const string AccountNotFound = "ACCOUNT_NOT_FOUND";
     public const string AccountInactive = "ACCOUNT_INACTIVE";
     public const string InsufficientBalance = "INSUFFICIENT_BALANCE";
