@@ -16,16 +16,18 @@ public sealed class ChangeAccountStatusCommandHandler(
     public async Task<AccountDto> Handle(ChangeAccountStatusCommand command, CancellationToken cancellationToken)
     {
         var adminId = currentUser.UserId ?? throw new ForbiddenAccessException();
-        var account = await accounts.GetByIdAsync(command.AccountId, cancellationToken) ?? throw new AccountNotFoundException();
-        var oldStatus = account.Status;
 
-        if (oldStatus == command.Status)
+        return await unitOfWork.ExecuteInTransactionAsync(async token =>
         {
-            return AccountDto.From(account);
-        }
+            var account = (await accounts.GetForUpdateAsync([command.AccountId], token)).SingleOrDefault()
+                ?? throw new AccountNotFoundException();
+            var oldStatus = account.Status;
 
-        await unitOfWork.ExecuteInTransactionAsync(_ =>
-        {
+            if (oldStatus == command.Status)
+            {
+                return AccountDto.From(account);
+            }
+
             if (command.Status == AccountStatus.Active)
             {
                 account.Activate();
@@ -38,9 +40,7 @@ public sealed class ChangeAccountStatusCommandHandler(
             auditLogs.Add(AuditLog.ForAccountStatusChange(
                 account.Id, oldStatus, command.Status, command.Reason, adminId, currentUser.CorrelationId));
 
-            return Task.CompletedTask;
+            return AccountDto.From(account);
         }, cancellationToken);
-
-        return AccountDto.From(account);
     }
 }

@@ -54,6 +54,44 @@ public class AccountStatusTests(ApiFactory factory) : IClassFixture<ApiFactory>
         Assert.False(await dbContext.AuditLogs.AnyAsync(log => log.AccountId == accountId));
     }
 
+    [Fact]
+    public async Task ParallelDeactivations_WriteExactlyOneAudit()
+    {
+        var accountId = await OpenAccountAsync();
+        var admin = await factory.CreateAdminClientAsync();
+
+        var responses = await Task.WhenAll(Enumerable.Range(0, 5).Select(_ =>
+            admin.PatchAsJsonAsync($"/api/v1/accounts/{accountId}/status", new { status = "Passive", reason = "Şüpheli işlem" })));
+
+        await using var dbContext = factory.CreateDbContext();
+        Assert.All(responses, response => Assert.Equal(HttpStatusCode.OK, response.StatusCode));
+        var audit = await dbContext.AuditLogs.SingleAsync(log => log.AccountId == accountId);
+        Assert.Equal(AccountStatus.Active, audit.OldStatus);
+    }
+
+    [Fact]
+    public async Task ParallelOppositeChanges_KeepAuditHistoryConsistent()
+    {
+        var accountId = await OpenAccountAsync();
+        var admin = await factory.CreateAdminClientAsync();
+
+        var responses = await Task.WhenAll(Enumerable.Range(0, 10).Select(i =>
+            admin.PatchAsJsonAsync(
+                $"/api/v1/accounts/{accountId}/status",
+                new { status = i % 2 == 0 ? "Passive" : "Active", reason = "Durum kontrolü" })));
+
+        await using var dbContext = factory.CreateDbContext();
+        var audits = await dbContext.AuditLogs.Where(log => log.AccountId == accountId).ToListAsync();
+        var account = await dbContext.Accounts.SingleAsync(a => a.Id == accountId);
+        var deactivations = audits.Count(audit => audit.NewStatus == AccountStatus.Passive);
+        var activations = audits.Count(audit => audit.NewStatus == AccountStatus.Active);
+        var expectedDifference = account.Status == AccountStatus.Passive ? 1 : 0;
+
+        Assert.All(responses, response => Assert.Equal(HttpStatusCode.OK, response.StatusCode));
+        Assert.All(audits, audit => Assert.NotEqual(audit.OldStatus, audit.NewStatus));
+        Assert.Equal(expectedDifference, deactivations - activations);
+    }
+
     [Theory]
     [InlineData(null)]
     [InlineData("kısa")]

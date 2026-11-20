@@ -22,10 +22,11 @@ public class ChangeAccountStatusCommandHandlerTests
     {
         currentUser.UserId.Returns(adminId);
         currentUser.CorrelationId.Returns("corr-1");
-        accounts.GetByIdAsync(account.Id, Arg.Any<CancellationToken>()).Returns(account);
+        accounts.GetForUpdateAsync(Arg.Any<IReadOnlyCollection<Guid>>(), Arg.Any<CancellationToken>())
+            .Returns(call => call.Arg<IReadOnlyCollection<Guid>>().Contains(account.Id) ? [account] : Array.Empty<Account>());
         unitOfWork
-            .ExecuteInTransactionAsync(Arg.Any<Func<CancellationToken, Task>>(), Arg.Any<CancellationToken>())
-            .Returns(call => call.Arg<Func<CancellationToken, Task>>()(CancellationToken.None));
+            .ExecuteInTransactionAsync(Arg.Any<Func<CancellationToken, Task<AccountDto>>>(), Arg.Any<CancellationToken>())
+            .Returns(call => call.Arg<Func<CancellationToken, Task<AccountDto>>>()(CancellationToken.None));
         handler = new ChangeAccountStatusCommandHandler(currentUser, accounts, auditLogs, unitOfWork);
     }
 
@@ -50,8 +51,18 @@ public class ChangeAccountStatusCommandHandlerTests
     {
         await handler.Handle(new ChangeAccountStatusCommand(account.Id, AccountStatus.Active, "Zaten aktif"), CancellationToken.None);
 
+        Assert.Equal(AccountStatus.Active, account.Status);
         auditLogs.DidNotReceive().Add(Arg.Any<AuditLog>());
-        await unitOfWork.DidNotReceive().ExecuteInTransactionAsync(Arg.Any<Func<CancellationToken, Task>>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task StatusIsReadUnderRowLock()
+    {
+        await handler.Handle(new ChangeAccountStatusCommand(account.Id, AccountStatus.Passive, "Şüpheli işlem"), CancellationToken.None);
+
+        await accounts.Received(1).GetForUpdateAsync(
+            Arg.Is<IReadOnlyCollection<Guid>>(ids => ids.Single() == account.Id), Arg.Any<CancellationToken>());
+        await accounts.DidNotReceive().GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>());
     }
 
     [Fact]
