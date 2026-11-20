@@ -76,4 +76,28 @@ public sealed class ReportQueries(AppDbContext dbContext) : IReportQueries
 
         return await query.OrderBy(total => total.PeriodStart).ToListAsync(cancellationToken);
     }
+
+    public Task<AccountMovementTotals> GetAccountMovementsAsync(
+        Guid accountId,
+        DateTimeOffset? createdFrom,
+        DateTimeOffset? createdBefore,
+        CancellationToken cancellationToken) =>
+        dbContext.Database
+            .SqlQuery<AccountMovementTotals>($"""
+                SELECT
+                    COUNT(*) FILTER (WHERE type = 'Deposit') AS deposit_count,
+                    COALESCE(SUM(amount) FILTER (WHERE type = 'Deposit'), 0) AS deposit_amount,
+                    COUNT(*) FILTER (WHERE type = 'Withdrawal') AS withdrawal_count,
+                    COALESCE(SUM(amount) FILTER (WHERE type = 'Withdrawal'), 0) AS withdrawal_amount,
+                    COUNT(*) FILTER (WHERE type = 'Transfer' AND target_account_id = {accountId}) AS incoming_transfer_count,
+                    COALESCE(SUM(amount) FILTER (WHERE type = 'Transfer' AND target_account_id = {accountId}), 0) AS incoming_transfer_amount,
+                    COUNT(*) FILTER (WHERE type = 'Transfer' AND source_account_id = {accountId}) AS outgoing_transfer_count,
+                    COALESCE(SUM(amount) FILTER (WHERE type = 'Transfer' AND source_account_id = {accountId}), 0) AS outgoing_transfer_amount
+                FROM transactions
+                WHERE status = 'Success'
+                  AND (source_account_id = {accountId} OR target_account_id = {accountId})
+                  AND ({createdFrom}::timestamptz IS NULL OR created_at >= {createdFrom})
+                  AND ({createdBefore}::timestamptz IS NULL OR created_at < {createdBefore})
+                """)
+            .SingleAsync(cancellationToken);
 }

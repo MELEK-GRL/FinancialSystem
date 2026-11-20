@@ -24,4 +24,15 @@ public sealed class ReportsController(ISender sender) : ApiControllerBase
         [FromQuery] DateOnly? to,
         CancellationToken cancellationToken) =>
         sender.Send(new GetPeriodicReportQuery(period, from, to), cancellationToken);
+
+    [HttpGet("accounts/{id:guid}")]
+    [ProducesResponseType<AccountReportDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, "application/problem+json")]
+    public Task<AccountReportDto> GetAccountReport(
+        Guid id,
+        [FromQuery] DateOnly? from,
+        [FromQuery] DateOnly? to,
+        CancellationToken cancellationToken) =>
+        sender.Send(new GetAccountReportQuery(id, from, to), cancellationToken);
 }
