@@ -12,11 +12,17 @@ public sealed class PostgresFixture : IAsyncLifetime
 
     public AppDbContext CreateDbContext() =>
         new(new DbContextOptionsBuilder<AppDbContext>()
-            .UseNpgsql(ConnectionString)
+            .UseNpgsql(ConnectionString, npgsql => npgsql.MigrationsHistoryTable("__ef_migrations_history"))
             .UseSnakeCaseNamingConvention()
             .Options);
 
-    public Task InitializeAsync() => container.StartAsync();
+    public async Task InitializeAsync()
+    {
+        await container.StartAsync();
+
+        await using var dbContext = CreateDbContext();
+        await dbContext.Database.MigrateAsync();
+    }
 
     public Task DisposeAsync() => container.DisposeAsync().AsTask();
 }
