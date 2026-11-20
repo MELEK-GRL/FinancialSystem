@@ -54,4 +54,10 @@
   <data name="IDEMPOTENCY_CONFLICT" xml:space="preserve">
     <value>This idempotency key was used with a different request</value>
   </data>
+  <data name="AMOUNT_MUST_BE_POSITIVE" xml:space="preserve">
+    <value>Amount must be greater than zero</value>
+  </data>
+  <data name="AMOUNT_TOO_MANY_DECIMALS" xml:space="preserve">
+    <value>Amount can have at most 2 decimal places</value>
+  </data>
 </root>

@@ -54,4 +54,10 @@
   <data name="IDEMPOTENCY_CONFLICT" xml:space="preserve">
     <value>Bu işlem anahtarı farklı bir istekle kullanılmış</value>
   </data>
+  <data name="AMOUNT_MUST_BE_POSITIVE" xml:space="preserve">
+    <value>Tutar 0'dan büyük olmalı</value>
+  </data>
+  <data name="AMOUNT_TOO_MANY_DECIMALS" xml:space="preserve">
+    <value>Tutar en fazla 2 ondalık basamak içerebilir</value>
+  </data>
 </root>
