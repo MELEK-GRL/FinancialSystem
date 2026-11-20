@@ -95,9 +95,68 @@ public class AccountHistoryTests(ApiFactory factory) : IClassFixture<ApiFactory>
         Assert.Single(await GetItemsAsync(admin, accountId));
     }
 
-    private static async Task<List<JsonElement>> GetItemsAsync(HttpClient client, Guid accountId)
+    [Theory]
+    [InlineData("type=Withdrawal", 2)]
+    [InlineData("status=Failed", 1)]
+    [InlineData("type=Withdrawal&status=Success", 1)]
+    [InlineData("minAmount=25&maxAmount=100", 2)]
+    [InlineData("minAmount=500", 1)]
+    [InlineData("maxAmount=20", 1)]
+    public async Task Filters_NarrowTheHistory(string filter, int expectedCount)
     {
-        var page = await client.GetFromJsonAsync<JsonElement>($"/api/v1/accounts/{accountId}/transactions");
+        var (customer, accountId) = await CreateAccountWithFourTransactionsAsync();
+
+        var items = await GetItemsAsync(customer.Client, accountId, filter);
+
+        Assert.Equal(expectedCount, items.Count);
+    }
+
+    [Fact]
+    public async Task DateFilter_UsesIstanbulDays()
+    {
+        var (customer, accountId) = await CreateAccountWithFourTransactionsAsync();
+        var today = DateOnly.FromDateTime(TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Europe/Istanbul")).DateTime);
+
+        Assert.Equal(4, (await GetItemsAsync(customer.Client, accountId, $"from={today:yyyy-MM-dd}&to={today:yyyy-MM-dd}")).Count);
+        Assert.Empty(await GetItemsAsync(customer.Client, accountId, $"from={today.AddDays(1):yyyy-MM-dd}"));
+        Assert.Empty(await GetItemsAsync(customer.Client, accountId, $"to={today.AddDays(-1):yyyy-MM-dd}"));
+    }
+
+    [Theory]
+    [InlineData("from=2026-11-20&to=2026-11-19")]
+    [InlineData("minAmount=100&maxAmount=50")]
+    [InlineData("minAmount=-5")]
+    [InlineData("type=Unknown")]
+    [InlineData("from=2026-13-01")]
+    public async Task InvalidFilter_Returns400(string filter)
+    {
+        var customer = await factory.RegisterCustomerAsync();
+        var accountId = await customer.OpenAccountAsync();
+
+        var response = await customer.Client.GetAsync($"/api/v1/accounts/{accountId}/transactions?{filter}");
+        var problem = await response.Content.ReadFromJsonAsync<JsonElement>();
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal(ErrorCodes.ValidationError, problem.GetProperty("errorCode").GetString());
+    }
+
+    private async Task<(TestCustomer Customer, Guid AccountId)> CreateAccountWithFourTransactionsAsync()
+    {
+        var customer = await factory.RegisterCustomerAsync();
+        var receiver = await factory.RegisterCustomerAsync();
+        var accountId = await customer.OpenAccountAsync();
+        var target = await receiver.OpenAccountWithNumberAsync();
+        await customer.DepositAsync(accountId, 100m);
+        await customer.Client.PostAsJsonAsync("/api/v1/transactions/withdraw", new { accountId, amount = 30m });
+        await customer.Client.PostAsJsonAsync("/api/v1/transactions/withdraw", new { accountId, amount = 500m });
+        await customer.Client.PostAsJsonAsync(
+            "/api/v1/transactions/transfer", new { sourceAccountId = accountId, targetAccountNo = target.AccountNo, amount = 20m });
+        return (customer, accountId);
+    }
+
+    private static async Task<List<JsonElement>> GetItemsAsync(HttpClient client, Guid accountId, string filter = "")
+    {
+        var page = await client.GetFromJsonAsync<JsonElement>($"/api/v1/accounts/{accountId}/transactions?{filter}");
         return page.GetProperty("items").EnumerateArray().ToList();
     }
 }

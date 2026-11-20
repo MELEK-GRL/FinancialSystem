@@ -6,7 +6,11 @@ public interface ITransactionQueries
 {
     Task<TransactionWithOwners?> GetByReferenceNoAsync(string referenceNo, CancellationToken cancellationToken);
 
-    Task<PagedResult<AccountTransactionDto>> GetAccountHistoryAsync(Guid accountId, PageRequest page, CancellationToken cancellationToken);
+    Task<PagedResult<AccountTransactionDto>> GetAccountHistoryAsync(
+        Guid accountId,
+        TransactionHistoryFilter filter,
+        PageRequest page,
+        CancellationToken cancellationToken);
 }
 
 public sealed record TransactionWithOwners(

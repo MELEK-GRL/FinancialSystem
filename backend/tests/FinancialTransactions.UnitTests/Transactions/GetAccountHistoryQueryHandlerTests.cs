@@ -19,7 +19,7 @@ public class GetAccountHistoryQueryHandlerTests
     public GetAccountHistoryQueryHandlerTests()
     {
         accountQueries.GetByIdAsync(account.Id, Arg.Any<CancellationToken>()).Returns(account);
-        transactionQueries.GetAccountHistoryAsync(account.Id, Arg.Any<PageRequest>(), Arg.Any<CancellationToken>())
+        transactionQueries.GetAccountHistoryAsync(account.Id, Arg.Any<TransactionHistoryFilter>(), Arg.Any<PageRequest>(), Arg.Any<CancellationToken>())
             .Returns(new PagedResult<AccountTransactionDto>([], 1, PageRequest.DefaultSize, 0));
         handler = new GetAccountHistoryQueryHandler(currentUser, accountQueries, transactionQueries);
     }
@@ -41,6 +41,24 @@ public class GetAccountHistoryQueryHandlerTests
 
         await Assert.ThrowsAsync<AccountNotFoundException>(() => handler.Handle(new GetAccountHistoryQuery(account.Id), CancellationToken.None));
         await transactionQueries.DidNotReceive()
-            .GetAccountHistoryAsync(Arg.Any<Guid>(), Arg.Any<PageRequest>(), Arg.Any<CancellationToken>());
+            .GetAccountHistoryAsync(Arg.Any<Guid>(), Arg.Any<TransactionHistoryFilter>(), Arg.Any<PageRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task DateFilter_CoversWholeIstanbulDays()
+    {
+        currentUser.CustomerId.Returns(account.CustomerId);
+
+        await handler.Handle(
+            new GetAccountHistoryQuery(account.Id, From: new DateOnly(2026, 11, 1), To: new DateOnly(2026, 11, 20)),
+            CancellationToken.None);
+
+        await transactionQueries.Received(1).GetAccountHistoryAsync(
+            account.Id,
+            Arg.Is<TransactionHistoryFilter>(filter =>
+                filter.CreatedFrom == new DateTimeOffset(2026, 10, 31, 21, 0, 0, TimeSpan.Zero)
+                && filter.CreatedBefore == new DateTimeOffset(2026, 11, 20, 21, 0, 0, TimeSpan.Zero)),
+            Arg.Any<PageRequest>(),
+            Arg.Any<CancellationToken>());
     }
 }

@@ -132,4 +132,28 @@
   <data name="TRANSACTION_NOT_FOUND" xml:space="preserve">
     <value>İşlem bulunamadı</value>
   </data>
+  <data name="DATE_RANGE_INVALID" xml:space="preserve">
+    <value>Bitiş tarihi başlangıç tarihinden önce olamaz</value>
+  </data>
+  <data name="AMOUNT_RANGE_INVALID" xml:space="preserve">
+    <value>En çok tutar en az tutardan küçük olamaz</value>
+  </data>
+  <data name="Field.From" xml:space="preserve">
+    <value>Başlangıç tarihi</value>
+  </data>
+  <data name="Field.To" xml:space="preserve">
+    <value>Bitiş tarihi</value>
+  </data>
+  <data name="Field.MinAmount" xml:space="preserve">
+    <value>En az tutar</value>
+  </data>
+  <data name="Field.MaxAmount" xml:space="preserve">
+    <value>En çok tutar</value>
+  </data>
+  <data name="Field.Type" xml:space="preserve">
+    <value>İşlem türü</value>
+  </data>
+  <data name="Field.Status" xml:space="preserve">
+    <value>Durum</value>
+  </data>
 </root>

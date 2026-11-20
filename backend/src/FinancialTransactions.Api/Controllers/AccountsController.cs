@@ -6,6 +6,7 @@ using FinancialTransactions.Application.Accounts.Queries;
 using FinancialTransactions.Application.Common.Paging;
 using FinancialTransactions.Application.Transactions.Queries;
 using FinancialTransactions.Domain.Accounts;
+using FinancialTransactions.Domain.Transactions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -51,8 +52,17 @@ public sealed class AccountsController(ISender sender) : ApiControllerBase
     [HttpGet("{id:guid}/transactions")]
     [ProducesResponseType<PagedResult<AccountTransactionDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, "application/problem+json")]
-    public Task<PagedResult<AccountTransactionDto>> GetHistory(Guid id, CancellationToken cancellationToken) =>
-        sender.Send(new GetAccountHistoryQuery(id), cancellationToken);
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
+    public Task<PagedResult<AccountTransactionDto>> GetHistory(
+        Guid id,
+        [FromQuery] DateOnly? from,
+        [FromQuery] DateOnly? to,
+        [FromQuery] TransactionType? type,
+        [FromQuery] TransactionStatus? status,
+        [FromQuery] decimal? minAmount,
+        [FromQuery] decimal? maxAmount,
+        CancellationToken cancellationToken) =>
+        sender.Send(new GetAccountHistoryQuery(id, from, to, type, status, minAmount, maxAmount), cancellationToken);
 
     [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
     [HttpPatch("{id:guid}/status")]

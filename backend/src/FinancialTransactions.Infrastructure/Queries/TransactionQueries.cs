@@ -34,25 +34,60 @@ public sealed class TransactionQueries(AppDbContext dbContext) : ITransactionQue
 
     public Task<PagedResult<AccountTransactionDto>> GetAccountHistoryAsync(
         Guid accountId,
+        TransactionHistoryFilter filter,
         PageRequest page,
-        CancellationToken cancellationToken) =>
-        (from transaction in dbContext.Transactions.AsNoTracking()
-         where transaction.SourceAccountId == accountId || transaction.TargetAccountId == accountId
-         let isIncoming = transaction.TargetAccountId == accountId
-         let counterpartyId = isIncoming ? transaction.SourceAccountId : transaction.TargetAccountId
-         orderby transaction.CreatedAt descending, transaction.ReferenceNo descending
-         select new AccountTransactionDto(
-             transaction.Id,
-             transaction.ReferenceNo,
-             transaction.Type,
-             transaction.Status,
-             isIncoming ? TransactionDirection.In : TransactionDirection.Out,
-             transaction.Amount,
-             transaction.Currency,
-             dbContext.Accounts.Where(account => account.Id == counterpartyId).Select(account => account.AccountNo).FirstOrDefault(),
-             transaction.Description,
-             transaction.FailureReason,
-             transaction.CreatedAt,
-             transaction.CompletedAt))
-        .ToPagedResultAsync(page, cancellationToken);
+        CancellationToken cancellationToken)
+    {
+        var transactions = dbContext.Transactions.AsNoTracking()
+            .Where(transaction => transaction.SourceAccountId == accountId || transaction.TargetAccountId == accountId);
+
+        if (filter.CreatedFrom is { } createdFrom)
+        {
+            transactions = transactions.Where(transaction => transaction.CreatedAt >= createdFrom);
+        }
+
+        if (filter.CreatedBefore is { } createdBefore)
+        {
+            transactions = transactions.Where(transaction => transaction.CreatedAt < createdBefore);
+        }
+
+        if (filter.Type is { } type)
+        {
+            transactions = transactions.Where(transaction => transaction.Type == type);
+        }
+
+        if (filter.Status is { } status)
+        {
+            transactions = transactions.Where(transaction => transaction.Status == status);
+        }
+
+        if (filter.MinAmount is { } minAmount)
+        {
+            transactions = transactions.Where(transaction => transaction.Amount >= minAmount);
+        }
+
+        if (filter.MaxAmount is { } maxAmount)
+        {
+            transactions = transactions.Where(transaction => transaction.Amount <= maxAmount);
+        }
+
+        return (from transaction in transactions
+                let isIncoming = transaction.TargetAccountId == accountId
+                let counterpartyId = isIncoming ? transaction.SourceAccountId : transaction.TargetAccountId
+                orderby transaction.CreatedAt descending, transaction.ReferenceNo descending
+                select new AccountTransactionDto(
+                    transaction.Id,
+                    transaction.ReferenceNo,
+                    transaction.Type,
+                    transaction.Status,
+                    isIncoming ? TransactionDirection.In : TransactionDirection.Out,
+                    transaction.Amount,
+                    transaction.Currency,
+                    dbContext.Accounts.Where(account => account.Id == counterpartyId).Select(account => account.AccountNo).FirstOrDefault(),
+                    transaction.Description,
+                    transaction.FailureReason,
+                    transaction.CreatedAt,
+                    transaction.CompletedAt))
+            .ToPagedResultAsync(page, cancellationToken);
+    }
 }
