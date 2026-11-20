@@ -100,4 +100,44 @@ public sealed class ReportQueries(AppDbContext dbContext) : IReportQueries
                   AND ({createdBefore}::timestamptz IS NULL OR created_at < {createdBefore})
                 """)
             .SingleAsync(cancellationToken);
+
+    public async Task<IReadOnlyList<TypeStatusCounts>> GetStatusCountsByTypeAsync(
+        DateTimeOffset? createdFrom,
+        DateTimeOffset? createdBefore,
+        Guid? initiatedByCustomerId,
+        CancellationToken cancellationToken) =>
+        await dbContext.Database
+            .SqlQuery<TypeStatusCounts>($"""
+                SELECT
+                    type,
+                    COUNT(*) AS total_count,
+                    COUNT(*) FILTER (WHERE status = 'Success') AS success_count,
+                    COUNT(*) FILTER (WHERE status = 'Failed') AS failed_count,
+                    COUNT(*) FILTER (WHERE status = 'Pending') AS pending_count
+                FROM transactions
+                WHERE ({initiatedByCustomerId}::uuid IS NULL OR initiated_by_customer_id = {initiatedByCustomerId})
+                  AND ({createdFrom}::timestamptz IS NULL OR created_at >= {createdFrom})
+                  AND ({createdBefore}::timestamptz IS NULL OR created_at < {createdBefore})
+                GROUP BY type
+                """)
+            .ToListAsync(cancellationToken);
+
+    public async Task<IReadOnlyList<FailureReasonCount>> GetFailureReasonsAsync(
+        DateTimeOffset? createdFrom,
+        DateTimeOffset? createdBefore,
+        Guid? initiatedByCustomerId,
+        CancellationToken cancellationToken) =>
+        await dbContext.Database
+            .SqlQuery<FailureReasonCount>($"""
+                SELECT failure_reason AS reason, COUNT(*) AS count
+                FROM transactions
+                WHERE status = 'Failed'
+                  AND ({initiatedByCustomerId}::uuid IS NULL OR initiated_by_customer_id = {initiatedByCustomerId})
+                  AND ({createdFrom}::timestamptz IS NULL OR created_at >= {createdFrom})
+                  AND ({createdBefore}::timestamptz IS NULL OR created_at < {createdBefore})
+                GROUP BY failure_reason
+                """)
+            .OrderByDescending(reason => reason.Count)
+            .ThenBy(reason => reason.Reason)
+            .ToListAsync(cancellationToken);
 }

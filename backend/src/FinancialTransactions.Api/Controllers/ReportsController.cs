@@ -35,4 +35,10 @@ public sealed class ReportsController(ISender sender) : ApiControllerBase
         [FromQuery] DateOnly? to,
         CancellationToken cancellationToken) =>
         sender.Send(new GetAccountReportQuery(id, from, to), cancellationToken);
+
+    [HttpGet("statistics")]
+    [ProducesResponseType<StatisticsDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
+    public Task<StatisticsDto> GetStatistics([FromQuery] DateOnly? from, [FromQuery] DateOnly? to, CancellationToken cancellationToken) =>
+        sender.Send(new GetStatisticsQuery(from, to), cancellationToken);
 }

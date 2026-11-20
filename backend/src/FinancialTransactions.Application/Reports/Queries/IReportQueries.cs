@@ -16,6 +16,18 @@ public interface IReportQueries
         DateTimeOffset? createdFrom,
         DateTimeOffset? createdBefore,
         CancellationToken cancellationToken);
+
+    Task<IReadOnlyList<TypeStatusCounts>> GetStatusCountsByTypeAsync(
+        DateTimeOffset? createdFrom,
+        DateTimeOffset? createdBefore,
+        Guid? initiatedByCustomerId,
+        CancellationToken cancellationToken);
+
+    Task<IReadOnlyList<FailureReasonCount>> GetFailureReasonsAsync(
+        DateTimeOffset? createdFrom,
+        DateTimeOffset? createdBefore,
+        Guid? initiatedByCustomerId,
+        CancellationToken cancellationToken);
 }
 
 public sealed record SummaryTotals(decimal TotalInflow, decimal TotalOutflow, long DepositCount, long WithdrawalCount);
@@ -31,3 +43,7 @@ public sealed record AccountMovementTotals(
     decimal IncomingTransferAmount,
     long OutgoingTransferCount,
     decimal OutgoingTransferAmount);
+
+public sealed record TypeStatusCounts(string Type, long TotalCount, long SuccessCount, long FailedCount, long PendingCount);
+
+public sealed record FailureReasonCount(string Reason, long Count);
