@@ -165,4 +165,7 @@
   <data name="PASSWORD_TOO_LONG" xml:space="preserve">
     <value>Şifre çok uzun: en fazla 72 byte olabilir (Türkçe harfler 2 byte sayılır)</value>
   </data>
+  <data name="Field.Period" xml:space="preserve">
+    <value>Dönem</value>
+  </data>
 </root>

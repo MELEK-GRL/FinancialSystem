@@ -14,4 +14,14 @@ public sealed class ReportsController(ISender sender) : ApiControllerBase
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
     public Task<SummaryReportDto> GetSummary([FromQuery] DateOnly? from, [FromQuery] DateOnly? to, CancellationToken cancellationToken) =>
         sender.Send(new GetSummaryQuery(from, to), cancellationToken);
+
+    [HttpGet("periodic")]
+    [ProducesResponseType<PeriodicReportDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
+    public Task<PeriodicReportDto> GetPeriodic(
+        [FromQuery] ReportPeriod? period,
+        [FromQuery] DateOnly? from,
+        [FromQuery] DateOnly? to,
+        CancellationToken cancellationToken) =>
+        sender.Send(new GetPeriodicReportQuery(period, from, to), cancellationToken);
 }
