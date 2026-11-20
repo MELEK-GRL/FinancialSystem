@@ -17,7 +17,7 @@ public class DepositTests(ApiFactory factory) : IClassFixture<ApiFactory>
     public async Task Deposit_IncreasesBalance_RecordsSuccess_AndQueuesCompletedEvent()
     {
         var customer = await factory.RegisterCustomerAsync();
-        var accountId = await OpenAccountAsync(customer);
+        var accountId = await customer.OpenAccountAsync();
 
         var response = await customer.Client.PostAsJsonAsync(Url, new { accountId, amount = 250.75m, description = "Maaş" });
         var transaction = await response.Content.ReadFromJsonAsync<JsonElement>();
@@ -29,7 +29,7 @@ public class DepositTests(ApiFactory factory) : IClassFixture<ApiFactory>
         Assert.Equal("Deposit", transaction.GetProperty("type").GetString());
         Assert.Contains("\"description\":\"Maaş\"", await response.Content.ReadAsStringAsync());
         Assert.Equal(JsonValueKind.String, transaction.GetProperty("completedAt").ValueKind);
-        Assert.Equal(250.75m, await BalanceAsync(customer, accountId));
+        Assert.Equal(250.75m, await customer.BalanceAsync(accountId));
 
         await using var dbContext = factory.CreateDbContext();
         var saved = await dbContext.Transactions.SingleAsync(t => t.ReferenceNo == referenceNo);
@@ -47,25 +47,25 @@ public class DepositTests(ApiFactory factory) : IClassFixture<ApiFactory>
     public async Task MultipleDeposits_AddUp()
     {
         var customer = await factory.RegisterCustomerAsync();
-        var accountId = await OpenAccountAsync(customer);
+        var accountId = await customer.OpenAccountAsync();
 
         await customer.Client.PostAsJsonAsync(Url, new { accountId, amount = 0.10m });
         await customer.Client.PostAsJsonAsync(Url, new { accountId, amount = 0.20m });
 
-        Assert.Equal(0.30m, await BalanceAsync(customer, accountId));
+        Assert.Equal(0.30m, await customer.BalanceAsync(accountId));
     }
 
     [Fact]
     public async Task ConcurrentDepositsToSameAccount_LoseNoUpdate()
     {
         var customer = await factory.RegisterCustomerAsync();
-        var accountId = await OpenAccountAsync(customer);
+        var accountId = await customer.OpenAccountAsync();
 
         var responses = await Task.WhenAll(Enumerable.Range(0, 20).Select(_ =>
             customer.Client.PostAsJsonAsync(Url, new { accountId, amount = 1m })));
 
         Assert.All(responses, response => Assert.Equal(HttpStatusCode.Created, response.StatusCode));
-        Assert.Equal(20m, await BalanceAsync(customer, accountId));
+        Assert.Equal(20m, await customer.BalanceAsync(accountId));
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class DepositTests(ApiFactory factory) : IClassFixture<ApiFactory>
     {
         var owner = await factory.RegisterCustomerAsync();
         var stranger = await factory.RegisterCustomerAsync();
-        var accountId = await OpenAccountAsync(owner);
+        var accountId = await owner.OpenAccountAsync();
 
         var response = await stranger.Client.PostAsJsonAsync(Url, new { accountId, amount = 10m });
 
@@ -86,21 +86,21 @@ public class DepositTests(ApiFactory factory) : IClassFixture<ApiFactory>
     public async Task DepositToPassiveAccount_Returns422_RecordsFailure_AndKeepsBalance()
     {
         var customer = await factory.RegisterCustomerAsync();
-        var accountId = await OpenAccountAsync(customer);
+        var accountId = await customer.OpenAccountAsync();
         var admin = await factory.CreateAdminClientAsync();
         await admin.PatchAsJsonAsync($"/api/v1/accounts/{accountId}/status", new { status = "Passive", reason = "Şüpheli işlem" });
 
         var response = await customer.Client.PostAsJsonAsync(Url, new { accountId, amount = 10m });
 
         await AssertFailureRecordedAsync(response, accountId, ErrorCodes.AccountInactive);
-        Assert.Equal(0m, await BalanceAsync(customer, accountId));
+        Assert.Equal(0m, await customer.BalanceAsync(accountId));
     }
 
     [Fact]
     public async Task DepositByPassiveCustomer_Returns422_AndRecordsFailure()
     {
         var customer = await factory.RegisterCustomerAsync();
-        var accountId = await OpenAccountAsync(customer);
+        var accountId = await customer.OpenAccountAsync();
         var admin = await factory.CreateAdminClientAsync();
         await admin.PatchAsJsonAsync($"/api/v1/customers/{customer.CustomerId}/status", new { status = "Passive" });
 
@@ -113,12 +113,12 @@ public class DepositTests(ApiFactory factory) : IClassFixture<ApiFactory>
     public async Task DepositAboveLimit_Returns422_AndRecordsFailure()
     {
         var customer = await factory.RegisterCustomerAsync();
-        var accountId = await OpenAccountAsync(customer);
+        var accountId = await customer.OpenAccountAsync();
 
         var response = await customer.Client.PostAsJsonAsync(Url, new { accountId, amount = 100000.01m });
 
         await AssertFailureRecordedAsync(response, accountId, ErrorCodes.AmountLimitExceeded);
-        Assert.Equal(0m, await BalanceAsync(customer, accountId));
+        Assert.Equal(0m, await customer.BalanceAsync(accountId));
     }
 
     [Theory]
@@ -128,7 +128,7 @@ public class DepositTests(ApiFactory factory) : IClassFixture<ApiFactory>
     public async Task InvalidAmount_Returns400_AndCreatesNoTransaction(string amount)
     {
         var customer = await factory.RegisterCustomerAsync();
-        var accountId = await OpenAccountAsync(customer);
+        var accountId = await customer.OpenAccountAsync();
 
         var response = await customer.Client.PostAsync(Url, JsonContent.Create(
             JsonDocument.Parse($"{{\"accountId\":\"{accountId}\",\"amount\":{amount}}}").RootElement));
@@ -163,13 +163,4 @@ public class DepositTests(ApiFactory factory) : IClassFixture<ApiFactory>
             [TransactionEventTypes.Failed],
             await dbContext.OutboxMessages.Where(m => m.AggregateId == failed.Id).Select(m => m.EventType).ToListAsync());
     }
-
-    private static async Task<Guid> OpenAccountAsync(TestCustomer customer)
-    {
-        var response = await customer.Client.PostAsync("/api/v1/accounts", null);
-        return (await response.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("id").GetGuid();
-    }
-
-    private static async Task<decimal> BalanceAsync(TestCustomer customer, Guid accountId) =>
-        (await customer.Client.GetFromJsonAsync<JsonElement>($"/api/v1/accounts/{accountId}/balance")).GetProperty("balance").GetDecimal();
 }
