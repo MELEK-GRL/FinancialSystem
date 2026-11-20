@@ -1,5 +1,7 @@
+using System.Text.Json.Serialization;
 using FinancialTransactions.Api.ErrorHandling;
 using FinancialTransactions.Api.Middleware;
+using FinancialTransactions.Api.OpenApi;
 using FinancialTransactions.Application;
 using FinancialTransactions.Infrastructure;
 using Microsoft.AspNetCore.HttpLogging;
@@ -29,8 +31,10 @@ builder.Services.AddApiProblemDetails();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+builder.Services.AddControllers()
+    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+builder.Services.AddApiDocumentation();
 
 var app = builder.Build();
 
@@ -43,15 +47,11 @@ app.UseHttpLogging();
 app.UseExceptionHandler();
 app.UseStatusCodePages();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.MapApiDocumentation();
 app.MapControllers();
 
 app.Run();
