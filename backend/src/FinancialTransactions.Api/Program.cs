@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using FinancialTransactions.Api.ErrorHandling;
+using FinancialTransactions.Api.Health;
 using FinancialTransactions.Api.Middleware;
 using FinancialTransactions.Api.OpenApi;
 using FinancialTransactions.Application;
@@ -35,6 +36,7 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddControllers()
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddApiDocumentation();
+builder.Services.AddApiHealthChecks();
 
 var app = builder.Build();
 
@@ -51,6 +53,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.MapApiHealthChecks();
 app.MapApiDocumentation();
 app.MapControllers();
 
