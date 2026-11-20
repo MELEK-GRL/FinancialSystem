@@ -93,6 +93,31 @@ public class TransferTests(ApiFactory factory) : IClassFixture<ApiFactory>
     }
 
     [Fact]
+    public async Task PassiveReceiverCustomer_Returns422_AndQueuesFailedEventForBothCustomers()
+    {
+        var sender = await factory.RegisterCustomerAsync();
+        var receiver = await factory.RegisterCustomerAsync();
+        var sourceId = await sender.OpenAccountAsync();
+        var target = await receiver.OpenAccountWithNumberAsync();
+        await sender.DepositAsync(sourceId, 100m);
+        var admin = await factory.CreateAdminClientAsync();
+        await admin.PatchAsJsonAsync($"/api/v1/customers/{receiver.CustomerId}/status", new { status = "Passive" });
+
+        var response = await sender.Client.PostAsJsonAsync(Url, new { sourceAccountId = sourceId, targetAccountNo = target.AccountNo, amount = 10m });
+
+        await AssertFailedAsync(response, sourceId, ErrorCodes.CustomerInactive);
+        Assert.Equal(100m, await sender.BalanceAsync(sourceId));
+
+        await using var dbContext = factory.CreateDbContext();
+        var failed = await dbContext.Transactions.SingleAsync(t => t.SourceAccountId == sourceId && t.Type == TransactionType.Transfer);
+        var message = await dbContext.OutboxMessages.SingleAsync(m => m.AggregateId == failed.Id);
+        var payload = JsonSerializer.Deserialize<TransactionEvent>(message.Payload, JsonSerializerOptions.Web)!;
+        Assert.Equal(TransactionEventTypes.Failed, message.EventType);
+        Assert.Equal(sender.CustomerId, payload.SourceCustomerId);
+        Assert.Equal(receiver.CustomerId, payload.TargetCustomerId);
+    }
+
+    [Fact]
     public async Task TransferToSameAccount_Returns422_WithoutRecord()
     {
         var customer = await factory.RegisterCustomerAsync();

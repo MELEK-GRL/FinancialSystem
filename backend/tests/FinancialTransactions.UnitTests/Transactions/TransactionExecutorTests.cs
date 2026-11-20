@@ -1,4 +1,5 @@
 using FinancialTransactions.Application.Accounts;
+using FinancialTransactions.Application.Common.Exceptions;
 using FinancialTransactions.Application.Common.Interfaces;
 using FinancialTransactions.Application.Common.Options;
 using FinancialTransactions.Application.Customers;
@@ -6,6 +7,7 @@ using FinancialTransactions.Application.Transactions;
 using FinancialTransactions.Contracts.Transactions;
 using FinancialTransactions.Domain.Accounts;
 using FinancialTransactions.Domain.Common;
+using FinancialTransactions.Domain.Customers;
 using FinancialTransactions.Domain.Transactions;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -90,4 +92,111 @@ public class TransactionExecutorTests
         Assert.Equal(10m, account.Balance);
         await accounts.Received(1).GetForUpdateAsync(Arg.Any<IReadOnlyCollection<Guid>>(), CancellationToken.None);
     }
+
+    [Fact]
+    public async Task AmountAboveLimit_FailsWithLimitCode_AndMovesNothing()
+    {
+        var account = Account.Open(Guid.NewGuid());
+        var deposit = DepositTo(account, 5000m, null);
+
+        await Assert.ThrowsAsync<AmountLimitExceededException>(
+            () => executor.ExecuteAsync(deposit, locked => locked[account.Id].Credit(deposit.Amount), CancellationToken.None));
+
+        Assert.Equal(ErrorCodes.AmountLimitExceeded, deposit.FailureReason);
+        Assert.Equal(0m, account.Balance);
+    }
+
+    [Fact]
+    public async Task InactiveOwner_FailsWithCustomerInactive()
+    {
+        var account = Account.Open(Guid.NewGuid());
+        var deposit = DepositTo(account, 10m, null);
+        customers.AllActiveAsync(Arg.Any<IReadOnlyCollection<Guid>>(), Arg.Any<CancellationToken>()).Returns(false);
+
+        await Assert.ThrowsAsync<CustomerInactiveException>(
+            () => executor.ExecuteAsync(deposit, locked => locked[account.Id].Credit(deposit.Amount), CancellationToken.None));
+
+        Assert.Equal(ErrorCodes.CustomerInactive, deposit.FailureReason);
+        Assert.Equal(0m, account.Balance);
+    }
+
+    [Fact]
+    public async Task SameKeyAfterSuccess_ReturnsFirstResult_WithoutTouchingTheDatabase()
+    {
+        var account = Account.Open(Guid.NewGuid());
+        var first = DepositTo(account, 10m, "key-12345");
+        first.MarkSucceeded();
+        PreviousWithKey(first);
+
+        var result = await executor.ExecuteAsync(DepositTo(account, 10m, "key-12345"), _ => { }, CancellationToken.None);
+
+        Assert.Equal(first.ReferenceNo, result.ReferenceNo);
+        await unitOfWork.DidNotReceive().ExecuteInTransactionAsync(Arg.Any<Func<CancellationToken, Task>>(), Arg.Any<CancellationToken>());
+    }
+
+    [Theory]
+    [InlineData(ErrorCodes.InsufficientBalance, typeof(TransactionFailedException))]
+    [InlineData(ErrorCodes.LockTimeout, typeof(LockTimeoutException))]
+    public async Task SameKeyAfterFailure_ReplaysTheSameFailure(string reason, Type expected)
+    {
+        var account = Account.Open(Guid.NewGuid());
+        var first = DepositTo(account, 10m, "key-12345");
+        first.MarkFailed(reason);
+        PreviousWithKey(first);
+
+        var exception = await Record.ExceptionAsync(
+            () => executor.ExecuteAsync(DepositTo(account, 10m, "key-12345"), _ => { }, CancellationToken.None));
+
+        Assert.IsType(expected, exception);
+    }
+
+    [Fact]
+    public async Task SameKeyWhileFirstIsPending_ThrowsInProgress()
+    {
+        var account = Account.Open(Guid.NewGuid());
+        PreviousWithKey(DepositTo(account, 10m, "key-12345"));
+
+        await Assert.ThrowsAsync<IdempotencyInProgressException>(
+            () => executor.ExecuteAsync(DepositTo(account, 10m, "key-12345"), _ => { }, CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task SameKeyWithDifferentAmount_ThrowsConflict()
+    {
+        var account = Account.Open(Guid.NewGuid());
+        PreviousWithKey(DepositTo(account, 10m, "key-12345"));
+
+        await Assert.ThrowsAsync<IdempotencyConflictException>(
+            () => executor.ExecuteAsync(DepositTo(account, 20m, "key-12345"), _ => { }, CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task LosingTheInsertRace_ReplaysTheWinner()
+    {
+        var account = Account.Open(Guid.NewGuid());
+        var winner = DepositTo(account, 10m, "key-12345");
+        winner.MarkSucceeded();
+        transactions.GetByIdempotencyKeyAsync(account.CustomerId, "key-12345", Arg.Any<CancellationToken>())
+            .Returns(null, winner);
+        unitOfWork
+            .ExecuteInTransactionAsync(Arg.Any<Func<CancellationToken, Task>>(), Arg.Any<CancellationToken>())
+            .ThrowsAsync(new UniqueConstraintViolationException("ix_transactions_initiated_by_customer_id_idempotency_key", new InvalidOperationException()));
+
+        var result = await executor.ExecuteAsync(DepositTo(account, 10m, "key-12345"), _ => { }, CancellationToken.None);
+
+        Assert.Equal(winner.ReferenceNo, result.ReferenceNo);
+    }
+
+    private Transaction DepositTo(Account account, decimal amount, string? idempotencyKey)
+    {
+        accounts.GetForUpdateAsync(Arg.Any<IReadOnlyCollection<Guid>>(), Arg.Any<CancellationToken>()).Returns([account]);
+        customers.AllActiveAsync(Arg.Any<IReadOnlyCollection<Guid>>(), Arg.Any<CancellationToken>()).Returns(true);
+        var deposit = Transaction.CreateDeposit($"TX{Guid.NewGuid():N}", account.Id, amount, null, account.CustomerId, idempotencyKey);
+        transactions.GetByIdAsync(deposit.Id, Arg.Any<CancellationToken>()).Returns(deposit);
+        return deposit;
+    }
+
+    private void PreviousWithKey(Transaction previous) =>
+        transactions.GetByIdempotencyKeyAsync(previous.InitiatedByCustomerId, previous.IdempotencyKey!, Arg.Any<CancellationToken>())
+            .Returns(previous);
 }
