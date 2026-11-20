@@ -2,6 +2,7 @@ using FinancialTransactions.Application.Common.Localization;
 using FinancialTransactions.Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace FinancialTransactions.Api.ErrorHandling;
 
@@ -11,12 +12,15 @@ public static class InvalidModelStateResponse
 
     public static IActionResult Create(ActionContext context)
     {
-        var parameterNames = context.ActionDescriptor.Parameters.Select(parameter => parameter.Name).ToHashSet();
+        var bodyParameterNames = context.ActionDescriptor.Parameters
+            .Where(parameter => parameter.BindingInfo?.BindingSource == BindingSource.Body)
+            .Select(parameter => parameter.Name)
+            .ToHashSet();
         var message = Messages.Get(Messages.InvalidValue);
 
         var errors = context.ModelState
             .Where(entry => entry.Value is { Errors.Count: > 0 })
-            .Select(entry => ToFieldName(entry.Key, parameterNames))
+            .Select(entry => ToFieldName(entry.Key, bodyParameterNames))
             .Distinct()
             .ToDictionary(field => field, _ => new[] { message });
 
@@ -33,11 +37,11 @@ public static class InvalidModelStateResponse
         };
     }
 
-    private static string ToFieldName(string key, HashSet<string> parameterNames)
+    private static string ToFieldName(string key, HashSet<string> bodyParameterNames)
     {
         var name = key.TrimStart('$', '.');
 
-        if (name.Length == 0 || parameterNames.Contains(name))
+        if (name.Length == 0 || bodyParameterNames.Contains(name))
         {
             return BodyField;
         }
