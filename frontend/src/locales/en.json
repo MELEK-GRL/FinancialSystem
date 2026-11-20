@@ -37,5 +37,27 @@
     "PROCESSING_ERROR": "The transaction could not be completed and no money was moved. Please try again",
     "TRANSACTION_NOT_FOUND": "Transaction not found",
     "NETWORK_ERROR": "Cannot reach the server, check your connection"
+  },
+  "validation": {
+    "required": "This field is required",
+    "nameLength": "Must be between 2 and 50 characters",
+    "emailInvalid": "Enter a valid email address",
+    "phoneInvalid": "Phone must be 10 digits starting with 5 (5XX XXX XX XX)",
+    "tcknInvalid": "Enter a valid Turkish national ID",
+    "passwordLength": "Password must be at least 8 characters",
+    "passwordWeak": "Password must contain at least one letter and one digit",
+    "passwordTooLong": "Password is too long: at most 72 bytes (non-English letters count as 2)",
+    "passwordMismatch": "Passwords do not match",
+    "accountNoInvalid": "Account number must be 12 characters starting with TR",
+    "amountInvalid": "Enter a valid amount (at most 2 decimals)",
+    "amountPositive": "Amount must be greater than 0",
+    "amountLimit": "Amount exceeds the transaction limit",
+    "textTooLong": "Text is too long",
+    "dateRangeInvalid": "End date cannot be before start date"
+  },
+  "form": {
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "clear": "Clear"
   }
 }

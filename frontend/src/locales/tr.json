@@ -37,5 +37,27 @@
     "PROCESSING_ERROR": "İşlem tamamlanamadı, para hareketi olmadı. Lütfen tekrar deneyin",
     "TRANSACTION_NOT_FOUND": "İşlem bulunamadı",
     "NETWORK_ERROR": "Sunucuya ulaşılamadı, bağlantınızı kontrol edin"
+  },
+  "validation": {
+    "required": "Bu alan zorunlu",
+    "nameLength": "2 ile 50 karakter arasında olmalı",
+    "emailInvalid": "Geçerli bir e-posta adresi girin",
+    "phoneInvalid": "Telefon 5 ile başlayan 10 haneli olmalı (5XX XXX XX XX)",
+    "tcknInvalid": "Geçerli bir T.C. kimlik numarası girin",
+    "passwordLength": "Şifre en az 8 karakter olmalı",
+    "passwordWeak": "Şifre en az bir harf ve bir rakam içermeli",
+    "passwordTooLong": "Şifre çok uzun: en fazla 72 byte (Türkçe harfler 2 byte sayılır)",
+    "passwordMismatch": "Şifreler eşleşmiyor",
+    "accountNoInvalid": "Hesap numarası TR ile başlayan 12 karakter olmalı",
+    "amountInvalid": "Geçerli bir tutar girin (en fazla 2 ondalık)",
+    "amountPositive": "Tutar 0'dan büyük olmalı",
+    "amountLimit": "Tutar işlem limitini aşıyor",
+    "textTooLong": "Metin çok uzun",
+    "dateRangeInvalid": "Bitiş tarihi başlangıç tarihinden önce olamaz"
+  },
+  "form": {
+    "showPassword": "Şifreyi göster",
+    "hidePassword": "Şifreyi gizle",
+    "clear": "Temizle"
   }
 }
