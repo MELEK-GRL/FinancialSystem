@@ -21,8 +21,82 @@ namespace FinancialTransactions.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.HasSequence("account_no_seq")
+                .StartsAt(1000000001L);
+
             modelBuilder.HasSequence("customer_no_seq")
                 .StartsAt(100000001L);
+
+            modelBuilder.Entity("FinancialTransactions.Domain.Accounts.Account", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("AccountNo")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("account_no")
+                        .HasDefaultValueSql("'TR' || nextval('account_no_seq')");
+
+                    b.Property<decimal>("Balance")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("numeric(19,4)")
+                        .HasColumnName("balance");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(3)
+                        .HasColumnType("character(3)")
+                        .HasDefaultValue("TRY")
+                        .HasColumnName("currency")
+                        .IsFixedLength();
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("customer_id");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
+                        .HasColumnName("status");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at")
+                        .HasDefaultValueSql("now()");
+
+                    b.HasKey("Id")
+                        .HasName("pk_accounts");
+
+                    b.HasIndex("AccountNo")
+                        .IsUnique()
+                        .HasDatabaseName("ix_accounts_account_no");
+
+                    b.HasIndex("CustomerId")
+                        .HasDatabaseName("ix_accounts_customer_id");
+
+                    b.ToTable("accounts", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_accounts_balance_not_negative", "balance >= 0");
+
+                            t.HasCheckConstraint("ck_accounts_currency", "currency ~ '^[A-Z]{3}$'");
+
+                            t.HasCheckConstraint("ck_accounts_status", "status IN ('Active', 'Passive')");
+                        });
+                });
 
             modelBuilder.Entity("FinancialTransactions.Domain.Customers.Customer", b =>
                 {
@@ -162,6 +236,16 @@ namespace FinancialTransactions.Infrastructure.Persistence.Migrations
 
                             t.HasCheckConstraint("ck_users_role", "role IN ('Admin', 'Customer')");
                         });
+                });
+
+            modelBuilder.Entity("FinancialTransactions.Domain.Accounts.Account", b =>
+                {
+                    b.HasOne("FinancialTransactions.Domain.Customers.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_accounts_customers_customer_id");
                 });
 
             modelBuilder.Entity("FinancialTransactions.Domain.Users.User", b =>

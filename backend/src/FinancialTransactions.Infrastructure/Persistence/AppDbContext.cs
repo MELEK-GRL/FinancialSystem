@@ -1,3 +1,4 @@
+using FinancialTransactions.Domain.Accounts;
 using FinancialTransactions.Domain.Customers;
 using FinancialTransactions.Domain.Users;
 using FinancialTransactions.Infrastructure.Persistence.Configurations;
@@ -11,9 +12,12 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 
     public DbSet<User> Users => Set<User>();
 
+    public DbSet<Account> Accounts => Set<Account>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasSequence<long>(CustomerConfiguration.CustomerNoSequence).StartsAt(100000001);
+        modelBuilder.HasSequence<long>(AccountConfiguration.AccountNoSequence).StartsAt(1000000001);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 }
