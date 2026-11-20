@@ -8,6 +8,7 @@ using FinancialTransactions.Api.Services;
 using FinancialTransactions.Application;
 using FinancialTransactions.Application.Common.Interfaces;
 using FinancialTransactions.Infrastructure;
+using FinancialTransactions.Infrastructure.Persistence.Seeding;
 using Microsoft.AspNetCore.HttpLogging;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -64,6 +65,8 @@ app.UseAuthorization();
 app.MapApiHealthChecks();
 app.MapApiDocumentation();
 app.MapControllers();
+
+await app.Services.InitializeDatabaseAsync();
 
 app.Run();
 

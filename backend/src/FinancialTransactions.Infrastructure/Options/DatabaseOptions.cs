@@ -11,4 +11,6 @@ public sealed class DatabaseOptions
 
     [Range(1, 300)]
     public int CommandTimeoutSeconds { get; init; } = 30;
+
+    public bool InitializeOnStartup { get; init; }
 }

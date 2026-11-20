@@ -4,6 +4,7 @@ using FinancialTransactions.Application.Customers;
 using FinancialTransactions.Application.Users;
 using FinancialTransactions.Infrastructure.Options;
 using FinancialTransactions.Infrastructure.Persistence;
+using FinancialTransactions.Infrastructure.Persistence.Seeding;
 using FinancialTransactions.Infrastructure.Queries;
 using FinancialTransactions.Infrastructure.Repositories;
 using FinancialTransactions.Infrastructure.Security;
@@ -28,6 +29,8 @@ public static class DependencyInjection
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
+        services.AddOptions<SeedOptions>().BindConfiguration(SeedOptions.SectionName);
+
         services.AddDbContext<AppDbContext>((serviceProvider, options) =>
         {
             var database = serviceProvider.GetRequiredService<IOptions<DatabaseOptions>>().Value;
@@ -46,6 +49,7 @@ public static class DependencyInjection
         services.TryAddSingleton(TimeProvider.System);
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IUserQueries, UserQueries>();
+        services.AddScoped<DatabaseInitializer>();
 
         return services;
     }
