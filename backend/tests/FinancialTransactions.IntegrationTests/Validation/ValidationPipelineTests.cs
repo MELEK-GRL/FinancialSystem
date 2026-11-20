@@ -4,6 +4,7 @@ using System.Text.Json;
 using FinancialTransactions.Domain.Common;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -86,6 +87,7 @@ internal sealed class SampleCommandHandler : IRequestHandler<SampleCommand, stri
     public Task<string> Handle(SampleCommand request, CancellationToken cancellationToken) => Task.FromResult(request.Name);
 }
 
+[AllowAnonymous]
 [ApiController]
 [Route("test-commands")]
 public class SampleCommandController(ISender sender) : ControllerBase

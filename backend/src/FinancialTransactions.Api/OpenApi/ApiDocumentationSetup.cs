@@ -40,8 +40,8 @@ public static class ApiDocumentationSetup
 
     public static WebApplication MapApiDocumentation(this WebApplication app)
     {
-        app.MapOpenApi();
-        app.MapScalarApiReference(options => options.WithTitle(Title));
+        app.MapOpenApi().AllowAnonymous();
+        app.MapScalarApiReference(options => options.WithTitle(Title)).AllowAnonymous();
 
         return app;
     }

@@ -15,6 +15,7 @@ public sealed class GlobalExceptionHandler(
         {
             RequestValidationException => (StatusCodes.Status400BadRequest, ErrorCodes.ValidationError),
             InvalidCredentialsException => (StatusCodes.Status401Unauthorized, ErrorCodes.InvalidCredentials),
+            ForbiddenAccessException => (StatusCodes.Status403Forbidden, ErrorCodes.Forbidden),
             NotFoundException notFound => (StatusCodes.Status404NotFound, notFound.ErrorCode),
             ConflictException conflict => (StatusCodes.Status409Conflict, conflict.ErrorCode),
             BusinessRuleException rule => (StatusCodes.Status422UnprocessableEntity, rule.ErrorCode),

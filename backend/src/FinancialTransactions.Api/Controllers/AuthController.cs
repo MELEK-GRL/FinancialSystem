@@ -9,6 +9,7 @@ namespace FinancialTransactions.Api.Controllers;
 
 public sealed class AuthController(ISender sender) : ApiControllerBase
 {
+    [AllowAnonymous]
     [HttpPost("register")]
     [ProducesResponseType<RegisterResult>(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, "application/problem+json")]
@@ -18,6 +19,7 @@ public sealed class AuthController(ISender sender) : ApiControllerBase
         return Created("/api/v1/customers/me", result);
     }
 
+    [AllowAnonymous]
     [HttpPost("login")]
     [ProducesResponseType<LoginResult>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized, "application/problem+json")]

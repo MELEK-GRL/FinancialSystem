@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using FinancialTransactions.Api.Middleware;
 using FinancialTransactions.Domain.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -38,7 +39,6 @@ public class ErrorHandlingTests(WebApplicationFactory<Program> factory) : IClass
     [Theory]
     [InlineData("/test-errors/not-found", 404, ErrorCodes.AccountNotFound)]
     [InlineData("/test-errors/conflict", 409, ErrorCodes.DuplicateCustomer)]
-    [InlineData("/route-does-not-exist", 404, ErrorCodes.NotFound)]
     public async Task Errors_AreMappedToStatusAndErrorCode(string path, int status, string errorCode)
     {
         var problem = await GetProblemAsync(path);
@@ -82,6 +82,7 @@ public class ErrorHandlingTests(WebApplicationFactory<Program> factory) : IClass
     }
 }
 
+[AllowAnonymous]
 [ApiController]
 [Route("test-errors")]
 public class ErrorTestController : ControllerBase

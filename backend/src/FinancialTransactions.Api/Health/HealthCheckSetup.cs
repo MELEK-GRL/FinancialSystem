@@ -23,13 +23,13 @@ public static class HealthCheckSetup
         {
             Predicate = _ => false,
             ResponseWriter = WriteResponseAsync,
-        });
+        }).AllowAnonymous();
 
         app.MapHealthChecks("/health/ready", new HealthCheckOptions
         {
             Predicate = check => check.Tags.Contains(ReadyTag),
             ResponseWriter = WriteResponseAsync,
-        });
+        }).AllowAnonymous();
 
         return app;
     }

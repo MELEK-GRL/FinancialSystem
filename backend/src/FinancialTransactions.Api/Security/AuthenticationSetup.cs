@@ -2,6 +2,7 @@ using FinancialTransactions.Application.Common.Security;
 using FinancialTransactions.Infrastructure.Options;
 using FinancialTransactions.Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -34,7 +35,15 @@ public static class AuthenticationSetup
                 };
             });
 
-        services.AddAuthorization();
+        services.AddAuthorizationBuilder()
+            .SetFallbackPolicy(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
+            .AddPolicy(AuthorizationPolicies.AdminOnly, policy => policy
+                .RequireAuthenticatedUser()
+                .RequireClaim(AppClaims.Role, AppRoles.Admin))
+            .AddPolicy(AuthorizationPolicies.CustomerOnly, policy => policy
+                .RequireAuthenticatedUser()
+                .RequireClaim(AppClaims.Role, AppRoles.Customer)
+                .RequireClaim(AppClaims.CustomerId));
 
         return services;
     }
