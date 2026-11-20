@@ -59,5 +59,114 @@
     "showPassword": "Şifreyi göster",
     "hidePassword": "Şifreyi gizle",
     "clear": "Temizle"
+  },
+  "designSystem": {
+    "title": "Tasarım Sistemi",
+    "subtitle": "Ortak bileşenlerin canlı önizlemesi. Formu deneyerek validasyonu ve dil değişimini görebilirsiniz.",
+    "sections": {
+      "colors": "Renkler",
+      "typography": "Yazı",
+      "buttons": "Butonlar",
+      "badges": "Rozetler",
+      "form": "Form ve validasyon",
+      "search": "Arama",
+      "money": "Para ve tarih",
+      "table": "Tablo",
+      "states": "Durum ekranları",
+      "overlays": "Pencere ve bildirim"
+    },
+    "sample": {
+      "heading1": "Sayfa başlığı",
+      "heading2": "Bölüm başlığı",
+      "heading3": "Alt başlık",
+      "body": "Gövde metni: hesap hareketleriniz burada listelenir.",
+      "muted": "İkincil açıklama metni.",
+      "small": "Küçük not metni."
+    },
+    "buttons": {
+      "primary": "Para Gönder",
+      "secondary": "Vazgeç",
+      "danger": "Hesabı Pasif Yap",
+      "ghost": "Detay",
+      "loading": "Gönderiliyor",
+      "disabled": "Pasif",
+      "menu": "Menü"
+    },
+    "badges": {
+      "neutral": "Nötr",
+      "primary": "Bilgi",
+      "success": "Başarılı",
+      "danger": "Başarısız",
+      "warning": "Bekliyor"
+    },
+    "form": {
+      "firstName": "Ad",
+      "email": "E-posta",
+      "nationalId": "T.C. Kimlik No",
+      "phone": "Telefon",
+      "password": "Şifre",
+      "amount": "Tutar",
+      "accountNo": "Alıcı hesap no",
+      "description": "Açıklama",
+      "type": "İşlem türü",
+      "typePlaceholder": "Seçin",
+      "dateRange": "Tarih aralığı",
+      "from": "Başlangıç",
+      "to": "Bitiş",
+      "approve": "Bilgilerin doğru olduğunu onaylıyorum",
+      "submit": "Doğrula",
+      "valid": "Form geçerli, istek gönderilmeye hazır",
+      "hint": "Boş göndermeyi ve hatalı değerler yazmayı deneyin"
+    },
+    "types": {
+      "Deposit": "Para yatırma",
+      "Withdrawal": "Para çekme",
+      "Transfer": "Transfer"
+    },
+    "search": {
+      "label": "Müşteri ara",
+      "placeholder": "Ad, e-posta veya müşteri no",
+      "result": "Son arama: {{value}}",
+      "empty": "Henüz arama yapılmadı"
+    },
+    "money": {
+      "balance": "Toplam bakiye",
+      "incoming": "Gelen",
+      "outgoing": "Giden",
+      "date": "İşlem tarihi"
+    },
+    "table": {
+      "reference": "Referans",
+      "type": "Tür",
+      "status": "Durum",
+      "amount": "Tutar",
+      "date": "Tarih"
+    },
+    "status": {
+      "Success": "Başarılı",
+      "Failed": "Başarısız",
+      "Pending": "Bekliyor"
+    },
+    "states": {
+      "emptyTitle": "Henüz hesabınız yok",
+      "emptyDescription": "İlk hesabınızı açarak başlayın.",
+      "emptyAction": "Hesap Aç",
+      "errorTitle": "Veriler yüklenemedi",
+      "errorDescription": "Bağlantınızı kontrol edip tekrar deneyin."
+    },
+    "overlays": {
+      "openModal": "Modal aç",
+      "modalTitle": "Transfer detayı",
+      "modalBody": "Modal ESC tuşuyla ya da kapat butonuyla kapanır; açıkken odak içeride kalır.",
+      "openConfirm": "Onay penceresi",
+      "confirmTitle": "Hesabı pasif yap",
+      "confirmBody": "Pasif hesapta para hareketi yapılamaz. Devam edilsin mi?",
+      "confirmAction": "Pasif yap",
+      "confirmed": "Hesap pasif yapıldı",
+      "toastSuccess": "Başarılı toast",
+      "toastError": "Hata toast",
+      "toastSuccessText": "Transfer gönderildi",
+      "toastErrorText": "Yetersiz bakiye"
+    }
   }
 }

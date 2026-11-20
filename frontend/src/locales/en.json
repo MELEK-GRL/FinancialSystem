@@ -59,5 +59,114 @@
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "clear": "Clear"
+  },
+  "designSystem": {
+    "title": "Design System",
+    "subtitle": "Live preview of the shared components. Try the form to see validation and language switching.",
+    "sections": {
+      "colors": "Colors",
+      "typography": "Typography",
+      "buttons": "Buttons",
+      "badges": "Badges",
+      "form": "Form and validation",
+      "search": "Search",
+      "money": "Money and date",
+      "table": "Table",
+      "states": "State screens",
+      "overlays": "Dialogs and notifications"
+    },
+    "sample": {
+      "heading1": "Page title",
+      "heading2": "Section title",
+      "heading3": "Subtitle",
+      "body": "Body text: your account movements are listed here.",
+      "muted": "Secondary description text.",
+      "small": "Small note text."
+    },
+    "buttons": {
+      "primary": "Send Money",
+      "secondary": "Cancel",
+      "danger": "Deactivate Account",
+      "ghost": "Details",
+      "loading": "Sending",
+      "disabled": "Disabled",
+      "menu": "Menu"
+    },
+    "badges": {
+      "neutral": "Neutral",
+      "primary": "Info",
+      "success": "Success",
+      "danger": "Failed",
+      "warning": "Pending"
+    },
+    "form": {
+      "firstName": "First name",
+      "email": "Email",
+      "nationalId": "National ID",
+      "phone": "Phone",
+      "password": "Password",
+      "amount": "Amount",
+      "accountNo": "Recipient account no",
+      "description": "Description",
+      "type": "Transaction type",
+      "typePlaceholder": "Select",
+      "dateRange": "Date range",
+      "from": "From",
+      "to": "To",
+      "approve": "I confirm the details are correct",
+      "submit": "Validate",
+      "valid": "Form is valid, ready to send",
+      "hint": "Try submitting empty or typing invalid values"
+    },
+    "types": {
+      "Deposit": "Deposit",
+      "Withdrawal": "Withdrawal",
+      "Transfer": "Transfer"
+    },
+    "search": {
+      "label": "Search customers",
+      "placeholder": "Name, email or customer no",
+      "result": "Last search: {{value}}",
+      "empty": "No search yet"
+    },
+    "money": {
+      "balance": "Total balance",
+      "incoming": "Incoming",
+      "outgoing": "Outgoing",
+      "date": "Transaction date"
+    },
+    "table": {
+      "reference": "Reference",
+      "type": "Type",
+      "status": "Status",
+      "amount": "Amount",
+      "date": "Date"
+    },
+    "status": {
+      "Success": "Success",
+      "Failed": "Failed",
+      "Pending": "Pending"
+    },
+    "states": {
+      "emptyTitle": "You have no accounts yet",
+      "emptyDescription": "Start by opening your first account.",
+      "emptyAction": "Open Account",
+      "errorTitle": "Could not load data",
+      "errorDescription": "Check your connection and try again."
+    },
+    "overlays": {
+      "openModal": "Open modal",
+      "modalTitle": "Transfer details",
+      "modalBody": "The modal closes with ESC or the close button; focus stays inside while it is open.",
+      "openConfirm": "Confirm dialog",
+      "confirmTitle": "Deactivate account",
+      "confirmBody": "No money can be moved on a passive account. Continue?",
+      "confirmAction": "Deactivate",
+      "confirmed": "Account deactivated",
+      "toastSuccess": "Success toast",
+      "toastError": "Error toast",
+      "toastSuccessText": "Transfer sent",
+      "toastErrorText": "Insufficient balance"
+    }
   }
 }
