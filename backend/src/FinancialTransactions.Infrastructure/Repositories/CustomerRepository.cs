@@ -16,5 +16,10 @@ public sealed class CustomerRepository(AppDbContext dbContext) : ICustomerReposi
     public Task<Customer?> GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
         dbContext.Customers.SingleOrDefaultAsync(customer => customer.Id == id, cancellationToken);
 
+    public async Task<bool> AllActiveAsync(IReadOnlyCollection<Guid> customerIds, CancellationToken cancellationToken) =>
+        !await dbContext.Customers.AnyAsync(
+            customer => customerIds.Contains(customer.Id) && customer.Status != CustomerStatus.Active,
+            cancellationToken);
+
     public void Add(Customer customer) => dbContext.Customers.Add(customer);
 }

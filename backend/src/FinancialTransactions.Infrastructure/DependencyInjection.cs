@@ -6,6 +6,7 @@ using FinancialTransactions.Application.Auth.Queries.GetMe;
 using FinancialTransactions.Application.Common.Interfaces;
 using FinancialTransactions.Application.Customers;
 using FinancialTransactions.Application.Customers.Queries;
+using FinancialTransactions.Application.Transactions;
 using FinancialTransactions.Application.Users;
 using FinancialTransactions.Infrastructure.Options;
 using FinancialTransactions.Infrastructure.Outbox;
@@ -55,6 +56,7 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+        services.AddScoped<ITransactionRepository, TransactionRepository>();
         services.AddSingleton<IPasswordHasher, BcryptPasswordHasher>();
         services.TryAddSingleton(TimeProvider.System);
         services.AddSingleton<IJwtTokenService, JwtTokenService>();

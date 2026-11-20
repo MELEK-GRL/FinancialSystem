@@ -1,4 +1,6 @@
+using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
+using System.Text.Unicode;
 using FinancialTransactions.Api.ErrorHandling;
 using FinancialTransactions.Api.Health;
 using FinancialTransactions.Api.Middleware;
@@ -48,7 +50,11 @@ builder.Services.AddControllers(options =>
         options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
         options.Conventions.Add(new RouteTokenTransformerConvention(new KebabCaseParameterTransformer()));
     })
-    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+    })
     .ConfigureApiBehaviorOptions(options => options.InvalidModelStateResponseFactory = InvalidModelStateResponse.Create);
 builder.Services.AddApiDocumentation();
 builder.Services.AddApiHealthChecks();

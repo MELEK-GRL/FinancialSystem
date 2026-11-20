@@ -10,5 +10,7 @@ public interface ICustomerRepository
 
     Task<Customer?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
+    Task<bool> AllActiveAsync(IReadOnlyCollection<Guid> customerIds, CancellationToken cancellationToken);
+
     void Add(Customer customer);
 }
