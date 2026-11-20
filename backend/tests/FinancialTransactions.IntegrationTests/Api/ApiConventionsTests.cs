@@ -34,9 +34,9 @@ public class ApiConventionsTests(WebApplicationFactory<Program> factory) : IClas
     }
 
     [Fact]
-    public async Task Controllers_AreServedUnderLowercaseVersionedRoute()
+    public async Task Controllers_AreServedUnderKebabCaseVersionedRoute()
     {
-        var response = await client.GetAsync("/api/v1/sampleitems/7");
+        var response = await client.GetAsync("/api/v1/sample-items/7");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -44,16 +44,16 @@ public class ApiConventionsTests(WebApplicationFactory<Program> factory) : IClas
     [Fact]
     public async Task Create_Returns201WithLocationHeader()
     {
-        var response = await client.PostAsync("/api/v1/sampleitems", null);
+        var response = await client.PostAsync("/api/v1/sample-items", null);
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        Assert.Equal("/api/v1/sampleitems/7", response.Headers.Location?.AbsolutePath);
+        Assert.Equal("/api/v1/sample-items/7", response.Headers.Location?.AbsolutePath);
     }
 
     [Fact]
     public async Task Enums_AreSerializedAsStrings()
     {
-        var item = await client.GetFromJsonAsync<JsonElement>("/api/v1/sampleitems/7");
+        var item = await client.GetFromJsonAsync<JsonElement>("/api/v1/sample-items/7");
 
         Assert.Equal("Active", item.GetProperty("status").GetString());
     }

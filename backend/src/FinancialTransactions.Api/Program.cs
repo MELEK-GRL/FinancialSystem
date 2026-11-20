@@ -3,6 +3,7 @@ using FinancialTransactions.Api.ErrorHandling;
 using FinancialTransactions.Api.Health;
 using FinancialTransactions.Api.Middleware;
 using FinancialTransactions.Api.OpenApi;
+using FinancialTransactions.Api.Routing;
 using FinancialTransactions.Api.Security;
 using FinancialTransactions.Api.Services;
 using FinancialTransactions.Application;
@@ -10,6 +11,7 @@ using FinancialTransactions.Application.Common.Interfaces;
 using FinancialTransactions.Infrastructure;
 using FinancialTransactions.Infrastructure.Persistence.Seeding;
 using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +43,11 @@ builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.AddApiAuthentication();
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
-builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true)
+builder.Services.AddControllers(options =>
+    {
+        options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+        options.Conventions.Add(new RouteTokenTransformerConvention(new KebabCaseParameterTransformer()));
+    })
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
     .ConfigureApiBehaviorOptions(options => options.InvalidModelStateResponseFactory = InvalidModelStateResponse.Create);
 builder.Services.AddApiDocumentation();

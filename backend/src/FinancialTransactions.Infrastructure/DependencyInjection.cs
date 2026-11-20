@@ -1,6 +1,7 @@
 using FinancialTransactions.Application.Accounts;
 using FinancialTransactions.Application.Accounts.Queries;
 using FinancialTransactions.Application.Audit;
+using FinancialTransactions.Application.Audit.Queries;
 using FinancialTransactions.Application.Auth.Queries.GetMe;
 using FinancialTransactions.Application.Common.Interfaces;
 using FinancialTransactions.Application.Customers;
@@ -57,6 +58,7 @@ public static class DependencyInjection
         services.AddScoped<IUserQueries, UserQueries>();
         services.AddScoped<IAccountQueries, AccountQueries>();
         services.AddScoped<ICustomerQueries, CustomerQueries>();
+        services.AddScoped<IAuditLogQueries, AuditLogQueries>();
         services.AddScoped<DatabaseInitializer>();
 
         return services;
