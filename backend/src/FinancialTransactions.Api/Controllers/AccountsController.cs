@@ -61,8 +61,11 @@ public sealed class AccountsController(ISender sender) : ApiControllerBase
         [FromQuery] TransactionStatus? status,
         [FromQuery] decimal? minAmount,
         [FromQuery] decimal? maxAmount,
-        CancellationToken cancellationToken) =>
-        sender.Send(new GetAccountHistoryQuery(id, from, to, type, status, minAmount, maxAmount), cancellationToken);
+        [FromQuery] string? sort,
+        CancellationToken cancellationToken,
+        [FromQuery] int page = 1,
+        [FromQuery] int size = PageRequest.DefaultSize) =>
+        sender.Send(new GetAccountHistoryQuery(id, from, to, type, status, minAmount, maxAmount, sort, page, size), cancellationToken);
 
     [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
     [HttpPatch("{id:guid}/status")]

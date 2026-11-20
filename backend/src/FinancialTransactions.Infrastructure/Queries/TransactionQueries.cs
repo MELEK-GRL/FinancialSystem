@@ -35,6 +35,7 @@ public sealed class TransactionQueries(AppDbContext dbContext) : ITransactionQue
     public Task<PagedResult<AccountTransactionDto>> GetAccountHistoryAsync(
         Guid accountId,
         TransactionHistoryFilter filter,
+        TransactionHistorySort sort,
         PageRequest page,
         CancellationToken cancellationToken)
     {
@@ -71,10 +72,17 @@ public sealed class TransactionQueries(AppDbContext dbContext) : ITransactionQue
             transactions = transactions.Where(transaction => transaction.Amount <= maxAmount);
         }
 
-        return (from transaction in transactions
+        var ordered = sort switch
+        {
+            TransactionHistorySort.CreatedAtAsc => transactions.OrderBy(transaction => transaction.CreatedAt).ThenBy(transaction => transaction.ReferenceNo),
+            TransactionHistorySort.AmountDesc => transactions.OrderByDescending(transaction => transaction.Amount).ThenByDescending(transaction => transaction.ReferenceNo),
+            TransactionHistorySort.AmountAsc => transactions.OrderBy(transaction => transaction.Amount).ThenBy(transaction => transaction.ReferenceNo),
+            _ => transactions.OrderByDescending(transaction => transaction.CreatedAt).ThenByDescending(transaction => transaction.ReferenceNo),
+        };
+
+        return (from transaction in ordered
                 let isIncoming = transaction.TargetAccountId == accountId
                 let counterpartyId = isIncoming ? transaction.SourceAccountId : transaction.TargetAccountId
-                orderby transaction.CreatedAt descending, transaction.ReferenceNo descending
                 select new AccountTransactionDto(
                     transaction.Id,
                     transaction.ReferenceNo,

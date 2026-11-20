@@ -15,6 +15,7 @@ public sealed class Messages
     public const string IdempotencyKeyInvalid = "IDEMPOTENCY_KEY_INVALID";
     public const string DateRangeInvalid = "DATE_RANGE_INVALID";
     public const string AmountRangeInvalid = "AMOUNT_RANGE_INVALID";
+    public const string SortInvalid = "SORT_INVALID";
 
     private static readonly ResourceManager Resources = new(typeof(Messages));
 

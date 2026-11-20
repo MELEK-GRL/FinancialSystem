@@ -140,6 +140,81 @@ public class AccountHistoryTests(ApiFactory factory) : IClassFixture<ApiFactory>
         Assert.Equal(ErrorCodes.ValidationError, problem.GetProperty("errorCode").GetString());
     }
 
+    [Fact]
+    public async Task Pages_DoNotOverlap_AndCoverAllTransactions()
+    {
+        var (customer, accountId) = await CreateAccountWithDepositsAsync(12);
+
+        var pages = new List<JsonElement>();
+        for (var page = 1; page <= 3; page++)
+        {
+            pages.Add(await customer.Client.GetFromJsonAsync<JsonElement>($"/api/v1/accounts/{accountId}/transactions?page={page}&size=5"));
+        }
+
+        var ids = pages.SelectMany(page => page.GetProperty("items").EnumerateArray().Select(item => item.GetProperty("id").GetGuid())).ToList();
+        Assert.Equal([5, 5, 2], pages.Select(page => page.GetProperty("items").GetArrayLength()));
+        Assert.All(pages, page => Assert.Equal(12, page.GetProperty("totalCount").GetInt32()));
+        Assert.Equal(3, pages[0].GetProperty("totalPages").GetInt32());
+        Assert.Equal(12, ids.Distinct().Count());
+    }
+
+    [Theory]
+    [InlineData("amount_asc", new[] { 1, 2, 3, 4, 5 })]
+    [InlineData("amount_desc", new[] { 5, 4, 3, 2, 1 })]
+    [InlineData("createdAt_asc", new[] { 1, 2, 3, 4, 5 })]
+    [InlineData("createdAt_desc", new[] { 5, 4, 3, 2, 1 })]
+    [InlineData("AMOUNT_ASC", new[] { 1, 2, 3, 4, 5 })]
+    public async Task Sort_OrdersByAllowedFields(string sort, int[] expectedAmounts)
+    {
+        var (customer, accountId) = await CreateAccountWithDepositsAsync(5);
+
+        var items = await GetItemsAsync(customer.Client, accountId, $"sort={sort}");
+
+        Assert.Equal(expectedAmounts.Select(amount => (decimal)amount), items.Select(item => item.GetProperty("amount").GetDecimal()));
+    }
+
+    [Theory]
+    [InlineData("sort=balance_desc")]
+    [InlineData("sort=amount")]
+    [InlineData("page=0")]
+    [InlineData("size=0")]
+    [InlineData("size=101")]
+    public async Task InvalidPagingOrSort_Returns400(string query)
+    {
+        var customer = await factory.RegisterCustomerAsync();
+        var accountId = await customer.OpenAccountAsync();
+
+        var response = await customer.Client.GetAsync($"/api/v1/accounts/{accountId}/transactions?{query}");
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task InvalidSort_ListsAllowedValues()
+    {
+        var customer = await factory.RegisterCustomerAsync();
+        var accountId = await customer.OpenAccountAsync();
+
+        var response = await customer.Client.GetAsync($"/api/v1/accounts/{accountId}/transactions?sort=balance_desc");
+        var problem = await response.Content.ReadFromJsonAsync<JsonElement>();
+
+        var message = problem.GetProperty("errors").EnumerateObject().Single().Value[0].GetString();
+        Assert.Equal("Sıralama şunlardan biri olmalı: createdAt_desc, createdAt_asc, amount_desc, amount_asc", message);
+    }
+
+    private async Task<(TestCustomer Customer, Guid AccountId)> CreateAccountWithDepositsAsync(int count)
+    {
+        var customer = await factory.RegisterCustomerAsync();
+        var accountId = await customer.OpenAccountAsync();
+
+        for (var amount = 1; amount <= count; amount++)
+        {
+            await customer.DepositAsync(accountId, amount);
+        }
+
+        return (customer, accountId);
+    }
+
     private async Task<(TestCustomer Customer, Guid AccountId)> CreateAccountWithFourTransactionsAsync()
     {
         var customer = await factory.RegisterCustomerAsync();

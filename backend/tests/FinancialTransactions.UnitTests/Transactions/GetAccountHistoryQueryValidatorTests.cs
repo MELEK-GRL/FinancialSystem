@@ -50,4 +50,32 @@ public class GetAccountHistoryQueryValidatorTests
     {
         Assert.False(validator.Validate(new GetAccountHistoryQuery(Guid.NewGuid(), Type: (TransactionType)99)).IsValid);
     }
+
+    [Theory]
+    [InlineData("createdAt_desc")]
+    [InlineData("amount_asc")]
+    [InlineData("Amount_Desc")]
+    public void AllowedSort_Passes(string sort)
+    {
+        Assert.True(validator.Validate(new GetAccountHistoryQuery(Guid.NewGuid(), Sort: sort)).IsValid);
+    }
+
+    [Theory]
+    [InlineData("balance_desc")]
+    [InlineData("created_at desc; drop table transactions")]
+    public void UnknownSort_Fails(string sort)
+    {
+        var result = validator.Validate(new GetAccountHistoryQuery(Guid.NewGuid(), Sort: sort));
+
+        Assert.Equal(nameof(GetAccountHistoryQuery.Sort), Assert.Single(result.Errors).PropertyName);
+    }
+
+    [Theory]
+    [InlineData(0, 20)]
+    [InlineData(1, 0)]
+    [InlineData(1, 101)]
+    public void InvalidPaging_Fails(int page, int size)
+    {
+        Assert.False(validator.Validate(new GetAccountHistoryQuery(Guid.NewGuid(), Page: page, Size: size)).IsValid);
+    }
 }

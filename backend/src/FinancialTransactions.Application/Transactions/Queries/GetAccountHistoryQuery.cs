@@ -1,3 +1,4 @@
+using System.Globalization;
 using FinancialTransactions.Application.Accounts.Queries;
 using FinancialTransactions.Application.Common.Interfaces;
 using FinancialTransactions.Application.Common.Localization;
@@ -19,7 +20,10 @@ public sealed record GetAccountHistoryQuery(
     TransactionType? Type = null,
     TransactionStatus? Status = null,
     decimal? MinAmount = null,
-    decimal? MaxAmount = null) : IRequest<PagedResult<AccountTransactionDto>>;
+    decimal? MaxAmount = null,
+    string? Sort = null,
+    int Page = 1,
+    int Size = PageRequest.DefaultSize) : IRequest<PagedResult<AccountTransactionDto>>;
 
 public sealed class GetAccountHistoryQueryValidator : AbstractValidator<GetAccountHistoryQuery>
 {
@@ -47,6 +51,14 @@ public sealed class GetAccountHistoryQueryValidator : AbstractValidator<GetAccou
             .GreaterThanOrEqualTo(query => query.MinAmount)
             .WithMessage(_ => Messages.Get(Messages.AmountRangeInvalid))
             .When(query => query.MinAmount.HasValue && query.MaxAmount.HasValue);
+
+        RuleFor(query => query.Sort)
+            .Must(sort => sort is null || TransactionHistorySorts.ByName.ContainsKey(sort))
+            .WithMessage(_ => string.Format(
+                CultureInfo.InvariantCulture, Messages.Get(Messages.SortInvalid), string.Join(", ", TransactionHistorySorts.ByName.Keys)));
+
+        RuleFor(query => query.Page).GreaterThanOrEqualTo(1);
+        RuleFor(query => query.Size).InclusiveBetween(1, PageRequest.MaxSize);
     }
 }
 
@@ -72,6 +84,11 @@ public sealed class GetAccountHistoryQueryHandler(
             query.MinAmount,
             query.MaxAmount);
 
-        return await transactionQueries.GetAccountHistoryAsync(account.Id, filter, new PageRequest(), cancellationToken);
+        return await transactionQueries.GetAccountHistoryAsync(
+            account.Id,
+            filter,
+            TransactionHistorySorts.Parse(query.Sort),
+            new PageRequest(query.Page, query.Size),
+            cancellationToken);
     }
 }

@@ -9,6 +9,7 @@ public interface ITransactionQueries
     Task<PagedResult<AccountTransactionDto>> GetAccountHistoryAsync(
         Guid accountId,
         TransactionHistoryFilter filter,
+        TransactionHistorySort sort,
         PageRequest page,
         CancellationToken cancellationToken);
 }
