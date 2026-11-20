@@ -72,4 +72,34 @@
   <data name="INVALID_CREDENTIALS" xml:space="preserve">
     <value>Email or password is incorrect</value>
   </data>
+  <data name="INVALID_VALUE" xml:space="preserve">
+    <value>Invalid value</value>
+  </data>
+  <data name="Field.FirstName" xml:space="preserve">
+    <value>First name</value>
+  </data>
+  <data name="Field.LastName" xml:space="preserve">
+    <value>Last name</value>
+  </data>
+  <data name="Field.NationalId" xml:space="preserve">
+    <value>National ID</value>
+  </data>
+  <data name="Field.Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Field.Phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="Field.Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Field.Amount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="Field.Page" xml:space="preserve">
+    <value>Page</value>
+  </data>
+  <data name="Field.Size" xml:space="preserve">
+    <value>Page size</value>
+  </data>
 </root>

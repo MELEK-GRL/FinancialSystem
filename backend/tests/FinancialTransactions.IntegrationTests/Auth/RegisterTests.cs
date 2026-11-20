@@ -71,6 +71,47 @@ public class RegisterTests(ApiFactory factory) : IClassFixture<ApiFactory>
     }
 
     [Fact]
+    public async Task Register_WithEmptyBody_ReturnsOneLocalizedErrorPerField()
+    {
+        var response = await client.PostAsync(Url, JsonContent.Create(new { }));
+        var errors = (await response.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("errors");
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        foreach (var field in new[] { "firstName", "lastName", "nationalId", "email", "phone", "password" })
+        {
+            Assert.Equal(1, errors.GetProperty(field).GetArrayLength());
+        }
+
+        Assert.Equal("'Ad' boş olmamalı.", errors.GetProperty("firstName")[0].GetString());
+    }
+
+    [Fact]
+    public async Task Register_WithMalformedJson_ReturnsGenericErrorWithoutParserDetails()
+    {
+        var response = await client.PostAsync(Url, new StringContent("{\"email\":", System.Text.Encoding.UTF8, "application/json"));
+        var body = await response.Content.ReadAsStringAsync();
+        var problem = JsonDocument.Parse(body).RootElement;
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal(ErrorCodes.ValidationError, problem.GetProperty("errorCode").GetString());
+        Assert.DoesNotContain("BytePositionInLine", body);
+        Assert.Equal("Geçersiz değer", problem.GetProperty("errors").EnumerateObject().First().Value[0].GetString());
+    }
+
+    [Fact]
+    public async Task Register_StoresEmailInLowercase()
+    {
+        var request = NewRequest() with { Email = $"  {Guid.NewGuid():N}@EXAMPLE.com " };
+
+        await client.PostAsJsonAsync(Url, request);
+
+        await using var dbContext = factory.CreateDbContext();
+        var expected = request.Email.Trim().ToLowerInvariant();
+        Assert.True(await dbContext.Customers.AnyAsync(customer => customer.Email == expected));
+        Assert.True(await dbContext.Users.AnyAsync(user => user.Email == expected));
+    }
+
+    [Fact]
     public async Task ConcurrentRegistrations_WithSameNationalId_CreateOnlyOneCustomer()
     {
         var nationalId = TestData.ValidNationalId();

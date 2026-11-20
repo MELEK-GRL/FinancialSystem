@@ -1,4 +1,5 @@
 using FinancialTransactions.Application.Common.Behaviors;
+using FinancialTransactions.Application.Common.Localization;
 using FinancialTransactions.Application.Common.Options;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,8 @@ public static class DependencyInjection
             configuration.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
 
+        ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
+        ValidatorOptions.Global.DisplayNameResolver = (_, member, _) => member is null ? null : Messages.FieldName(member.Name);
         services.AddValidatorsFromAssembly(assembly);
 
         return services;

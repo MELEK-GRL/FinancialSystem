@@ -10,8 +10,11 @@ public sealed class Messages
     public const string NationalIdInvalid = "NATIONAL_ID_INVALID";
     public const string PhoneInvalid = "PHONE_INVALID";
     public const string PasswordWeak = "PASSWORD_WEAK";
+    public const string InvalidValue = "INVALID_VALUE";
 
     private static readonly ResourceManager Resources = new(typeof(Messages));
 
     public static string Get(string key) => Resources.GetString(key, CultureInfo.CurrentUICulture) ?? key;
+
+    public static string? FieldName(string propertyName) => Resources.GetString($"Field.{propertyName}", CultureInfo.CurrentUICulture);
 }

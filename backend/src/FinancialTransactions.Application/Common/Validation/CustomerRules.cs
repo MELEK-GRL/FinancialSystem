@@ -19,13 +19,14 @@ public static class CustomerRules
         rule.NotEmpty().MaximumLength(EmailMaxLength).EmailAddress();
 
     public static IRuleBuilderOptions<T, string> MustBeValidNationalId<T>(this IRuleBuilder<T, string> rule) =>
-        rule.Must(NationalId.IsValid).WithMessage(_ => Messages.Get(Messages.NationalIdInvalid));
+        rule.NotEmpty().Must(NationalId.IsValid).WithMessage(_ => Messages.Get(Messages.NationalIdInvalid));
 
     public static IRuleBuilderOptions<T, string> MustBeValidPhone<T>(this IRuleBuilder<T, string> rule) =>
-        rule.Matches("^5[0-9]{9}$").WithMessage(_ => Messages.Get(Messages.PhoneInvalid));
+        rule.NotEmpty().Matches("^5[0-9]{9}$").WithMessage(_ => Messages.Get(Messages.PhoneInvalid));
 
     public static IRuleBuilderOptions<T, string> MustBeStrongPassword<T>(this IRuleBuilder<T, string> rule) =>
         rule
+            .NotEmpty()
             .Length(PasswordMinLength, PasswordMaxLength)
             .Matches("[A-Za-z]").WithMessage(_ => Messages.Get(Messages.PasswordWeak))
             .Matches("[0-9]").WithMessage(_ => Messages.Get(Messages.PasswordWeak));

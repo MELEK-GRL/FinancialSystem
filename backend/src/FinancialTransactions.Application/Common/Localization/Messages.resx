@@ -72,4 +72,34 @@
   <data name="INVALID_CREDENTIALS" xml:space="preserve">
     <value>E-posta veya şifre hatalı</value>
   </data>
+  <data name="INVALID_VALUE" xml:space="preserve">
+    <value>Geçersiz değer</value>
+  </data>
+  <data name="Field.FirstName" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="Field.LastName" xml:space="preserve">
+    <value>Soyad</value>
+  </data>
+  <data name="Field.NationalId" xml:space="preserve">
+    <value>T.C. kimlik no</value>
+  </data>
+  <data name="Field.Email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="Field.Phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="Field.Password" xml:space="preserve">
+    <value>Şifre</value>
+  </data>
+  <data name="Field.Amount" xml:space="preserve">
+    <value>Tutar</value>
+  </data>
+  <data name="Field.Page" xml:space="preserve">
+    <value>Sayfa</value>
+  </data>
+  <data name="Field.Size" xml:space="preserve">
+    <value>Sayfa boyutu</value>
+  </data>
 </root>

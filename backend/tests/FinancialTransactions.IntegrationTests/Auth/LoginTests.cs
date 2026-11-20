@@ -66,6 +66,24 @@ public class LoginTests(ApiFactory factory) : IClassFixture<ApiFactory>
     }
 
     [Fact]
+    public async Task Me_ForAdmin_ReturnsNoCustomerInformation()
+    {
+        var jwtService = factory.Services.GetRequiredService<FinancialTransactions.Application.Common.Interfaces.IJwtTokenService>();
+        var admin = User.CreateAdmin(TestData.UniqueEmail(), "hash");
+        await using (var dbContext = factory.CreateDbContext())
+        {
+            dbContext.Users.Add(admin);
+            await dbContext.SaveChangesAsync();
+        }
+
+        var me = await (await SendMeAsync(jwtService.Create(admin).Token)).Content.ReadFromJsonAsync<JsonElement>();
+
+        Assert.Equal(AppRoles.Admin, me.GetProperty("role").GetString());
+        Assert.Equal(JsonValueKind.Null, me.GetProperty("customerId").ValueKind);
+        Assert.Equal(JsonValueKind.Null, me.GetProperty("customerNo").ValueKind);
+    }
+
+    [Fact]
     public async Task Me_WithoutToken_Returns401ProblemDetails()
     {
         var response = await client.GetAsync("/api/v1/auth/me");
