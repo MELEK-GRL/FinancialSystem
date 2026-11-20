@@ -8,6 +8,7 @@ using FinancialTransactions.Domain.Accounts;
 using FinancialTransactions.Domain.Common;
 using FinancialTransactions.Domain.Customers;
 using FinancialTransactions.Domain.Transactions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace FinancialTransactions.Application.Transactions;
@@ -18,7 +19,8 @@ public sealed class TransactionExecutor(
     ITransactionRepository transactions,
     IOutbox outbox,
     IUnitOfWork unitOfWork,
-    IOptions<TransactionOptions> options)
+    IOptions<TransactionOptions> options,
+    ILogger<TransactionExecutor> logger)
 {
     public async Task<TransactionDto> ExecuteAsync(
         Transaction transaction,
@@ -62,11 +64,11 @@ public sealed class TransactionExecutor(
                 moveMoney(lockedAccounts.ToDictionary(account => account.Id));
                 transaction.MarkSucceeded();
                 outbox.Enqueue(TransactionEventTypes.Completed, transaction.Id, ToEvent(transaction, lockedAccounts));
-            }, cancellationToken);
+            }, CancellationToken.None);
         }
-        catch (BusinessRuleException exception)
+        catch (Exception exception)
         {
-            await RecordFailureAsync(transaction.Id, exception.ErrorCode, cancellationToken);
+            await RecordFailureAsync(transaction.Id, FailureReasonOf(exception));
             throw;
         }
 
@@ -88,7 +90,7 @@ public sealed class TransactionExecutor(
         return previous.Status switch
         {
             TransactionStatus.Success => TransactionDto.From(previous),
-            TransactionStatus.Failed => throw new TransactionFailedException(previous.FailureReason ?? ErrorCodes.InternalError),
+            TransactionStatus.Failed => throw FailureOf(previous.FailureReason),
             _ => throw new IdempotencyInProgressException(),
         };
     }
@@ -113,16 +115,37 @@ public sealed class TransactionExecutor(
         }
     }
 
-    private async Task RecordFailureAsync(Guid transactionId, string reason, CancellationToken cancellationToken) =>
-        await unitOfWork.ExecuteInTransactionAsync(async token =>
-        {
-            var failed = await transactions.GetByIdAsync(transactionId, token)
-                ?? throw new InvalidOperationException($"Transaction {transactionId} was not found");
-            var involvedAccounts = await accounts.GetByIdsAsync(AccountIdsOf(failed), token);
+    private static Exception FailureOf(string? reason) =>
+        reason == ErrorCodes.LockTimeout
+            ? new LockTimeoutException()
+            : new TransactionFailedException(reason ?? ErrorCodes.ProcessingError);
 
-            failed.MarkFailed(reason);
-            outbox.Enqueue(TransactionEventTypes.Failed, failed.Id, ToEvent(failed, involvedAccounts));
-        }, cancellationToken);
+    private static string FailureReasonOf(Exception exception) => exception switch
+    {
+        BusinessRuleException rule => rule.ErrorCode,
+        LockTimeoutException => ErrorCodes.LockTimeout,
+        _ => ErrorCodes.ProcessingError,
+    };
+
+    private async Task RecordFailureAsync(Guid transactionId, string reason)
+    {
+        try
+        {
+            await unitOfWork.ExecuteInTransactionAsync(async token =>
+            {
+                var failed = await transactions.GetByIdAsync(transactionId, token)
+                    ?? throw new InvalidOperationException($"Transaction {transactionId} was not found");
+                var involvedAccounts = await accounts.GetByIdsAsync(AccountIdsOf(failed), token);
+
+                failed.MarkFailed(reason);
+                outbox.Enqueue(TransactionEventTypes.Failed, failed.Id, ToEvent(failed, involvedAccounts));
+            }, CancellationToken.None);
+        }
+        catch (Exception exception)
+        {
+            logger.LogError(exception, "Could not mark transaction {TransactionId} as failed with {Reason}", transactionId, reason);
+        }
+    }
 
     private static Guid[] AccountIdsOf(Transaction transaction) =>
         new[] { transaction.SourceAccountId, transaction.TargetAccountId }.OfType<Guid>().ToArray();

@@ -19,6 +19,7 @@ public sealed class GlobalExceptionHandler(
             NotFoundException notFound => (StatusCodes.Status404NotFound, notFound.ErrorCode),
             ConflictException conflict => (StatusCodes.Status409Conflict, conflict.ErrorCode),
             BusinessRuleException rule => (StatusCodes.Status422UnprocessableEntity, rule.ErrorCode),
+            LockTimeoutException => (StatusCodes.Status503ServiceUnavailable, ErrorCodes.LockTimeout),
             _ => (StatusCodes.Status500InternalServerError, ErrorCodes.InternalError),
         };
 

@@ -123,4 +123,10 @@
   <data name="Field.IdempotencyKey" xml:space="preserve">
     <value>Idempotency key</value>
   </data>
+  <data name="LOCK_TIMEOUT" xml:space="preserve">
+    <value>The account is busy, the transaction was not completed. Please try again</value>
+  </data>
+  <data name="PROCESSING_ERROR" xml:space="preserve">
+    <value>The transaction could not be completed and no money was moved. Please try again</value>
+  </data>
 </root>

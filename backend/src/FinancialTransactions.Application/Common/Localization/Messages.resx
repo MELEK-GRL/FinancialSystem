@@ -123,4 +123,10 @@
   <data name="Field.IdempotencyKey" xml:space="preserve">
     <value>İşlem anahtarı</value>
   </data>
+  <data name="LOCK_TIMEOUT" xml:space="preserve">
+    <value>Hesap şu anda yoğun, işlem gerçekleşmedi. Lütfen tekrar deneyin</value>
+  </data>
+  <data name="PROCESSING_ERROR" xml:space="preserve">
+    <value>İşlem tamamlanamadı, para hareketi olmadı. Lütfen tekrar deneyin</value>
+  </data>
 </root>

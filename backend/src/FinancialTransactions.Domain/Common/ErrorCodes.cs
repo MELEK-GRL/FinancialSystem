@@ -20,4 +20,6 @@ public static class ErrorCodes
     public const string DuplicateCustomer = "DUPLICATE_CUSTOMER";
     public const string IdempotencyConflict = "IDEMPOTENCY_CONFLICT";
     public const string IdempotencyInProgress = "IDEMPOTENCY_IN_PROGRESS";
+    public const string LockTimeout = "LOCK_TIMEOUT";
+    public const string ProcessingError = "PROCESSING_ERROR";
 }
