@@ -3,6 +3,8 @@ using FinancialTransactions.Application.Accounts;
 using FinancialTransactions.Application.Accounts.Commands.ChangeAccountStatus;
 using FinancialTransactions.Application.Accounts.Commands.OpenAccount;
 using FinancialTransactions.Application.Accounts.Queries;
+using FinancialTransactions.Application.Common.Paging;
+using FinancialTransactions.Application.Transactions.Queries;
 using FinancialTransactions.Domain.Accounts;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -45,6 +47,12 @@ public sealed class AccountsController(ISender sender) : ApiControllerBase
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, "application/problem+json")]
     public Task<AccountBalanceDto> GetBalance(Guid id, CancellationToken cancellationToken) =>
         sender.Send(new GetAccountBalanceQuery(id), cancellationToken);
+
+    [HttpGet("{id:guid}/transactions")]
+    [ProducesResponseType<PagedResult<AccountTransactionDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, "application/problem+json")]
+    public Task<PagedResult<AccountTransactionDto>> GetHistory(Guid id, CancellationToken cancellationToken) =>
+        sender.Send(new GetAccountHistoryQuery(id), cancellationToken);
 
     [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
     [HttpPatch("{id:guid}/status")]

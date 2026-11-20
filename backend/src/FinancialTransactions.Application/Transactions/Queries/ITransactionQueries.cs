@@ -1,8 +1,12 @@
+using FinancialTransactions.Application.Common.Paging;
+
 namespace FinancialTransactions.Application.Transactions.Queries;
 
 public interface ITransactionQueries
 {
     Task<TransactionWithOwners?> GetByReferenceNoAsync(string referenceNo, CancellationToken cancellationToken);
+
+    Task<PagedResult<AccountTransactionDto>> GetAccountHistoryAsync(Guid accountId, PageRequest page, CancellationToken cancellationToken);
 }
 
 public sealed record TransactionWithOwners(

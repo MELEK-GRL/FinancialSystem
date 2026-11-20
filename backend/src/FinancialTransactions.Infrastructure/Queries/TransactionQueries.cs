@@ -1,3 +1,4 @@
+using FinancialTransactions.Application.Common.Paging;
 using FinancialTransactions.Application.Transactions;
 using FinancialTransactions.Application.Transactions.Queries;
 using FinancialTransactions.Infrastructure.Persistence;
@@ -30,4 +31,28 @@ public sealed class TransactionQueries(AppDbContext dbContext) : ITransactionQue
              source == null ? null : source.CustomerId,
              target == null ? null : target.CustomerId))
         .SingleOrDefaultAsync(cancellationToken);
+
+    public Task<PagedResult<AccountTransactionDto>> GetAccountHistoryAsync(
+        Guid accountId,
+        PageRequest page,
+        CancellationToken cancellationToken) =>
+        (from transaction in dbContext.Transactions.AsNoTracking()
+         where transaction.SourceAccountId == accountId || transaction.TargetAccountId == accountId
+         let isIncoming = transaction.TargetAccountId == accountId
+         let counterpartyId = isIncoming ? transaction.SourceAccountId : transaction.TargetAccountId
+         orderby transaction.CreatedAt descending, transaction.ReferenceNo descending
+         select new AccountTransactionDto(
+             transaction.Id,
+             transaction.ReferenceNo,
+             transaction.Type,
+             transaction.Status,
+             isIncoming ? TransactionDirection.In : TransactionDirection.Out,
+             transaction.Amount,
+             transaction.Currency,
+             dbContext.Accounts.Where(account => account.Id == counterpartyId).Select(account => account.AccountNo).FirstOrDefault(),
+             transaction.Description,
+             transaction.FailureReason,
+             transaction.CreatedAt,
+             transaction.CompletedAt))
+        .ToPagedResultAsync(page, cancellationToken);
 }
