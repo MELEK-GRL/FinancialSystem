@@ -1,4 +1,10 @@
+using FinancialTransactions.Application;
+using FinancialTransactions.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -17,3 +23,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program;
