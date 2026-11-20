@@ -253,6 +253,125 @@ namespace FinancialTransactions.Infrastructure.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FinancialTransactions.Domain.Transactions.Transaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(19, 4)
+                        .HasColumnType("numeric(19,4)")
+                        .HasColumnName("amount");
+
+                    b.Property<DateTimeOffset?>("CompletedAt")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("completed_at");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("character(3)")
+                        .HasColumnName("currency")
+                        .IsFixedLength();
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("FailureReason")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("failure_reason");
+
+                    b.Property<string>("IdempotencyKey")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("idempotency_key");
+
+                    b.Property<Guid>("InitiatedByCustomerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("initiated_by_customer_id");
+
+                    b.Property<string>("ReferenceNo")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)")
+                        .HasColumnName("reference_no");
+
+                    b.Property<Guid?>("SourceAccountId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("source_account_id");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
+                        .HasColumnName("status");
+
+                    b.Property<Guid?>("TargetAccountId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("target_account_id");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_transactions");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("ix_transactions_created_at");
+
+                    b.HasIndex("ReferenceNo")
+                        .IsUnique()
+                        .HasDatabaseName("ix_transactions_reference_no");
+
+                    b.HasIndex("InitiatedByCustomerId", "IdempotencyKey")
+                        .IsUnique()
+                        .HasDatabaseName("ix_transactions_initiated_by_customer_id_idempotency_key")
+                        .HasFilter("idempotency_key IS NOT NULL");
+
+                    b.HasIndex("SourceAccountId", "CreatedAt")
+                        .IsDescending(false, true)
+                        .HasDatabaseName("ix_transactions_source_account_id_created_at");
+
+                    b.HasIndex("Status", "CreatedAt")
+                        .HasDatabaseName("ix_transactions_status_created_at");
+
+                    b.HasIndex("TargetAccountId", "CreatedAt")
+                        .IsDescending(false, true)
+                        .HasDatabaseName("ix_transactions_target_account_id_created_at");
+
+                    b.HasIndex(new[] { "CreatedAt" }, "ix_transactions_pending_created_at")
+                        .HasDatabaseName("ix_transactions_pending_created_at")
+                        .HasFilter("status = 'Pending'");
+
+                    b.ToTable("transactions", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_transactions_accounts_match_type", "(type = 'Deposit' AND source_account_id IS NULL AND target_account_id IS NOT NULL)\nOR (type = 'Withdrawal' AND source_account_id IS NOT NULL AND target_account_id IS NULL)\nOR (type = 'Transfer' AND source_account_id IS NOT NULL AND target_account_id IS NOT NULL\n    AND source_account_id <> target_account_id)");
+
+                            t.HasCheckConstraint("ck_transactions_amount_positive", "amount > 0");
+
+                            t.HasCheckConstraint("ck_transactions_currency", "currency ~ '^[A-Z]{3}$'");
+
+                            t.HasCheckConstraint("ck_transactions_status", "status IN ('Pending', 'Success', 'Failed')");
+
+                            t.HasCheckConstraint("ck_transactions_type", "type IN ('Deposit', 'Withdrawal', 'Transfer')");
+                        });
+                });
+
             modelBuilder.Entity("FinancialTransactions.Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -332,6 +451,28 @@ namespace FinancialTransactions.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_audit_logs_users_performed_by");
+                });
+
+            modelBuilder.Entity("FinancialTransactions.Domain.Transactions.Transaction", b =>
+                {
+                    b.HasOne("FinancialTransactions.Domain.Customers.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("InitiatedByCustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_transactions_customers_initiated_by_customer_id");
+
+                    b.HasOne("FinancialTransactions.Domain.Accounts.Account", null)
+                        .WithMany()
+                        .HasForeignKey("SourceAccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_transactions_accounts_source_account_id");
+
+                    b.HasOne("FinancialTransactions.Domain.Accounts.Account", null)
+                        .WithMany()
+                        .HasForeignKey("TargetAccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_transactions_accounts_target_account_id");
                 });
 
             modelBuilder.Entity("FinancialTransactions.Domain.Users.User", b =>
