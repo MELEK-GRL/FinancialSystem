@@ -27,6 +27,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     {
         modelBuilder.HasSequence<long>(CustomerConfiguration.CustomerNoSequence).StartsAt(100000001);
         modelBuilder.HasSequence<long>(AccountConfiguration.AccountNoSequence).StartsAt(1000000001);
+        modelBuilder.HasSequence<long>(ReferenceNumberGenerator.Sequence);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 }

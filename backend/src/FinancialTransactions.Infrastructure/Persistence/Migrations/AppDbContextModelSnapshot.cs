@@ -27,6 +27,8 @@ namespace FinancialTransactions.Infrastructure.Persistence.Migrations
             modelBuilder.HasSequence("customer_no_seq")
                 .StartsAt(100000001L);
 
+            modelBuilder.HasSequence("transaction_reference_seq");
+
             modelBuilder.Entity("FinancialTransactions.Domain.Accounts.Account", b =>
                 {
                     b.Property<Guid>("Id")
