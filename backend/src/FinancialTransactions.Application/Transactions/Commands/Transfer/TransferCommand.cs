@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FinancialTransactions.Application.Accounts.Queries;
 using FinancialTransactions.Application.Common.Interfaces;
 using FinancialTransactions.Application.Common.Security;
@@ -9,8 +10,12 @@ using MediatR;
 
 namespace FinancialTransactions.Application.Transactions.Commands.Transfer;
 
-public sealed record TransferCommand(Guid SourceAccountId, string TargetAccountNo, decimal Amount, string? Description)
-    : IRequest<TransactionDto>;
+public sealed record TransferCommand(
+    Guid SourceAccountId,
+    string TargetAccountNo,
+    decimal Amount,
+    string? Description,
+    [property: JsonIgnore] string? IdempotencyKey = null) : IRequest<TransactionDto>;
 
 public sealed class TransferCommandValidator : AbstractValidator<TransferCommand>
 {
@@ -20,6 +25,7 @@ public sealed class TransferCommandValidator : AbstractValidator<TransferCommand
         RuleFor(command => command.TargetAccountNo).MustBeValidAccountNo();
         RuleFor(command => command.Amount).MustBeValidAmount();
         RuleFor(command => command.Description).MaximumLength(TransactionRules.DescriptionMaxLength);
+        RuleFor(command => command.IdempotencyKey).MustBeValidIdempotencyKey();
     }
 }
 
@@ -54,7 +60,7 @@ public sealed class TransferCommandHandler(
             command.Amount,
             command.Description,
             customerId,
-            idempotencyKey: null);
+            command.IdempotencyKey);
 
         return await executor.ExecuteAsync(
             transaction,

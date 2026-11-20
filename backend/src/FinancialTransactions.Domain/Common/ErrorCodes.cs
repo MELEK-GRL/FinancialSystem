@@ -19,4 +19,5 @@ public static class ErrorCodes
     public const string AmountLimitExceeded = "AMOUNT_LIMIT_EXCEEDED";
     public const string DuplicateCustomer = "DUPLICATE_CUSTOMER";
     public const string IdempotencyConflict = "IDEMPOTENCY_CONFLICT";
+    public const string IdempotencyInProgress = "IDEMPOTENCY_IN_PROGRESS";
 }

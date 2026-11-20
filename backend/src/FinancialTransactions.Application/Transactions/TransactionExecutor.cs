@@ -1,4 +1,5 @@
 using FinancialTransactions.Application.Accounts;
+using FinancialTransactions.Application.Common.Exceptions;
 using FinancialTransactions.Application.Common.Interfaces;
 using FinancialTransactions.Application.Common.Options;
 using FinancialTransactions.Application.Customers;
@@ -24,11 +25,32 @@ public sealed class TransactionExecutor(
         Action<IReadOnlyDictionary<Guid, Account>> moveMoney,
         CancellationToken cancellationToken)
     {
-        await unitOfWork.ExecuteInTransactionAsync(_ =>
+        var previous = await FindPreviousAsync(transaction, cancellationToken);
+
+        if (previous is not null)
         {
-            transactions.Add(transaction);
-            return Task.CompletedTask;
-        }, cancellationToken);
+            return Replay(previous, transaction);
+        }
+
+        try
+        {
+            await unitOfWork.ExecuteInTransactionAsync(_ =>
+            {
+                transactions.Add(transaction);
+                return Task.CompletedTask;
+            }, cancellationToken);
+        }
+        catch (UniqueConstraintViolationException) when (transaction.IdempotencyKey is not null)
+        {
+            previous = await FindPreviousAsync(transaction, cancellationToken);
+
+            if (previous is null)
+            {
+                throw;
+            }
+
+            return Replay(previous, transaction);
+        }
 
         try
         {
@@ -49,6 +71,26 @@ public sealed class TransactionExecutor(
         }
 
         return TransactionDto.From(transaction);
+    }
+
+    private async Task<Transaction?> FindPreviousAsync(Transaction transaction, CancellationToken cancellationToken) =>
+        transaction.IdempotencyKey is { } key
+            ? await transactions.GetByIdempotencyKeyAsync(transaction.InitiatedByCustomerId, key, cancellationToken)
+            : null;
+
+    private static TransactionDto Replay(Transaction previous, Transaction request)
+    {
+        if (!previous.IsSameRequestAs(request))
+        {
+            throw new IdempotencyConflictException();
+        }
+
+        return previous.Status switch
+        {
+            TransactionStatus.Success => TransactionDto.From(previous),
+            TransactionStatus.Failed => throw new TransactionFailedException(previous.FailureReason ?? ErrorCodes.InternalError),
+            _ => throw new IdempotencyInProgressException(),
+        };
     }
 
     private async Task EnsureAllowedAsync(Transaction transaction, IReadOnlyList<Account> lockedAccounts, CancellationToken cancellationToken)

@@ -114,4 +114,13 @@
   <data name="Field.TargetAccountNo" xml:space="preserve">
     <value>Alıcı hesap numarası</value>
   </data>
+  <data name="IDEMPOTENCY_IN_PROGRESS" xml:space="preserve">
+    <value>İşlem şu anda sürüyor, birazdan tekrar deneyin</value>
+  </data>
+  <data name="IDEMPOTENCY_KEY_INVALID" xml:space="preserve">
+    <value>İşlem anahtarı 8-100 karakter olmalı; sadece harf, rakam, - ve _ içerebilir</value>
+  </data>
+  <data name="Field.IdempotencyKey" xml:space="preserve">
+    <value>İşlem anahtarı</value>
+  </data>
 </root>

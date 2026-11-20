@@ -86,4 +86,17 @@ public class TransactionTests
         Assert.Throws<ArgumentOutOfRangeException>(() =>
             Transaction.CreateDeposit("REF7", Guid.NewGuid(), amount, null, CustomerId, null));
     }
+
+    [Fact]
+    public void IsSameRequestAs_ComparesTypeAccountsAmountAndDescription()
+    {
+        var source = Guid.NewGuid();
+        var target = Guid.NewGuid();
+        var original = Transaction.CreateTransfer("REF1", source, target, 100m, "Kira", CustomerId, "key-1");
+
+        Assert.True(original.IsSameRequestAs(Transaction.CreateTransfer("REF2", source, target, 100.00m, " Kira ", CustomerId, "key-1")));
+        Assert.False(original.IsSameRequestAs(Transaction.CreateTransfer("REF2", source, target, 101m, "Kira", CustomerId, "key-1")));
+        Assert.False(original.IsSameRequestAs(Transaction.CreateTransfer("REF2", source, Guid.NewGuid(), 100m, "Kira", CustomerId, "key-1")));
+        Assert.False(original.IsSameRequestAs(Transaction.CreateWithdrawal("REF2", source, 100m, "Kira", CustomerId, "key-1")));
+    }
 }

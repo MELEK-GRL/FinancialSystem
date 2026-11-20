@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FinancialTransactions.Application.Accounts.Queries;
 using FinancialTransactions.Application.Common.Interfaces;
 using FinancialTransactions.Application.Common.Security;
@@ -9,7 +10,8 @@ using MediatR;
 
 namespace FinancialTransactions.Application.Transactions.Commands.Withdraw;
 
-public sealed record WithdrawCommand(Guid AccountId, decimal Amount, string? Description) : IRequest<TransactionDto>;
+public sealed record WithdrawCommand(Guid AccountId, decimal Amount, string? Description, [property: JsonIgnore] string? IdempotencyKey = null)
+    : IRequest<TransactionDto>;
 
 public sealed class WithdrawCommandValidator : AbstractValidator<WithdrawCommand>
 {
@@ -18,6 +20,7 @@ public sealed class WithdrawCommandValidator : AbstractValidator<WithdrawCommand
         RuleFor(command => command.AccountId).NotEmpty();
         RuleFor(command => command.Amount).MustBeValidAmount();
         RuleFor(command => command.Description).MaximumLength(TransactionRules.DescriptionMaxLength);
+        RuleFor(command => command.IdempotencyKey).MustBeValidIdempotencyKey();
     }
 }
 
@@ -43,7 +46,7 @@ public sealed class WithdrawCommandHandler(
             command.Amount,
             command.Description,
             customerId,
-            idempotencyKey: null);
+            command.IdempotencyKey);
 
         return await executor.ExecuteAsync(
             transaction,

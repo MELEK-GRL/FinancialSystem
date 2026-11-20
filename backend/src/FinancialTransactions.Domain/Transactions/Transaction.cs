@@ -48,6 +48,13 @@ public sealed class Transaction
         string referenceNo, Guid sourceAccountId, Guid targetAccountId, decimal amount, string? description, Guid customerId, string? idempotencyKey) =>
         Create(referenceNo, TransactionType.Transfer, amount, sourceAccountId, targetAccountId, description, customerId, idempotencyKey);
 
+    public bool IsSameRequestAs(Transaction other) =>
+        Type == other.Type
+        && SourceAccountId == other.SourceAccountId
+        && TargetAccountId == other.TargetAccountId
+        && Amount == other.Amount
+        && Description == other.Description;
+
     public void MarkSucceeded()
     {
         EnsurePending();
