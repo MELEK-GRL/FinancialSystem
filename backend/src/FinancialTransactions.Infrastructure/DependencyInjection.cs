@@ -1,5 +1,8 @@
 using FinancialTransactions.Infrastructure.Options;
+using FinancialTransactions.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace FinancialTransactions.Infrastructure;
 
@@ -16,6 +19,17 @@ public static class DependencyInjection
             .BindConfiguration(JwtOptions.SectionName)
             .ValidateDataAnnotations()
             .ValidateOnStart();
+
+        services.AddDbContext<AppDbContext>((serviceProvider, options) =>
+        {
+            var database = serviceProvider.GetRequiredService<IOptions<DatabaseOptions>>().Value;
+
+            options
+                .UseNpgsql(database.ConnectionString, npgsql => npgsql
+                    .CommandTimeout(database.CommandTimeoutSeconds)
+                    .MigrationsHistoryTable("__ef_migrations_history"))
+                .UseSnakeCaseNamingConvention();
+        });
 
         return services;
     }
