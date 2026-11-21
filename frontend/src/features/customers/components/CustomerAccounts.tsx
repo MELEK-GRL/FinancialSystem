@@ -1,0 +1,55 @@
+import { useTranslation } from 'react-i18next'
+import { AccountStatusBadge, useListAccountsQuery, type Account } from '@/features/accounts'
+import {
+  Card,
+  EmptyState,
+  ErrorState,
+  MoneyText,
+  Spinner,
+  Table,
+  type TableColumn,
+} from '@/shared/ui'
+
+export function CustomerAccounts({ customerId }: { customerId: string }) {
+  const { t } = useTranslation()
+  const { data, isLoading, isError, refetch } = useListAccountsQuery(customerId)
+
+  const columns: TableColumn<Account>[] = [
+    {
+      key: 'accountNo',
+      header: t('customers.accountNo'),
+      render: (a) => <span className="font-mono text-xs">{a.accountNo}</span>,
+    },
+    {
+      key: 'status',
+      header: t('customers.accountStatus'),
+      render: (a) => <AccountStatusBadge status={a.status} />,
+    },
+    {
+      key: 'balance',
+      header: t('customers.balance'),
+      align: 'right',
+      render: (a) => <MoneyText amount={a.balance} />,
+    },
+  ]
+
+  return (
+    <Card title={t('customers.accounts')} padded={false}>
+      {isLoading ? (
+        <div className="flex justify-center py-10">
+          <Spinner label={t('common.loading')} />
+        </div>
+      ) : isError ? (
+        <ErrorState
+          title={t('errors.INTERNAL_ERROR')}
+          retryLabel={t('common.retry')}
+          onRetry={refetch}
+        />
+      ) : data && data.length > 0 ? (
+        <Table columns={columns} rows={data} rowKey={(a) => a.id} />
+      ) : (
+        <EmptyState title={t('customers.noAccounts')} />
+      )}
+    </Card>
+  )
+}

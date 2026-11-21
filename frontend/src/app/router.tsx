@@ -1,8 +1,17 @@
 import { Suspense, type ReactNode } from 'react'
 import { createBrowserRouter } from 'react-router'
-import { ProtectedRoute } from '@/features/auth'
+import { ProtectedRoute, RequireRole } from '@/features/auth'
 import { AppLayout, AuthLayout, PageFallback } from '@/layouts'
-import { DesignSystemPage, HomePage, LoginPage, NotFoundPage, RegisterPage } from './lazyPages'
+import {
+  CustomerDetailPage,
+  CustomerListPage,
+  DesignSystemPage,
+  HomePage,
+  LoginPage,
+  NotFoundPage,
+  ProfilePage,
+  RegisterPage,
+} from './lazyPages'
 import { RouteErrorPage } from './pages/RouteErrorPage'
 
 const standalone = (page: ReactNode) => <Suspense fallback={<PageFallback />}>{page}</Suspense>
@@ -24,7 +33,20 @@ export const router = createBrowserRouter(
           children: [
             {
               element: <AppLayout />,
-              children: [{ index: true, path: '/', element: <HomePage /> }],
+              children: [
+                { index: true, path: '/', element: <HomePage /> },
+                {
+                  element: <RequireRole role="CUSTOMER" />,
+                  children: [{ path: '/profile', element: <ProfilePage /> }],
+                },
+                {
+                  element: <RequireRole role="ADMIN" />,
+                  children: [
+                    { path: '/customers', element: <CustomerListPage /> },
+                    { path: '/customers/:id', element: <CustomerDetailPage /> },
+                  ],
+                },
+              ],
             },
           ],
         },

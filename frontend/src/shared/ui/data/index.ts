@@ -1,5 +1,6 @@
 export * from './Card'
 export * from './DateText'
+export * from './DetailList'
 export * from './MoneyText'
 export * from './Pagination'
 export * from './Table'

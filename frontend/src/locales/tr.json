@@ -197,7 +197,9 @@
     "menu": "Menüyü aç",
     "closeMenu": "Menüyü kapat",
     "main": "Ana menü",
-    "designSystem": "Tasarım sistemi"
+    "designSystem": "Tasarım sistemi",
+    "profile": "Profilim",
+    "customers": "Müşteriler"
   },
   "roles": {
     "ADMIN": "Yönetici",
@@ -214,5 +216,51 @@
     "title": "Sayfa bulunamadı",
     "description": "Aradığınız sayfa taşınmış ya da hiç var olmamış olabilir.",
     "action": "Ana sayfaya dön"
+  },
+  "customers": {
+    "profileTitle": "Profilim",
+    "profileSubtitle": "Kişisel bilgileriniz ve iletişim bilgileriniz.",
+    "personalInfo": "Kişisel bilgiler",
+    "contactInfo": "İletişim bilgileri",
+    "contactHint": "E-posta adresiniz aynı zamanda giriş bilgisidir.",
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "fullName": "Ad soyad",
+    "nationalId": "T.C. Kimlik No",
+    "customerNo": "Müşteri no",
+    "email": "E-posta",
+    "phone": "Cep telefonu",
+    "status": "Durum",
+    "createdAt": "Kayıt tarihi",
+    "save": "Kaydet",
+    "saved": "Bilgileriniz güncellendi",
+    "listTitle": "Müşteriler",
+    "listSubtitle": "Kayıtlı müşterileri arayın, durumlarını yönetin.",
+    "searchLabel": "Müşteri ara",
+    "searchPlaceholder": "Ad, e-posta, müşteri no veya TCKN",
+    "statusFilter": "Durum",
+    "allStatuses": "Tümü",
+    "emptyTitle": "Müşteri bulunamadı",
+    "emptyDescription": "Arama ya da filtreyi değiştirip tekrar deneyin.",
+    "loadError": "Müşteriler yüklenemedi",
+    "back": "Müşterilere dön",
+    "detailError": "Müşteri bilgileri yüklenemedi",
+    "accounts": "Hesaplar",
+    "noAccounts": "Bu müşterinin henüz hesabı yok.",
+    "accountNo": "Hesap no",
+    "balance": "Bakiye",
+    "accountStatus": "Hesap durumu",
+    "deactivate": "Pasif yap",
+    "activate": "Aktif yap",
+    "deactivateTitle": "Müşteriyi pasif yap",
+    "activateTitle": "Müşteriyi aktif yap",
+    "deactivateBody": "{{name}} pasif yapılırsa yeni para işlemi yapamaz; mevcut kayıtları korunur.",
+    "activateBody": "{{name}} yeniden aktif yapılacak ve işlem yapabilecek.",
+    "deactivated": "Müşteri pasif yapıldı",
+    "activated": "Müşteri aktif yapıldı"
+  },
+  "status": {
+    "Active": "Aktif",
+    "Passive": "Pasif"
   }
 }

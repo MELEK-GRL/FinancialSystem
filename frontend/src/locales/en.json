@@ -197,7 +197,9 @@
     "menu": "Open menu",
     "closeMenu": "Close menu",
     "main": "Main menu",
-    "designSystem": "Design system"
+    "designSystem": "Design system",
+    "profile": "My profile",
+    "customers": "Customers"
   },
   "roles": {
     "ADMIN": "Administrator",
@@ -214,5 +216,51 @@
     "title": "Page not found",
     "description": "The page you are looking for may have moved or never existed.",
     "action": "Back to home"
+  },
+  "customers": {
+    "profileTitle": "My profile",
+    "profileSubtitle": "Your personal and contact details.",
+    "personalInfo": "Personal details",
+    "contactInfo": "Contact details",
+    "contactHint": "Your email address is also your sign-in name.",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "fullName": "Full name",
+    "nationalId": "National ID",
+    "customerNo": "Customer no",
+    "email": "Email",
+    "phone": "Mobile phone",
+    "status": "Status",
+    "createdAt": "Registered on",
+    "save": "Save",
+    "saved": "Your details were updated",
+    "listTitle": "Customers",
+    "listSubtitle": "Search registered customers and manage their status.",
+    "searchLabel": "Search customers",
+    "searchPlaceholder": "Name, email, customer no or national ID",
+    "statusFilter": "Status",
+    "allStatuses": "All",
+    "emptyTitle": "No customers found",
+    "emptyDescription": "Change the search or filter and try again.",
+    "loadError": "Customers could not be loaded",
+    "back": "Back to customers",
+    "detailError": "Customer details could not be loaded",
+    "accounts": "Accounts",
+    "noAccounts": "This customer has no accounts yet.",
+    "accountNo": "Account no",
+    "balance": "Balance",
+    "accountStatus": "Account status",
+    "deactivate": "Deactivate",
+    "activate": "Activate",
+    "deactivateTitle": "Deactivate customer",
+    "activateTitle": "Activate customer",
+    "deactivateBody": "If {{name}} is deactivated they cannot make new transactions; existing records are kept.",
+    "activateBody": "{{name}} will be activated again and can make transactions.",
+    "deactivated": "Customer deactivated",
+    "activated": "Customer activated"
+  },
+  "status": {
+    "Active": "Active",
+    "Passive": "Passive"
   }
 }
