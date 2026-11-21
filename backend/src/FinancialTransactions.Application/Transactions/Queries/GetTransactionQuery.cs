@@ -11,6 +11,11 @@ public sealed class GetTransactionQueryHandler(ICurrentUser currentUser, ITransa
 {
     public async Task<TransactionDto> Handle(GetTransactionQuery query, CancellationToken cancellationToken)
     {
+        if (string.IsNullOrWhiteSpace(query.ReferenceNo))
+        {
+            throw new TransactionNotFoundException();
+        }
+
         var referenceNo = query.ReferenceNo.Trim().ToUpperInvariant();
         var found = await transactionQueries.GetByReferenceNoAsync(referenceNo, cancellationToken);
 
