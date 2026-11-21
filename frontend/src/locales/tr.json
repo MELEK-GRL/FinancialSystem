@@ -168,5 +168,51 @@
       "toastSuccessText": "Transfer gönderildi",
       "toastErrorText": "Yetersiz bakiye"
     }
+  },
+  "auth": {
+    "brandTagline": "Hesaplarınız, transferleriniz ve raporlarınız tek yerde.",
+    "loginTitle": "Giriş yap",
+    "loginSubtitle": "Devam etmek için hesabınıza giriş yapın.",
+    "registerTitle": "Hesap oluştur",
+    "registerSubtitle": "Birkaç bilgiyle hemen müşterimiz olun.",
+    "email": "E-posta",
+    "password": "Şifre",
+    "passwordConfirm": "Şifre tekrar",
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "nationalId": "T.C. Kimlik No",
+    "phone": "Cep telefonu",
+    "loginButton": "Giriş yap",
+    "registerButton": "Kayıt ol",
+    "noAccount": "Hesabınız yok mu?",
+    "goRegister": "Kayıt olun",
+    "haveAccount": "Zaten hesabınız var mı?",
+    "goLogin": "Giriş yapın",
+    "registered": "Kaydınız tamamlandı, hoş geldiniz!",
+    "logout": "Çıkış yap",
+    "passwordHint": "En az 8 karakter, bir harf ve bir rakam"
+  },
+  "nav": {
+    "home": "Panel",
+    "menu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat",
+    "main": "Ana menü",
+    "designSystem": "Tasarım sistemi"
+  },
+  "roles": {
+    "ADMIN": "Yönetici",
+    "CUSTOMER": "Müşteri"
+  },
+  "home": {
+    "greeting": "Hoş geldiniz, {{name}}",
+    "greetingFallback": "Hoş geldiniz",
+    "customerNo": "Müşteri no: {{value}}",
+    "customerIntro": "Hesaplarınız, para transferi ve işlem geçmişi burada yer alacak.",
+    "adminIntro": "Müşteri ve hesap yönetimi, raporlar ve audit kayıtları burada yer alacak."
+  },
+  "notFound": {
+    "title": "Sayfa bulunamadı",
+    "description": "Aradığınız sayfa taşınmış ya da hiç var olmamış olabilir.",
+    "action": "Ana sayfaya dön"
   }
 }

@@ -1,10 +1,11 @@
+import { RouterProvider } from 'react-router/dom'
 import { Toaster } from 'sonner'
-import { DesignSystemPage } from '@/features/design-system'
+import { router } from './router'
 
 export function App() {
   return (
     <>
-      <DesignSystemPage />
+      <RouterProvider router={router} />
       <Toaster position="top-right" closeButton />
     </>
   )

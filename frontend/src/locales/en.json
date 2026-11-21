@@ -168,5 +168,51 @@
       "toastSuccessText": "Transfer sent",
       "toastErrorText": "Insufficient balance"
     }
+  },
+  "auth": {
+    "brandTagline": "Your accounts, transfers and reports in one place.",
+    "loginTitle": "Sign in",
+    "loginSubtitle": "Sign in to your account to continue.",
+    "registerTitle": "Create account",
+    "registerSubtitle": "Become a customer with just a few details.",
+    "email": "Email",
+    "password": "Password",
+    "passwordConfirm": "Confirm password",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "nationalId": "National ID",
+    "phone": "Mobile phone",
+    "loginButton": "Sign in",
+    "registerButton": "Sign up",
+    "noAccount": "Don't have an account?",
+    "goRegister": "Sign up",
+    "haveAccount": "Already have an account?",
+    "goLogin": "Sign in",
+    "registered": "Registration complete, welcome!",
+    "logout": "Sign out",
+    "passwordHint": "At least 8 characters, one letter and one digit"
+  },
+  "nav": {
+    "home": "Dashboard",
+    "menu": "Open menu",
+    "closeMenu": "Close menu",
+    "main": "Main menu",
+    "designSystem": "Design system"
+  },
+  "roles": {
+    "ADMIN": "Administrator",
+    "CUSTOMER": "Customer"
+  },
+  "home": {
+    "greeting": "Welcome, {{name}}",
+    "greetingFallback": "Welcome",
+    "customerNo": "Customer no: {{value}}",
+    "customerIntro": "Your accounts, money transfers and transaction history will be here.",
+    "adminIntro": "Customer and account management, reports and audit logs will be here."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for may have moved or never existed.",
+    "action": "Back to home"
   }
 }

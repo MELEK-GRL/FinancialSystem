@@ -1,25 +1,32 @@
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import type { SerializedError } from '@reduxjs/toolkit'
 import i18n from 'i18next'
+import { notify } from '@/shared/lib/notify'
 import { isProblemDetails, type ProblemDetails } from '@/shared/types'
 
-export type ApiError = FetchBaseQueryError | SerializedError | undefined
-
-export function getProblemDetails(error: ApiError): ProblemDetails | undefined {
-  return error && 'status' in error && isProblemDetails(error.data) ? error.data : undefined
+function isFetchError(error: unknown): error is FetchBaseQueryError {
+  return typeof error === 'object' && error !== null && 'status' in error
 }
 
-export function getErrorMessage(error: ApiError) {
+export function getProblemDetails(error: unknown): ProblemDetails | undefined {
+  return isFetchError(error) && isProblemDetails(error.data) ? error.data : undefined
+}
+
+export function getErrorMessage(error: unknown) {
   const problem = getProblemDetails(error)
   if (problem) return problem.title || i18n.t(`errors.${problem.errorCode}` as never)
 
-  if (
-    error &&
-    'status' in error &&
-    (error.status === 'FETCH_ERROR' || error.status === 'TIMEOUT_ERROR')
-  ) {
+  if (isFetchError(error) && (error.status === 'FETCH_ERROR' || error.status === 'TIMEOUT_ERROR')) {
     return i18n.t('errors.NETWORK_ERROR')
   }
 
   return i18n.t('errors.INTERNAL_ERROR')
+}
+
+export function reportApiError(
+  error: unknown,
+  applyFieldErrors?: (problem: ProblemDetails) => boolean,
+) {
+  const problem = getProblemDetails(error)
+  if (problem && applyFieldErrors?.(problem)) return
+  notify.error(getErrorMessage(error))
 }

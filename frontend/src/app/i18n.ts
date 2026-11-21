@@ -2,12 +2,9 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import en from '@/locales/en.json'
 import tr from '@/locales/tr.json'
-
-export const languages = ['tr', 'en'] as const
-export type Language = (typeof languages)[number]
+import { DEFAULT_LANGUAGE, languages, type Language } from '@/shared/i18n/languages'
 
 const STORAGE_KEY = 'language'
-const DEFAULT_LANGUAGE: Language = 'tr'
 
 function readStoredLanguage(): Language {
   try {

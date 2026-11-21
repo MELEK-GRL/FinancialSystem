@@ -1,0 +1,11 @@
+import { Navigate, Outlet, useLocation } from 'react-router'
+import { useAppSelector } from '@/app/hooks'
+import { selectIsAuthenticated } from '../authSlice'
+
+export function ProtectedRoute() {
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
+  const location = useLocation()
+
+  if (!isAuthenticated) return <Navigate to="/login" replace state={{ from: location.pathname }} />
+  return <Outlet />
+}

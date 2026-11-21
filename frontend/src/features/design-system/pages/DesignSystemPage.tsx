@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
-import { languages } from '@/app/i18n'
-import { Card, Heading, LanguageSwitcher, Text } from '@/shared/ui'
+import { LanguageSelector } from '@/shared/i18n'
+import { Card, Heading, Text } from '@/shared/ui'
 import { BadgesPreview, ButtonsPreview } from '../components/ButtonsPreview'
 import { ColorPalette } from '../components/ColorPalette'
 import { MoneyPreview, SearchPreview, TablePreview } from '../components/DataPreview'
@@ -9,7 +9,7 @@ import { OverlaysPreview, StatesPreview } from '../components/StatesPreview'
 import { TypographyPreview } from '../components/TypographyPreview'
 
 export function DesignSystemPage() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8 md:px-8">
@@ -19,15 +19,7 @@ export function DesignSystemPage() {
           <Heading>{t('designSystem.title')}</Heading>
           <Text variant="muted">{t('designSystem.subtitle')}</Text>
         </div>
-        <LanguageSwitcher
-          label={t('language.label')}
-          value={i18n.language}
-          options={languages.map((language) => ({
-            value: language,
-            label: t(`language.${language}`),
-          }))}
-          onChange={(language) => void i18n.changeLanguage(language)}
-        />
+        <LanguageSelector />
       </header>
 
       <Card title={t('designSystem.sections.colors')}>
