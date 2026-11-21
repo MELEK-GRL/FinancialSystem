@@ -1,3 +1,4 @@
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { baseApi } from '@/shared/api'
 import type { PagedResult } from '@/shared/types'
 import type {
@@ -18,6 +19,8 @@ const withIdempotency =
   })
 
 const affected = [{ type: 'Accounts' as const, id: 'LIST' }, 'Transactions' as const]
+const afterAnswer = (_result: unknown, error?: FetchBaseQueryError) =>
+  error && typeof error.status !== 'number' ? [] : affected
 
 export const transactionsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -31,15 +34,15 @@ export const transactionsApi = baseApi.injectEndpoints({
     }),
     deposit: build.mutation<Transaction, MoneyRequest>({
       query: withIdempotency('/transactions/deposit'),
-      invalidatesTags: affected,
+      invalidatesTags: afterAnswer,
     }),
     withdraw: build.mutation<Transaction, MoneyRequest>({
       query: withIdempotency('/transactions/withdraw'),
-      invalidatesTags: affected,
+      invalidatesTags: afterAnswer,
     }),
     transfer: build.mutation<Transaction, TransferRequest>({
       query: withIdempotency('/transactions/transfer'),
-      invalidatesTags: affected,
+      invalidatesTags: afterAnswer,
     }),
   }),
 })

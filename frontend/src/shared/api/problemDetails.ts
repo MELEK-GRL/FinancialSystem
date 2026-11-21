@@ -11,6 +11,10 @@ export function getProblemDetails(error: unknown): ProblemDetails | undefined {
   return isFetchError(error) && isProblemDetails(error.data) ? error.data : undefined
 }
 
+export function hasServerResponse(error: unknown) {
+  return isFetchError(error) && typeof error.status === 'number'
+}
+
 export function getErrorMessage(error: unknown) {
   const problem = getProblemDetails(error)
   if (problem) return problem.title || i18n.t(`errors.${problem.errorCode}` as never)

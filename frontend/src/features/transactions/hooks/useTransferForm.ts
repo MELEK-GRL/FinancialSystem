@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useLazyLookupAccountQuery, type Account, type AccountLookup } from '@/features/accounts'
-import { getErrorMessage, getProblemDetails } from '@/shared/api'
+import { getErrorMessage, getProblemDetails, hasServerResponse } from '@/shared/api'
 import { useIdempotencyKey, useLocale } from '@/shared/hooks'
 import { formatMoney, popup } from '@/shared/lib'
 import { useTransferMutation } from '../transactionsApi'
@@ -14,7 +14,7 @@ export type PendingTransfer = TransferFormOutput & { source: Account; recipient:
 export function useTransferForm(accounts: Account[]) {
   const { t } = useTranslation()
   const locale = useLocale()
-  const idempotencyKey = useIdempotencyKey()
+  const idempotency = useIdempotencyKey()
   const [pending, setPending] = useState<PendingTransfer | null>(null)
   const [lookup, lookupState] = useLazyLookupAccountQuery()
   const [transfer, transferState] = useTransferMutation()
@@ -61,7 +61,7 @@ export function useTransferForm(accounts: Account[]) {
     try {
       const result = await transfer({
         ...request,
-        idempotencyKey: idempotencyKey(request),
+        idempotencyKey: idempotency.keyFor(request),
       }).unwrap()
       setPending(null)
       form.reset({
@@ -79,6 +79,7 @@ export function useTransferForm(accounts: Account[]) {
         }),
       })
     } catch (error) {
+      if (hasServerResponse(error)) idempotency.reset()
       setPending(null)
       popup.danger({ title: t('transfer.failed'), description: getErrorMessage(error) })
     }

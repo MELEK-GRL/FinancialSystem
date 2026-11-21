@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useDepositMutation, useWithdrawMutation } from '@/features/transactions'
-import { getErrorMessage, getProblemDetails } from '@/shared/api'
+import { getErrorMessage, getProblemDetails, hasServerResponse } from '@/shared/api'
 import {
   useApiFormErrors,
   useFieldError,
@@ -34,7 +34,7 @@ export function MoneyOperationForm({ account, mode, onDone }: MoneyOperationForm
   const locale = useLocale()
   const fieldError = useFieldError()
   const keyboard = useFormKeyboard()
-  const idempotencyKey = useIdempotencyKey()
+  const idempotency = useIdempotencyKey()
   const [deposit, depositState] = useDepositMutation()
   const [withdraw, withdrawState] = useWithdrawMutation()
   const schema = useMemo(
@@ -59,7 +59,7 @@ export function MoneyOperationForm({ account, mode, onDone }: MoneyOperationForm
       const run = mode === 'deposit' ? deposit : withdraw
       const transaction = await run({
         ...request,
-        idempotencyKey: idempotencyKey(request),
+        idempotencyKey: idempotency.keyFor(request),
       }).unwrap()
       onDone()
       popup.success({
@@ -70,9 +70,9 @@ export function MoneyOperationForm({ account, mode, onDone }: MoneyOperationForm
         }),
       })
     } catch (error) {
+      if (hasServerResponse(error)) idempotency.reset()
       const problem = getProblemDetails(error)
       if (problem && applyApiErrors(problem)) return
-      onDone()
       popup.danger({ title: t('accounts.operationFailed'), description: getErrorMessage(error) })
     }
   })
