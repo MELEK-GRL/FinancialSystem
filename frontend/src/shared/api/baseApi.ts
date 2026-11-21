@@ -6,7 +6,7 @@ import {
   type FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react'
 import i18n from 'i18next'
-import { notify } from '@/shared/lib/notify'
+import { popup } from '@/shared/lib/popup'
 import { sessionExpired } from './sessionExpired'
 
 type StateWithSession = { auth: { session: { accessToken: string } | null } }
@@ -31,7 +31,10 @@ const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> =
 
   if (result.error?.status === 401 && hadSession) {
     api.dispatch(sessionExpired())
-    notify.error(i18n.t('errors.UNAUTHORIZED'))
+    popup.info({
+      title: i18n.t('popup.sessionExpiredTitle'),
+      description: i18n.t('popup.sessionExpiredBody'),
+    })
   }
 
   return result

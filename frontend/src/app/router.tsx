@@ -5,7 +5,6 @@ import { AppLayout, AuthLayout, PageFallback } from '@/layouts'
 import {
   CustomerDetailPage,
   CustomerListPage,
-  DesignSystemPage,
   HomePage,
   LoginPage,
   NotFoundPage,
@@ -50,7 +49,6 @@ export const router = createBrowserRouter(
             },
           ],
         },
-        { path: '/ui', element: standalone(<DesignSystemPage />) },
         { path: '*', element: standalone(<NotFoundPage />) },
       ],
     },

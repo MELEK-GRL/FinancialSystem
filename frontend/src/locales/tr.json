@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Finansal İşlem Sistemi",
+    "appName": "Finans Kuruluşu",
     "close": "Kapat",
     "cancel": "Vazgeç",
     "confirm": "Onayla",
@@ -8,7 +8,8 @@
     "loading": "Yükleniyor...",
     "previous": "Önceki",
     "next": "Sonraki",
-    "pageSummary": "Sayfa {{page}} / {{total}}"
+    "pageSummary": "Sayfa {{page}} / {{total}}",
+    "ok": "Tamam"
   },
   "language": {
     "label": "Dil",
@@ -60,115 +61,6 @@
     "hidePassword": "Şifreyi gizle",
     "clear": "Temizle"
   },
-  "designSystem": {
-    "title": "Tasarım Sistemi",
-    "subtitle": "Ortak bileşenlerin canlı önizlemesi. Formu deneyerek validasyonu ve dil değişimini görebilirsiniz.",
-    "sections": {
-      "colors": "Renkler",
-      "typography": "Yazı",
-      "buttons": "Butonlar",
-      "badges": "Rozetler",
-      "form": "Form ve validasyon",
-      "search": "Arama",
-      "money": "Para ve tarih",
-      "table": "Tablo",
-      "states": "Durum ekranları",
-      "overlays": "Pencere ve bildirim"
-    },
-    "sample": {
-      "heading1": "Sayfa başlığı",
-      "heading2": "Bölüm başlığı",
-      "heading3": "Alt başlık",
-      "body": "Gövde metni: hesap hareketleriniz burada listelenir.",
-      "muted": "İkincil açıklama metni.",
-      "small": "Küçük not metni."
-    },
-    "buttons": {
-      "primary": "Para Gönder",
-      "secondary": "Vazgeç",
-      "danger": "Hesabı Pasif Yap",
-      "ghost": "Detay",
-      "loading": "Gönderiliyor",
-      "disabled": "Pasif",
-      "menu": "Menü"
-    },
-    "badges": {
-      "neutral": "Nötr",
-      "primary": "Bilgi",
-      "success": "Başarılı",
-      "danger": "Başarısız",
-      "warning": "Bekliyor"
-    },
-    "form": {
-      "firstName": "Ad",
-      "email": "E-posta",
-      "nationalId": "T.C. Kimlik No",
-      "phone": "Telefon",
-      "password": "Şifre",
-      "amount": "Tutar",
-      "accountNo": "Alıcı hesap no",
-      "description": "Açıklama",
-      "type": "İşlem türü",
-      "typePlaceholder": "Seçin",
-      "dateRange": "Tarih aralığı",
-      "from": "Başlangıç",
-      "to": "Bitiş",
-      "approve": "Bilgilerin doğru olduğunu onaylıyorum",
-      "submit": "Doğrula",
-      "valid": "Form geçerli, istek gönderilmeye hazır",
-      "hint": "Boş göndermeyi ve hatalı değerler yazmayı deneyin"
-    },
-    "types": {
-      "Deposit": "Para yatırma",
-      "Withdrawal": "Para çekme",
-      "Transfer": "Transfer"
-    },
-    "search": {
-      "label": "Müşteri ara",
-      "placeholder": "Ad, e-posta veya müşteri no",
-      "result": "Son arama: {{value}}",
-      "empty": "Henüz arama yapılmadı"
-    },
-    "money": {
-      "balance": "Toplam bakiye",
-      "incoming": "Gelen",
-      "outgoing": "Giden",
-      "date": "İşlem tarihi"
-    },
-    "table": {
-      "reference": "Referans",
-      "type": "Tür",
-      "status": "Durum",
-      "amount": "Tutar",
-      "date": "Tarih"
-    },
-    "status": {
-      "Success": "Başarılı",
-      "Failed": "Başarısız",
-      "Pending": "Bekliyor"
-    },
-    "states": {
-      "emptyTitle": "Henüz hesabınız yok",
-      "emptyDescription": "İlk hesabınızı açarak başlayın.",
-      "emptyAction": "Hesap Aç",
-      "errorTitle": "Veriler yüklenemedi",
-      "errorDescription": "Bağlantınızı kontrol edip tekrar deneyin."
-    },
-    "overlays": {
-      "openModal": "Modal aç",
-      "modalTitle": "Transfer detayı",
-      "modalBody": "Modal ESC tuşuyla ya da kapat butonuyla kapanır; açıkken odak içeride kalır.",
-      "openConfirm": "Onay penceresi",
-      "confirmTitle": "Hesabı pasif yap",
-      "confirmBody": "Pasif hesapta para hareketi yapılamaz. Devam edilsin mi?",
-      "confirmAction": "Pasif yap",
-      "confirmed": "Hesap pasif yapıldı",
-      "toastSuccess": "Başarılı toast",
-      "toastError": "Hata toast",
-      "toastSuccessText": "Transfer gönderildi",
-      "toastErrorText": "Yetersiz bakiye"
-    }
-  },
   "auth": {
     "brandTagline": "Hesaplarınız, transferleriniz ve raporlarınız tek yerde.",
     "loginTitle": "Giriş yap",
@@ -188,16 +80,26 @@
     "goRegister": "Kayıt olun",
     "haveAccount": "Zaten hesabınız var mı?",
     "goLogin": "Giriş yapın",
-    "registered": "Kaydınız tamamlandı, hoş geldiniz!",
     "logout": "Çıkış yap",
-    "passwordHint": "En az 8 karakter, bir harf ve bir rakam"
+    "passwordHint": "En az 8 karakter, bir harf ve bir rakam",
+    "heroTitle": "Paranız güvende, işlemleriniz bir tık uzağınızda.",
+    "heroText": "Hesaplarınızı yönetin, para transferi yapın, tüm hareketlerinizi anında izleyin.",
+    "trustSecureTitle": "Güvenli altyapı",
+    "trustSecureText": "Her işlem şifreli bağlantı ve çok katmanlı kontrolle korunur.",
+    "trustAlwaysTitle": "7/24 erişim",
+    "trustAlwaysText": "Hesaplarınıza istediğiniz an, her cihazdan ulaşın.",
+    "trustReportsTitle": "Anlık raporlar",
+    "trustReportsText": "Giriş, çıkış ve işlem geçmişinizi tek ekranda görün.",
+    "copyright": "© {{year}} Finans Kuruluşu. Tüm hakları saklıdır.",
+    "registeredTitle": "Hesabınız oluşturuldu",
+    "registeredBody": "Finans Kuruluşu'na hoş geldiniz. Müşteri numaranız: {{customerNo}}",
+    "registeredAction": "Başlayalım"
   },
   "nav": {
     "home": "Panel",
     "menu": "Menüyü aç",
     "closeMenu": "Menüyü kapat",
     "main": "Ana menü",
-    "designSystem": "Tasarım sistemi",
     "profile": "Profilim",
     "customers": "Müşteriler"
   },
@@ -210,7 +112,8 @@
     "greetingFallback": "Hoş geldiniz",
     "customerNo": "Müşteri no: {{value}}",
     "customerIntro": "Hesaplarınız, para transferi ve işlem geçmişi burada yer alacak.",
-    "adminIntro": "Müşteri ve hesap yönetimi, raporlar ve audit kayıtları burada yer alacak."
+    "adminIntro": "Müşteri ve hesap yönetimi, raporlar ve audit kayıtları burada yer alacak.",
+    "welcomeLabel": "Finans Kuruluşu'na hoş geldiniz"
   },
   "notFound": {
     "title": "Sayfa bulunamadı",
@@ -257,10 +160,15 @@
     "deactivateBody": "{{name}} pasif yapılırsa yeni para işlemi yapamaz; mevcut kayıtları korunur.",
     "activateBody": "{{name}} yeniden aktif yapılacak ve işlem yapabilecek.",
     "deactivated": "Müşteri pasif yapıldı",
-    "activated": "Müşteri aktif yapıldı"
+    "activated": "Müşteri aktif yapıldı",
+    "statusChangeFailed": "Durum değiştirilemedi"
   },
   "status": {
     "Active": "Aktif",
     "Passive": "Pasif"
+  },
+  "popup": {
+    "sessionExpiredTitle": "Oturumunuz sona erdi",
+    "sessionExpiredBody": "Güvenliğiniz için lütfen tekrar giriş yapın."
   }
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { reportApiError } from '@/shared/api'
-import { notify } from '@/shared/lib'
+import { getErrorMessage } from '@/shared/api'
+import { notify, popup } from '@/shared/lib'
 import { Button, ConfirmDialog } from '@/shared/ui'
 import { useChangeCustomerStatusMutation } from '../customersApi'
 import type { Customer } from '../types'
@@ -19,7 +19,11 @@ export function CustomerStatusToggle({ customer }: { customer: Customer }) {
       notify.success(t(deactivating ? 'customers.deactivated' : 'customers.activated'))
       setOpen(false)
     } catch (error) {
-      reportApiError(error)
+      setOpen(false)
+      popup.danger({
+        title: t('customers.statusChangeFailed'),
+        description: getErrorMessage(error),
+      })
     }
   }
 

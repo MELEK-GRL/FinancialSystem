@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import { useAppDispatch } from '@/app/hooks'
-import { notify } from '@/shared/lib'
+import { popup } from '@/shared/lib'
 import { Heading, Link, Text } from '@/shared/ui'
 import { loggedIn } from '../authSlice'
 import { RegisterForm } from '../components/RegisterForm'
@@ -18,9 +18,13 @@ export function RegisterPage() {
         <Text variant="muted">{t('auth.registerSubtitle')}</Text>
       </div>
       <RegisterForm
-        onRegistered={(session) => {
+        onRegistered={(session, customerNo) => {
           dispatch(loggedIn(session))
-          notify.success(t('auth.registered'))
+          popup.success({
+            title: t('auth.registeredTitle'),
+            description: t('auth.registeredBody', { customerNo }),
+            actionLabel: t('auth.registeredAction'),
+          })
           navigate('/', { replace: true })
         }}
       />

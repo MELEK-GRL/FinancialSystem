@@ -23,10 +23,10 @@ export function Sidebar({ onNavigate }: SidebarProps) {
           className={({ isActive }) =>
             clsx(
               'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60',
               isActive
-                ? 'bg-primary-soft text-primary'
-                : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900',
+                ? 'bg-white/15 text-white'
+                : 'text-primary-muted hover:bg-white/10 hover:text-white',
             )
           }
         >

@@ -8,7 +8,7 @@ import { useLoginMutation, useRegisterMutation } from '../authApi'
 import { registerSchema, type RegisterFormInput, type RegisterFormOutput } from '../schemas'
 import type { Session } from '../types'
 
-export type RegisterFormProps = { onRegistered: (session: Session) => void }
+export type RegisterFormProps = { onRegistered: (session: Session, customerNo: string) => void }
 
 const fields = ['firstName', 'lastName', 'nationalId', 'email', 'phone', 'password'] as const
 
@@ -32,8 +32,15 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
   const onSubmit = handleSubmit(
     async ({ firstName, lastName, nationalId, email, phone, password }) => {
       try {
-        await registerCustomer({ firstName, lastName, nationalId, email, phone, password }).unwrap()
-        onRegistered(await login({ email, password }).unwrap())
+        const { customerNo } = await registerCustomer({
+          firstName,
+          lastName,
+          nationalId,
+          email,
+          phone,
+          password,
+        }).unwrap()
+        onRegistered(await login({ email, password }).unwrap(), customerNo)
       } catch (error) {
         reportApiError(error, applyApiErrors)
       }

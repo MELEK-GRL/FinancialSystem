@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Financial Transaction System",
+    "appName": "Finans Kuruluşu",
     "close": "Close",
     "cancel": "Cancel",
     "confirm": "Confirm",
@@ -8,7 +8,8 @@
     "loading": "Loading...",
     "previous": "Previous",
     "next": "Next",
-    "pageSummary": "Page {{page}} of {{total}}"
+    "pageSummary": "Page {{page}} of {{total}}",
+    "ok": "OK"
   },
   "language": {
     "label": "Language",
@@ -60,115 +61,6 @@
     "hidePassword": "Hide password",
     "clear": "Clear"
   },
-  "designSystem": {
-    "title": "Design System",
-    "subtitle": "Live preview of the shared components. Try the form to see validation and language switching.",
-    "sections": {
-      "colors": "Colors",
-      "typography": "Typography",
-      "buttons": "Buttons",
-      "badges": "Badges",
-      "form": "Form and validation",
-      "search": "Search",
-      "money": "Money and date",
-      "table": "Table",
-      "states": "State screens",
-      "overlays": "Dialogs and notifications"
-    },
-    "sample": {
-      "heading1": "Page title",
-      "heading2": "Section title",
-      "heading3": "Subtitle",
-      "body": "Body text: your account movements are listed here.",
-      "muted": "Secondary description text.",
-      "small": "Small note text."
-    },
-    "buttons": {
-      "primary": "Send Money",
-      "secondary": "Cancel",
-      "danger": "Deactivate Account",
-      "ghost": "Details",
-      "loading": "Sending",
-      "disabled": "Disabled",
-      "menu": "Menu"
-    },
-    "badges": {
-      "neutral": "Neutral",
-      "primary": "Info",
-      "success": "Success",
-      "danger": "Failed",
-      "warning": "Pending"
-    },
-    "form": {
-      "firstName": "First name",
-      "email": "Email",
-      "nationalId": "National ID",
-      "phone": "Phone",
-      "password": "Password",
-      "amount": "Amount",
-      "accountNo": "Recipient account no",
-      "description": "Description",
-      "type": "Transaction type",
-      "typePlaceholder": "Select",
-      "dateRange": "Date range",
-      "from": "From",
-      "to": "To",
-      "approve": "I confirm the details are correct",
-      "submit": "Validate",
-      "valid": "Form is valid, ready to send",
-      "hint": "Try submitting empty or typing invalid values"
-    },
-    "types": {
-      "Deposit": "Deposit",
-      "Withdrawal": "Withdrawal",
-      "Transfer": "Transfer"
-    },
-    "search": {
-      "label": "Search customers",
-      "placeholder": "Name, email or customer no",
-      "result": "Last search: {{value}}",
-      "empty": "No search yet"
-    },
-    "money": {
-      "balance": "Total balance",
-      "incoming": "Incoming",
-      "outgoing": "Outgoing",
-      "date": "Transaction date"
-    },
-    "table": {
-      "reference": "Reference",
-      "type": "Type",
-      "status": "Status",
-      "amount": "Amount",
-      "date": "Date"
-    },
-    "status": {
-      "Success": "Success",
-      "Failed": "Failed",
-      "Pending": "Pending"
-    },
-    "states": {
-      "emptyTitle": "You have no accounts yet",
-      "emptyDescription": "Start by opening your first account.",
-      "emptyAction": "Open Account",
-      "errorTitle": "Could not load data",
-      "errorDescription": "Check your connection and try again."
-    },
-    "overlays": {
-      "openModal": "Open modal",
-      "modalTitle": "Transfer details",
-      "modalBody": "The modal closes with ESC or the close button; focus stays inside while it is open.",
-      "openConfirm": "Confirm dialog",
-      "confirmTitle": "Deactivate account",
-      "confirmBody": "No money can be moved on a passive account. Continue?",
-      "confirmAction": "Deactivate",
-      "confirmed": "Account deactivated",
-      "toastSuccess": "Success toast",
-      "toastError": "Error toast",
-      "toastSuccessText": "Transfer sent",
-      "toastErrorText": "Insufficient balance"
-    }
-  },
   "auth": {
     "brandTagline": "Your accounts, transfers and reports in one place.",
     "loginTitle": "Sign in",
@@ -188,16 +80,26 @@
     "goRegister": "Sign up",
     "haveAccount": "Already have an account?",
     "goLogin": "Sign in",
-    "registered": "Registration complete, welcome!",
     "logout": "Sign out",
-    "passwordHint": "At least 8 characters, one letter and one digit"
+    "passwordHint": "At least 8 characters, one letter and one digit",
+    "heroTitle": "Your money is safe, your transactions one click away.",
+    "heroText": "Manage your accounts, send money and follow every movement instantly.",
+    "trustSecureTitle": "Secure infrastructure",
+    "trustSecureText": "Every transaction is protected by encrypted connections and layered checks.",
+    "trustAlwaysTitle": "24/7 access",
+    "trustAlwaysText": "Reach your accounts anytime, from any device.",
+    "trustReportsTitle": "Instant reports",
+    "trustReportsText": "See your inflows, outflows and history on one screen.",
+    "copyright": "© {{year}} Finans Kuruluşu. All rights reserved.",
+    "registeredTitle": "Your account is ready",
+    "registeredBody": "Welcome to Finans Kuruluşu. Your customer number: {{customerNo}}",
+    "registeredAction": "Let's start"
   },
   "nav": {
     "home": "Dashboard",
     "menu": "Open menu",
     "closeMenu": "Close menu",
     "main": "Main menu",
-    "designSystem": "Design system",
     "profile": "My profile",
     "customers": "Customers"
   },
@@ -210,7 +112,8 @@
     "greetingFallback": "Welcome",
     "customerNo": "Customer no: {{value}}",
     "customerIntro": "Your accounts, money transfers and transaction history will be here.",
-    "adminIntro": "Customer and account management, reports and audit logs will be here."
+    "adminIntro": "Customer and account management, reports and audit logs will be here.",
+    "welcomeLabel": "Welcome to Finans Kuruluşu"
   },
   "notFound": {
     "title": "Page not found",
@@ -257,10 +160,15 @@
     "deactivateBody": "If {{name}} is deactivated they cannot make new transactions; existing records are kept.",
     "activateBody": "{{name}} will be activated again and can make transactions.",
     "deactivated": "Customer deactivated",
-    "activated": "Customer activated"
+    "activated": "Customer activated",
+    "statusChangeFailed": "Status could not be changed"
   },
   "status": {
     "Active": "Active",
     "Passive": "Passive"
+  },
+  "popup": {
+    "sessionExpiredTitle": "Your session has ended",
+    "sessionExpiredBody": "For your security, please sign in again."
   }
 }

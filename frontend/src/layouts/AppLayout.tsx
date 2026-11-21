@@ -15,10 +15,10 @@ export function AppLayout() {
   useMeQuery()
 
   return (
-    <div className="flex min-h-screen">
-      <aside className="hidden w-64 shrink-0 border-r border-neutral-200 bg-white md:block">
-        <div className="flex h-16 items-center border-b border-neutral-200 px-5">
-          <Brand />
+    <div className="flex min-h-screen bg-neutral-50">
+      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 bg-primary-dark md:block">
+        <div className="flex h-16 items-center border-b border-white/10 px-5">
+          <Brand tone="light" />
         </div>
         <Sidebar />
       </aside>
@@ -31,12 +31,13 @@ export function AppLayout() {
             className="absolute inset-0 bg-neutral-900/40"
             onClick={() => setMenuOpen(false)}
           />
-          <aside className="relative h-full w-72 bg-white shadow-lg">
-            <div className="flex h-16 items-center justify-between border-b border-neutral-200 px-4">
-              <Brand />
+          <aside className="relative h-full w-72 bg-primary-dark shadow-xl">
+            <div className="flex h-16 items-center justify-between border-b border-white/10 px-4">
+              <Brand tone="light" />
               <IconButton
                 aria-label={t('nav.closeMenu')}
                 icon={<X className="size-5" />}
+                className="text-white/80 hover:bg-white/10 hover:text-white"
                 onClick={() => setMenuOpen(false)}
               />
             </div>

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { Button } from '../actions/Button'
 import { Text } from '../typography/Text'
-import { Modal } from './Modal'
+import { CenterModal } from './CenterModal'
 
 export type ConfirmDialogProps = {
   open: boolean
@@ -27,7 +27,8 @@ export function ConfirmDialog({
   onCancel,
 }: ConfirmDialogProps) {
   return (
-    <Modal
+    <CenterModal
+      size="sm"
       open={open}
       title={title}
       closeLabel={cancelLabel}
@@ -44,6 +45,6 @@ export function ConfirmDialog({
       }
     >
       {typeof description === 'string' ? <Text>{description}</Text> : description}
-    </Modal>
+    </CenterModal>
   )
 }

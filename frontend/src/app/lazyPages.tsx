@@ -9,9 +9,6 @@ export const RegisterPage = lazy(() =>
 export const HomePage = lazy(() =>
   import('@/features/home/pages/HomePage').then((m) => ({ default: m.HomePage })),
 )
-export const DesignSystemPage = lazy(() =>
-  import('@/features/design-system').then((m) => ({ default: m.DesignSystemPage })),
-)
 export const NotFoundPage = lazy(() =>
   import('./pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })),
 )

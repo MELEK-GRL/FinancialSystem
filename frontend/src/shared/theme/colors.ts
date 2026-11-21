@@ -1,5 +1,11 @@
 export const colors = {
-  primary: { DEFAULT: '#1f4e79', hover: '#173b5c', soft: '#e8eff6' },
+  primary: {
+    DEFAULT: '#1f4e79',
+    hover: '#173b5c',
+    soft: '#e8eff6',
+    dark: '#0d2440',
+    muted: '#9fb3c8',
+  },
   success: { DEFAULT: '#15803d', soft: '#dcfce7' },
   danger: { DEFAULT: '#b91c1c', hover: '#991b1b', soft: '#fee2e2' },
   warning: { DEFAULT: '#b45309', soft: '#fef3c7' },
