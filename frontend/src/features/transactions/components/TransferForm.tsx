@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { Account } from '@/features/accounts'
-import { useFieldError, useLocale } from '@/shared/hooks'
+import { useFieldError, useLocale, useFormKeyboard } from '@/shared/hooks'
 import { formatMoney } from '@/shared/lib'
 import { AmountInput, Button, Select, Textarea, TextInput } from '@/shared/ui'
 import { useTransferForm } from '../hooks/useTransferForm'
@@ -10,6 +10,7 @@ export function TransferForm({ accounts }: { accounts: Account[] }) {
   const { t } = useTranslation()
   const locale = useLocale()
   const fieldError = useFieldError()
+  const keyboard = useFormKeyboard()
   const { form, review, pending, confirm, cancel, isReviewing, isSending } =
     useTransferForm(accounts)
   const {
@@ -19,7 +20,7 @@ export function TransferForm({ accounts }: { accounts: Account[] }) {
 
   return (
     <>
-      <form noValidate onSubmit={review} className="flex flex-col gap-5">
+      <form noValidate {...keyboard} onSubmit={review} className="flex flex-col gap-5">
         <Select
           label={t('transfer.source')}
           required
@@ -35,6 +36,7 @@ export function TransferForm({ accounts }: { accounts: Account[] }) {
           {...register('sourceAccountId')}
         />
         <TextInput
+          autoFocus
           label={t('transfer.target')}
           hint={t('transfer.targetHint')}
           required

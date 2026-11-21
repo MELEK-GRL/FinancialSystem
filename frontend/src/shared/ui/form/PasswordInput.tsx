@@ -7,12 +7,18 @@ export type PasswordInputProps = Omit<TextInputProps, 'type' | 'suffix'> & {
   hideLabel: string
 }
 
-export function PasswordInput({ showLabel, hideLabel, ...props }: PasswordInputProps) {
+export function PasswordInput({
+  showLabel,
+  hideLabel,
+  maxLength = 16,
+  ...props
+}: PasswordInputProps) {
   const [visible, setVisible] = useState(false)
 
   return (
     <TextInput
       type={visible ? 'text' : 'password'}
+      maxLength={maxLength}
       suffix={
         <button
           type="button"

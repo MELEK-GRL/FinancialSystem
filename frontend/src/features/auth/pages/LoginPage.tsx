@@ -9,7 +9,8 @@ export function LoginPage() {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const from = (useLocation().state as { from?: string } | null)?.from ?? '/'
+  const state = useLocation().state as { from?: string; email?: string } | null
+  const from = state?.from ?? '/'
 
   return (
     <div className="flex flex-col gap-6">
@@ -18,6 +19,7 @@ export function LoginPage() {
         <Text variant="muted">{t('auth.loginSubtitle')}</Text>
       </div>
       <LoginForm
+        defaultEmail={state?.email}
         onLoggedIn={(session) => {
           dispatch(loggedIn(session))
           navigate(from, { replace: true })

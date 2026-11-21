@@ -1,20 +1,24 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useApiFormErrors, useFieldError } from '@/shared/hooks'
 import { reportApiError } from '@/shared/api'
+import { useApiFormErrors, useFieldError, useFormKeyboard } from '@/shared/hooks'
 import { Button, PasswordInput, TextInput } from '@/shared/ui'
 import { useLoginMutation } from '../authApi'
 import { loginSchema, type LoginForm as LoginFormValues } from '../schemas'
 import type { Session } from '../types'
 
-export type LoginFormProps = { onLoggedIn: (session: Session) => void }
+export type LoginFormProps = {
+  defaultEmail?: string
+  onLoggedIn: (session: Session) => void
+}
 
 const fields = ['email', 'password'] as const
 
-export function LoginForm({ onLoggedIn }: LoginFormProps) {
+export function LoginForm({ defaultEmail = '', onLoggedIn }: LoginFormProps) {
   const { t } = useTranslation()
   const fieldError = useFieldError()
+  const keyboard = useFormKeyboard()
   const [login, { isLoading }] = useLoginMutation()
   const {
     register,
@@ -25,6 +29,7 @@ export function LoginForm({ onLoggedIn }: LoginFormProps) {
     resolver: zodResolver(loginSchema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
+    defaultValues: { email: defaultEmail, password: '' },
   })
   const applyApiErrors = useApiFormErrors(setError, fields)
 
@@ -37,10 +42,12 @@ export function LoginForm({ onLoggedIn }: LoginFormProps) {
   })
 
   return (
-    <form noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
+    <form noValidate onSubmit={onSubmit} {...keyboard} className="flex flex-col gap-4">
       <TextInput
         type="email"
+        inputMode="email"
         autoComplete="email"
+        autoFocus={!defaultEmail}
         label={t('auth.email')}
         required
         error={fieldError(errors.email)}
@@ -48,6 +55,8 @@ export function LoginForm({ onLoggedIn }: LoginFormProps) {
       />
       <PasswordInput
         autoComplete="current-password"
+        autoFocus={Boolean(defaultEmail)}
+        enterKeyHint="go"
         label={t('auth.password')}
         required
         showLabel={t('form.showPassword')}

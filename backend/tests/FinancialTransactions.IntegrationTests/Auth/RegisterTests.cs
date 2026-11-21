@@ -71,13 +71,13 @@ public class RegisterTests(ApiFactory factory) : IClassFixture<ApiFactory>
     }
 
     [Fact]
-    public async Task Register_WithPasswordOver72Bytes_Returns400()
+    public async Task Register_WithPasswordLongerThan16_Returns400()
     {
-        var response = await client.PostAsJsonAsync(Url, NewRequest() with { Password = new string('ş', 40) + "Gizli1" });
+        var response = await client.PostAsJsonAsync(Url, NewRequest() with { Password = "Sifre123456789012" });
         var errors = (await response.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("errors");
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        Assert.StartsWith("Şifre çok uzun", errors.GetProperty("password")[0].GetString());
+        Assert.Equal("Şifre 6 ile 16 karakter arasında olmalı", errors.GetProperty("password")[0].GetString());
     }
 
     [Fact]

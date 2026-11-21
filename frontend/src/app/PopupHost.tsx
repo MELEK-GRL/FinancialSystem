@@ -14,7 +14,11 @@ export function PopupHost() {
       title={current?.title ?? ''}
       description={current?.description}
       actionLabel={current?.actionLabel ?? t('common.ok')}
-      onClose={popup.close}
+      onClose={() => {
+        const afterClose = current?.onClose
+        popup.close()
+        afterClose?.()
+      }}
     />
   )
 }

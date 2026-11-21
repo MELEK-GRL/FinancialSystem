@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react'
 import { FieldError } from './FieldError'
-import { DateInput } from './DateInput'
+import { TextInput } from './TextInput'
 
 export type DateRangeInputProps = {
   label: string
@@ -25,8 +25,8 @@ export function DateRangeInput({
     <fieldset className="flex flex-col gap-1.5" aria-describedby={error ? errorId : undefined}>
       <legend className="sr-only">{label}</legend>
       <div className="grid grid-cols-2 gap-3">
-        <DateInput label={fromLabel} {...fromProps} />
-        <DateInput label={toLabel} invalid={Boolean(error)} {...toProps} />
+        <TextInput type="date" label={fromLabel} {...fromProps} />
+        <TextInput type="date" label={toLabel} invalid={Boolean(error)} {...toProps} />
       </div>
       <FieldError id={errorId} message={error} />
     </fieldset>

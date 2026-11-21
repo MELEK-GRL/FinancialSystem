@@ -6,6 +6,7 @@ export type PopupContent = {
   title: string
   description?: ReactNode
   actionLabel?: string
+  onClose?: () => void
 }
 
 export type PopupState = (PopupContent & { variant: PopupVariant }) | null

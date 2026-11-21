@@ -2,21 +2,20 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { reportApiError } from '@/shared/api'
-import { useApiFormErrors, useFieldError } from '@/shared/hooks'
+import { useApiFormErrors, useFieldError, useFormKeyboard } from '@/shared/hooks'
 import { Button, PasswordInput, PhoneInput, TcknInput, TextInput } from '@/shared/ui'
-import { useLoginMutation, useRegisterMutation } from '../authApi'
+import { useRegisterMutation } from '../authApi'
 import { registerSchema, type RegisterFormInput, type RegisterFormOutput } from '../schemas'
-import type { Session } from '../types'
 
-export type RegisterFormProps = { onRegistered: (session: Session, customerNo: string) => void }
+export type RegisterFormProps = { onRegistered: (customerNo: string, email: string) => void }
 
 const fields = ['firstName', 'lastName', 'nationalId', 'email', 'phone', 'password'] as const
 
 export function RegisterForm({ onRegistered }: RegisterFormProps) {
   const { t } = useTranslation()
   const fieldError = useFieldError()
-  const [registerCustomer, registerState] = useRegisterMutation()
-  const [login, loginState] = useLoginMutation()
+  const keyboard = useFormKeyboard()
+  const [registerCustomer, { isLoading }] = useRegisterMutation()
   const {
     register,
     handleSubmit,
@@ -40,7 +39,7 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
           phone,
           password,
         }).unwrap()
-        onRegistered(await login({ email, password }).unwrap(), customerNo)
+        onRegistered(customerNo, email)
       } catch (error) {
         reportApiError(error, applyApiErrors)
       }
@@ -50,10 +49,11 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
   const passwordLabels = { showLabel: t('form.showPassword'), hideLabel: t('form.hidePassword') }
 
   return (
-    <form noValidate onSubmit={onSubmit} className="flex flex-col gap-4">
+    <form noValidate onSubmit={onSubmit} {...keyboard} className="flex flex-col gap-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <TextInput
           autoComplete="given-name"
+          autoFocus
           label={t('auth.firstName')}
           required
           error={fieldError(errors.firstName)}
@@ -75,6 +75,7 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
       />
       <TextInput
         type="email"
+        inputMode="email"
         autoComplete="email"
         label={t('auth.email')}
         required
@@ -98,17 +99,14 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
       />
       <PasswordInput
         autoComplete="new-password"
+        enterKeyHint="go"
         label={t('auth.passwordConfirm')}
         required
         error={fieldError(errors.passwordConfirm)}
         {...passwordLabels}
         {...register('passwordConfirm')}
       />
-      <Button
-        type="submit"
-        loading={registerState.isLoading || loginState.isLoading}
-        className="w-full"
-      >
+      <Button type="submit" loading={isLoading} className="w-full">
         {t('auth.registerButton')}
       </Button>
     </form>

@@ -2,7 +2,6 @@ import { z } from 'zod'
 import { isValidTckn } from './tckn'
 
 export const MAX_TRANSACTION_AMOUNT = Number(import.meta.env.VITE_MAX_TRANSACTION_AMOUNT ?? 100000)
-const PASSWORD_MAX_BYTES = 72
 
 const required = 'validation.required'
 
@@ -36,15 +35,15 @@ export const tcknSchema = z
   .min(1, required)
   .refine(isValidTckn, 'validation.tcknInvalid')
 
+export const PASSWORD_MIN_LENGTH = 6
+export const PASSWORD_MAX_LENGTH = 16
+
 export const passwordSchema = z
   .string()
   .min(1, required)
-  .min(8, 'validation.passwordLength')
+  .min(PASSWORD_MIN_LENGTH, 'validation.passwordLength')
+  .max(PASSWORD_MAX_LENGTH, 'validation.passwordLength')
   .refine((value) => /[A-Za-z]/.test(value) && /[0-9]/.test(value), 'validation.passwordWeak')
-  .refine(
-    (value) => new TextEncoder().encode(value).length <= PASSWORD_MAX_BYTES,
-    'validation.passwordTooLong',
-  )
 
 export const accountNoSchema = z
   .string()

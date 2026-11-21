@@ -4,7 +4,13 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useDepositMutation, useWithdrawMutation } from '@/features/transactions'
 import { getErrorMessage, getProblemDetails } from '@/shared/api'
-import { useApiFormErrors, useFieldError, useIdempotencyKey, useLocale } from '@/shared/hooks'
+import {
+  useApiFormErrors,
+  useFieldError,
+  useIdempotencyKey,
+  useLocale,
+  useFormKeyboard,
+} from '@/shared/hooks'
 import { formatMoney, popup } from '@/shared/lib'
 import { AmountInput, Button, DetailList, MoneyText, Textarea } from '@/shared/ui'
 import {
@@ -27,6 +33,7 @@ export function MoneyOperationForm({ account, mode, onDone }: MoneyOperationForm
   const { t } = useTranslation()
   const locale = useLocale()
   const fieldError = useFieldError()
+  const keyboard = useFormKeyboard()
   const idempotencyKey = useIdempotencyKey()
   const [deposit, depositState] = useDepositMutation()
   const [withdraw, withdrawState] = useWithdrawMutation()
@@ -71,7 +78,7 @@ export function MoneyOperationForm({ account, mode, onDone }: MoneyOperationForm
   })
 
   return (
-    <form noValidate onSubmit={onSubmit} className="flex flex-col gap-5">
+    <form noValidate {...keyboard} onSubmit={onSubmit} className="flex flex-col gap-5">
       <div className="rounded-lg bg-neutral-50 p-4">
         <DetailList
           items={[
@@ -105,12 +112,4 @@ export function MoneyOperationForm({ account, mode, onDone }: MoneyOperationForm
       </Button>
     </form>
   )
-}
-
-export function DepositForm(props: Omit<MoneyOperationFormProps, 'mode'>) {
-  return <MoneyOperationForm {...props} mode="deposit" />
-}
-
-export function WithdrawForm(props: Omit<MoneyOperationFormProps, 'mode'>) {
-  return <MoneyOperationForm {...props} mode="withdraw" />
 }

@@ -5,7 +5,7 @@ import { useListAccountsQuery } from '../accountsApi'
 import type { Account } from '../types'
 import { AccountCard } from './AccountCard'
 import { BalanceCard } from './BalanceCard'
-import { DepositForm, WithdrawForm } from './MoneyOperationForm'
+import { MoneyOperationForm } from './MoneyOperationForm'
 import { OpenAccountButton } from './OpenAccountButton'
 
 type Operation = { account: Account; mode: 'deposit' | 'withdraw' } | null
@@ -59,11 +59,8 @@ export function AccountsSection() {
         closeLabel={t('common.close')}
         onClose={close}
       >
-        {operation?.mode === 'deposit' ? (
-          <DepositForm account={operation.account} onDone={close} />
-        ) : null}
-        {operation?.mode === 'withdraw' ? (
-          <WithdrawForm account={operation.account} onDone={close} />
+        {operation ? (
+          <MoneyOperationForm account={operation.account} mode={operation.mode} onDone={close} />
         ) : null}
       </CenterModal>
     </div>

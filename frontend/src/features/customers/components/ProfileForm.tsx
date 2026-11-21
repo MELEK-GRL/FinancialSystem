@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { getProblemDetails, reportApiError } from '@/shared/api'
-import { useApiFormErrors, useFieldError } from '@/shared/hooks'
+import { useApiFormErrors, useFieldError, useFormKeyboard } from '@/shared/hooks'
 import { notify } from '@/shared/lib'
 import { Button, formatPhone, PhoneInput, TextInput } from '@/shared/ui'
 import { useUpdateMyProfileMutation } from '../customersApi'
@@ -14,6 +14,7 @@ const fields = ['email', 'phone'] as const
 export function ProfileForm({ customer }: { customer: Customer }) {
   const { t } = useTranslation()
   const fieldError = useFieldError()
+  const keyboard = useFormKeyboard()
   const [updateProfile, { isLoading }] = useUpdateMyProfileMutation()
   const {
     register,
@@ -45,7 +46,7 @@ export function ProfileForm({ customer }: { customer: Customer }) {
   })
 
   return (
-    <form noValidate onSubmit={onSubmit} className="flex max-w-md flex-col gap-4">
+    <form noValidate {...keyboard} onSubmit={onSubmit} className="flex max-w-md flex-col gap-4">
       <TextInput
         type="email"
         autoComplete="email"

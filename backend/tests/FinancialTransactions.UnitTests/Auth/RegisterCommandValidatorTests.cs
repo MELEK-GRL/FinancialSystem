@@ -18,7 +18,7 @@ public class RegisterCommandValidatorTests
     [InlineData(nameof(RegisterCommand.NationalId), "12345678951")]
     [InlineData(nameof(RegisterCommand.Email), "not-an-email")]
     [InlineData(nameof(RegisterCommand.Phone), "05321234567")]
-    [InlineData(nameof(RegisterCommand.Password), "short1")]
+    [InlineData(nameof(RegisterCommand.Password), "ab1")]
     [InlineData(nameof(RegisterCommand.Password), "onlyletters")]
     [InlineData(nameof(RegisterCommand.Password), "12345678")]
     public void InvalidField_Fails(string field, string value)
@@ -38,23 +38,25 @@ public class RegisterCommandValidatorTests
         Assert.Contains(result.Errors, error => error.PropertyName == field);
     }
 
-    [Fact]
-    public void PasswordUpTo72Bytes_Passes()
+    [Theory]
+    [InlineData("abc123")]
+    [InlineData("Sifre12345678901")]
+    [InlineData("şifre1")]
+    public void PasswordBetween6And16Characters_Passes(string password)
     {
-        Assert.True(validator.Validate(ValidCommand() with { Password = new string('a', 71) + "1" }).IsValid);
-        Assert.True(validator.Validate(ValidCommand() with { Password = new string('ş', 34) + "Ab1" }).IsValid);
+        Assert.True(validator.Validate(ValidCommand() with { Password = password }).IsValid);
     }
 
     [Theory]
-    [InlineData(73, 'a')]
-    [InlineData(40, 'ş')]
-    public void PasswordOver72Bytes_FailsWithClearMessage(int repeat, char letter)
+    [InlineData("ab12")]
+    [InlineData("Sifre123456789012")]
+    public void PasswordOutside6To16Characters_FailsWithClearMessage(string password)
     {
-        var result = validator.Validate(ValidCommand() with { Password = new string(letter, repeat) + "Gizli1" });
+        var result = validator.Validate(ValidCommand() with { Password = password });
 
         var error = Assert.Single(result.Errors);
         Assert.Equal(nameof(RegisterCommand.Password), error.PropertyName);
-        Assert.StartsWith("Şifre çok uzun", error.ErrorMessage);
+        Assert.Equal("Şifre 6 ile 16 karakter arasında olmalı", error.ErrorMessage);
     }
 
     private static RegisterCommand ValidCommand() =>

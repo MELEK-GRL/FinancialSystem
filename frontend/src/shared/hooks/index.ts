@@ -1,5 +1,6 @@
 export * from './useApiFormErrors'
 export * from './useDebounce'
 export * from './useFieldError'
+export * from './useFormKeyboard'
 export * from './useIdempotencyKey'
 export * from './useLocale'

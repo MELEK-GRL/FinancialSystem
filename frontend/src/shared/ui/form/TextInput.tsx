@@ -31,6 +31,7 @@ export function TextInput({
       <div className="relative">
         <input
           id={inputId}
+          enterKeyHint="next"
           required={required}
           aria-invalid={hasError || undefined}
           aria-describedby={describedBy(inputId, error, hint)}

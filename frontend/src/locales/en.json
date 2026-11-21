@@ -45,9 +45,8 @@
     "emailInvalid": "Enter a valid email address",
     "phoneInvalid": "Phone must be 10 digits starting with 5 (5XX XXX XX XX)",
     "tcknInvalid": "Enter a valid Turkish national ID",
-    "passwordLength": "Password must be at least 8 characters",
+    "passwordLength": "Password must be between 6 and 16 characters",
     "passwordWeak": "Password must contain at least one letter and one digit",
-    "passwordTooLong": "Password is too long: at most 72 bytes (non-English letters count as 2)",
     "passwordMismatch": "Passwords do not match",
     "accountNoInvalid": "Account number must be 12 characters starting with TR",
     "amountInvalid": "Enter a valid amount (at most 2 decimals)",
@@ -84,7 +83,7 @@
     "haveAccount": "Already have an account?",
     "goLogin": "Sign in",
     "logout": "Sign out",
-    "passwordHint": "At least 8 characters, one letter and one digit",
+    "passwordHint": "6–16 characters, at least one letter and one digit",
     "heroTitle": "Your money is safe, your transactions one click away.",
     "heroText": "Manage your accounts, send money and follow every movement instantly.",
     "trustSecureTitle": "Secure infrastructure",
@@ -95,8 +94,8 @@
     "trustReportsText": "See your inflows, outflows and history on one screen.",
     "copyright": "© {{year}} Finans Kuruluşu. All rights reserved.",
     "registeredTitle": "Your account is ready",
-    "registeredBody": "Welcome to Finans Kuruluşu. Your customer number: {{customerNo}}",
-    "registeredAction": "Let's start"
+    "registeredBody": "Your customer number: {{customerNo}}. You can now sign in with your email and password.",
+    "registeredAction": "Sign in"
   },
   "nav": {
     "home": "Dashboard",

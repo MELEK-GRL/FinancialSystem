@@ -45,9 +45,8 @@
     "emailInvalid": "Geçerli bir e-posta adresi girin",
     "phoneInvalid": "Telefon 5 ile başlayan 10 haneli olmalı (5XX XXX XX XX)",
     "tcknInvalid": "Geçerli bir T.C. kimlik numarası girin",
-    "passwordLength": "Şifre en az 8 karakter olmalı",
+    "passwordLength": "Şifre 6 ile 16 karakter arasında olmalı",
     "passwordWeak": "Şifre en az bir harf ve bir rakam içermeli",
-    "passwordTooLong": "Şifre çok uzun: en fazla 72 byte (Türkçe harfler 2 byte sayılır)",
     "passwordMismatch": "Şifreler eşleşmiyor",
     "accountNoInvalid": "Hesap numarası TR ile başlayan 12 karakter olmalı",
     "amountInvalid": "Geçerli bir tutar girin (en fazla 2 ondalık)",
@@ -84,7 +83,7 @@
     "haveAccount": "Zaten hesabınız var mı?",
     "goLogin": "Giriş yapın",
     "logout": "Çıkış yap",
-    "passwordHint": "En az 8 karakter, bir harf ve bir rakam",
+    "passwordHint": "6–16 karakter, en az bir harf ve bir rakam",
     "heroTitle": "Paranız güvende, işlemleriniz bir tık uzağınızda.",
     "heroText": "Hesaplarınızı yönetin, para transferi yapın, tüm hareketlerinizi anında izleyin.",
     "trustSecureTitle": "Güvenli altyapı",
@@ -95,8 +94,8 @@
     "trustReportsText": "Giriş, çıkış ve işlem geçmişinizi tek ekranda görün.",
     "copyright": "© {{year}} Finans Kuruluşu. Tüm hakları saklıdır.",
     "registeredTitle": "Hesabınız oluşturuldu",
-    "registeredBody": "Finans Kuruluşu'na hoş geldiniz. Müşteri numaranız: {{customerNo}}",
-    "registeredAction": "Başlayalım"
+    "registeredBody": "Müşteri numaranız: {{customerNo}}. Şimdi e-posta ve şifrenizle giriş yapabilirsiniz.",
+    "registeredAction": "Giriş yap"
   },
   "nav": {
     "home": "Panel",
