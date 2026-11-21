@@ -1,3 +1,4 @@
+using FinancialTransactions.Application.Common.Localization;
 using FinancialTransactions.Application.Common.Paging;
 using FinancialTransactions.Domain.Audit;
 using FluentValidation;
@@ -18,7 +19,10 @@ public sealed class ListAuditLogsQueryValidator : AbstractValidator<ListAuditLog
     public ListAuditLogsQueryValidator()
     {
         RuleFor(query => query.Action).IsInEnum();
-        RuleFor(query => query.To).GreaterThanOrEqualTo(query => query.From).When(query => query.From is not null && query.To is not null);
+        RuleFor(query => query.To)
+            .GreaterThanOrEqualTo(query => query.From)
+            .WithMessage(_ => Messages.Get(Messages.DateRangeInvalid))
+            .When(query => query.From is not null && query.To is not null);
         RuleFor(query => query.Page).GreaterThanOrEqualTo(1);
         RuleFor(query => query.Size).InclusiveBetween(1, PageRequest.MaxSize);
     }
@@ -29,7 +33,7 @@ public sealed class ListAuditLogsQueryHandler(IAuditLogQueries auditLogQueries)
 {
     public Task<PagedResult<AuditLogDto>> Handle(ListAuditLogsQuery query, CancellationToken cancellationToken) =>
         auditLogQueries.ListAsync(
-            new AuditLogFilter(query.AccountId, query.Action, query.From, query.To),
+            new AuditLogFilter(query.AccountId, query.Action, query.From?.ToUniversalTime(), query.To?.ToUniversalTime()),
             new PageRequest(query.Page, query.Size),
             cancellationToken);
 }
