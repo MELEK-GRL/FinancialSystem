@@ -9,7 +9,8 @@
     "previous": "Previous",
     "next": "Next",
     "pageSummary": "Page {{page}} of {{total}}",
-    "ok": "OK"
+    "ok": "OK",
+    "errorTitle": "Request could not be completed"
   },
   "language": {
     "label": "Language",
@@ -215,7 +216,8 @@
     "statusChanged": "Account status updated",
     "statusChangeFailed": "Account status could not be changed",
     "history": "Account activity",
-    "historyShort": "View"
+    "historyShort": "View",
+    "statusChangedBody": "{{accountNo}} is now {{status}}"
   },
   "transfer": {
     "title": "Send money",

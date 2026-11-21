@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { getProblemDetails, reportApiError } from '@/shared/api'
 import { useApiFormErrors, useFieldError, useFormKeyboard } from '@/shared/hooks'
-import { notify } from '@/shared/lib'
+import { popup } from '@/shared/lib'
 import { Button, formatPhone, PhoneInput, TextInput } from '@/shared/ui'
 import { useUpdateMyProfileMutation } from '../customersApi'
 import { profileSchema, type ProfileFormInput, type ProfileFormOutput } from '../schemas'
@@ -34,7 +34,7 @@ export function ProfileForm({ customer }: { customer: Customer }) {
     try {
       const updated = await updateProfile(values).unwrap()
       reset({ email: updated.email, phone: formatPhone(updated.phone) })
-      notify.success(t('customers.saved'))
+      popup.success({ title: t('customers.saved') })
     } catch (error) {
       const problem = getProblemDetails(error)
       if (problem?.errorCode === 'DUPLICATE_CUSTOMER') {

@@ -1,6 +1,6 @@
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import i18n from 'i18next'
-import { notify } from '@/shared/lib/notify'
+import { popup } from '@/shared/lib/popup'
 import { isProblemDetails, type ProblemDetails } from '@/shared/types'
 
 function isFetchError(error: unknown): error is FetchBaseQueryError {
@@ -28,5 +28,5 @@ export function reportApiError(
 ) {
   const problem = getProblemDetails(error)
   if (problem && applyFieldErrors?.(problem)) return
-  notify.error(getErrorMessage(error))
+  popup.danger({ title: i18n.t('common.errorTitle'), description: getErrorMessage(error) })
 }

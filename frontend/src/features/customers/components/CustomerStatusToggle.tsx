@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getErrorMessage } from '@/shared/api'
-import { notify, popup } from '@/shared/lib'
+import { popup } from '@/shared/lib'
 import { Button, ConfirmDialog } from '@/shared/ui'
 import { useChangeCustomerStatusMutation } from '../customersApi'
 import type { Customer } from '../types'
@@ -16,8 +16,11 @@ export function CustomerStatusToggle({ customer }: { customer: Customer }) {
   const confirm = async () => {
     try {
       await changeStatus({ id: customer.id, status: deactivating ? 'Passive' : 'Active' }).unwrap()
-      notify.success(t(deactivating ? 'customers.deactivated' : 'customers.activated'))
       setOpen(false)
+      popup.success({
+        title: t(deactivating ? 'customers.deactivated' : 'customers.activated'),
+        description: name,
+      })
     } catch (error) {
       setOpen(false)
       popup.danger({

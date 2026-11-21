@@ -9,7 +9,8 @@
     "previous": "Önceki",
     "next": "Sonraki",
     "pageSummary": "Sayfa {{page}} / {{total}}",
-    "ok": "Tamam"
+    "ok": "Tamam",
+    "errorTitle": "İşlem tamamlanamadı"
   },
   "language": {
     "label": "Dil",
@@ -215,7 +216,8 @@
     "statusChanged": "Hesap durumu güncellendi",
     "statusChangeFailed": "Hesap durumu değiştirilemedi",
     "history": "Hesap hareketleri",
-    "historyShort": "Görüntüle"
+    "historyShort": "Görüntüle",
+    "statusChangedBody": "{{accountNo}} artık {{status}}"
   },
   "transfer": {
     "title": "Para gönder",

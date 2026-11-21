@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { getErrorMessage } from '@/shared/api'
 import { useFieldError } from '@/shared/hooks'
-import { notify, popup } from '@/shared/lib'
+import { popup } from '@/shared/lib'
 import { Button, CenterModal, Textarea } from '@/shared/ui'
 import { useChangeAccountStatusMutation } from '../accountsApi'
 import { statusReasonSchema, type StatusReasonForm } from '../schemas'
@@ -40,7 +40,13 @@ export function AccountStatusToggle({ account }: { account: Account }) {
         reason: reason.trim(),
       }).unwrap()
       close()
-      notify.success(t('accounts.statusChanged'))
+      popup.success({
+        title: t('accounts.statusChanged'),
+        description: t('accounts.statusChangedBody', {
+          accountNo: account.accountNo,
+          status: t(deactivating ? 'status.Passive' : 'status.Active'),
+        }),
+      })
     } catch (error) {
       close()
       popup.danger({ title: t('accounts.statusChangeFailed'), description: getErrorMessage(error) })
