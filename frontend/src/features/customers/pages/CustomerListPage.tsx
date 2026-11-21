@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate, useSearchParams } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
+import { useUrlParams } from '@/shared/hooks'
 import {
   Card,
   EmptyState,
@@ -22,7 +23,7 @@ export function CustomerListPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
-  const [params, setParams] = useSearchParams()
+  const { params, update } = useUrlParams()
   const search = params.get('search') ?? ''
   const status = statuses.find((value) => value === params.get('status'))
   const page = Math.max(1, Number(params.get('page')) || 1)
@@ -34,18 +35,6 @@ export function CustomerListPage() {
     size: PAGE_SIZE,
   })
 
-  const update = useCallback(
-    (changes: Record<string, string | undefined>) =>
-      setParams((current) => {
-        const next = new URLSearchParams(current)
-        for (const [key, value] of Object.entries(changes)) {
-          if (value) next.set(key, value)
-          else next.delete(key)
-        }
-        return next
-      }),
-    [setParams],
-  )
   const handleSearch = useCallback(
     (value: string) => update({ search: value, page: undefined }),
     [update],

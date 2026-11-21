@@ -36,3 +36,6 @@ export const TransactionHistoryPage = lazy(() =>
     default: m.TransactionHistoryPage,
   })),
 )
+export const AuditLogPage = lazy(() =>
+  import('@/features/audit/pages/AuditLogPage').then((m) => ({ default: m.AuditLogPage })),
+)

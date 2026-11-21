@@ -41,15 +41,17 @@ export function CustomerAccounts({ customerId }: { customerId: string }) {
     },
     {
       key: 'history',
-      header: t('accounts.history'),
+      header: t('customers.records'),
       render: (a) => (
-        <Link
-          to={`/accounts/${a.id}/transactions`}
-          state={{ from: location.pathname + location.search }}
-          className="text-sm"
-        >
-          {t('accounts.historyShort')}
-        </Link>
+        <span className="flex flex-wrap gap-x-3 gap-y-1 text-sm">
+          <Link
+            to={`/accounts/${a.id}/transactions`}
+            state={{ from: location.pathname + location.search }}
+          >
+            {t('customers.transactionsLink')}
+          </Link>
+          <Link to={`/audit-logs?accountId=${a.id}`}>{t('customers.statusHistoryLink')}</Link>
+        </span>
       ),
     },
     {

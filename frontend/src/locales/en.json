@@ -107,7 +107,8 @@
     "profile": "My profile",
     "customers": "Customers",
     "accounts": "My accounts",
-    "transfer": "Send money"
+    "transfer": "Send money",
+    "audit": "Audit logs"
   },
   "roles": {
     "ADMIN": "Administrator",
@@ -166,7 +167,10 @@
     "activateBody": "{{name}} will be activated again and can make transactions.",
     "deactivated": "Customer deactivated",
     "activated": "Customer activated",
-    "statusChangeFailed": "Status could not be changed"
+    "statusChangeFailed": "Status could not be changed",
+    "records": "Records",
+    "transactionsLink": "Transactions",
+    "statusHistoryLink": "Status history"
   },
   "status": {
     "Active": "Active",
@@ -216,7 +220,6 @@
     "statusChanged": "Account status updated",
     "statusChangeFailed": "Account status could not be changed",
     "history": "Account activity",
-    "historyShort": "View",
     "statusChangedBody": "{{accountNo}} is now {{status}}"
   },
   "transfer": {
@@ -294,6 +297,33 @@
       "createdAt_asc": "Oldest",
       "amount_desc": "Amount (high)",
       "amount_asc": "Amount (low)"
+    }
+  },
+  "audit": {
+    "title": "Audit logs",
+    "subtitle": "Account status changes: who, when and why.",
+    "dateRange": "Date range",
+    "from": "From",
+    "to": "To",
+    "action": "Action",
+    "allActions": "All",
+    "apply": "Filter",
+    "clear": "Clear",
+    "accountFilter": "Account: {{accountNo}}",
+    "removeAccountFilter": "Remove account filter",
+    "count": "{{count}} records",
+    "loadError": "Audit logs could not be loaded",
+    "emptyTitle": "No audit records yet",
+    "emptyFiltered": "No records match these filters",
+    "emptyFilteredHint": "Change the filters and try again.",
+    "date": "Date",
+    "account": "Account",
+    "change": "Status change",
+    "reason": "Reason",
+    "performedBy": "Performed by",
+    "actions": {
+      "AccountDeactivated": "Deactivated",
+      "AccountActivated": "Activated"
     }
   }
 }

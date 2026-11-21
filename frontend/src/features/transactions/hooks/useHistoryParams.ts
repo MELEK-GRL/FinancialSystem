@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { useSearchParams } from 'react-router'
+import { useUrlParams } from '@/shared/hooks'
 import type { HistoryFilters, HistorySort, TransactionStatus, TransactionType } from '../types'
 
 export const transactionTypes: TransactionType[] = ['Deposit', 'Withdrawal', 'Transfer']
@@ -21,7 +21,7 @@ const amount = (value: string | null) =>
 const filterKeys = ['from', 'to', 'type', 'status', 'minAmount', 'maxAmount'] as const
 
 export function useHistoryParams() {
-  const [params, setParams] = useSearchParams()
+  const { params, update } = useUrlParams()
 
   const filters = useMemo<HistoryFilters>(
     () => ({
@@ -37,19 +37,6 @@ export function useHistoryParams() {
   const sort = pick(historySorts, params.get('sort')) ?? 'createdAt_desc'
   const page = Math.max(1, Number(params.get('page')) || 1)
   const hasFilters = filterKeys.some((key) => filters[key] !== undefined)
-
-  const update = useCallback(
-    (changes: Record<string, string | undefined>) =>
-      setParams((current) => {
-        const next = new URLSearchParams(current)
-        for (const [key, value] of Object.entries(changes)) {
-          if (value) next.set(key, value)
-          else next.delete(key)
-        }
-        return next
-      }),
-    [setParams],
-  )
 
   const applyFilters = useCallback(
     (values: HistoryFilters) => update({ ...values, page: undefined }),

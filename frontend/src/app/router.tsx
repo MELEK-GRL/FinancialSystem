@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router'
 import { ProtectedRoute, RequireRole } from '@/features/auth'
 import { AppLayout, AuthLayout, PageFallback } from '@/layouts'
 import {
+  AuditLogPage,
   CustomerDetailPage,
   CustomerListPage,
   HomePage,
@@ -51,6 +52,7 @@ export const router = createBrowserRouter(
                   children: [
                     { path: '/customers', element: <CustomerListPage /> },
                     { path: '/customers/:id', element: <CustomerDetailPage /> },
+                    { path: '/audit-logs', element: <AuditLogPage /> },
                   ],
                 },
               ],

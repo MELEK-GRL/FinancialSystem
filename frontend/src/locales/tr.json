@@ -107,7 +107,8 @@
     "profile": "Profilim",
     "customers": "Müşteriler",
     "accounts": "Hesaplarım",
-    "transfer": "Para gönder"
+    "transfer": "Para gönder",
+    "audit": "Audit kayıtları"
   },
   "roles": {
     "ADMIN": "Yönetici",
@@ -166,7 +167,10 @@
     "activateBody": "{{name}} yeniden aktif yapılacak ve işlem yapabilecek.",
     "deactivated": "Müşteri pasif yapıldı",
     "activated": "Müşteri aktif yapıldı",
-    "statusChangeFailed": "Durum değiştirilemedi"
+    "statusChangeFailed": "Durum değiştirilemedi",
+    "records": "Kayıtlar",
+    "transactionsLink": "Hareketler",
+    "statusHistoryLink": "Durum geçmişi"
   },
   "status": {
     "Active": "Aktif",
@@ -216,7 +220,6 @@
     "statusChanged": "Hesap durumu güncellendi",
     "statusChangeFailed": "Hesap durumu değiştirilemedi",
     "history": "Hesap hareketleri",
-    "historyShort": "Görüntüle",
     "statusChangedBody": "{{accountNo}} artık {{status}}"
   },
   "transfer": {
@@ -294,6 +297,33 @@
       "createdAt_asc": "En eski",
       "amount_desc": "Tutar (yüksek)",
       "amount_asc": "Tutar (düşük)"
+    }
+  },
+  "audit": {
+    "title": "Audit kayıtları",
+    "subtitle": "Hesap durumu değişiklikleri: kim, ne zaman, hangi sebeple.",
+    "dateRange": "Tarih aralığı",
+    "from": "Başlangıç",
+    "to": "Bitiş",
+    "action": "İşlem",
+    "allActions": "Tümü",
+    "apply": "Filtrele",
+    "clear": "Temizle",
+    "accountFilter": "Hesap: {{accountNo}}",
+    "removeAccountFilter": "Hesap filtresini kaldır",
+    "count": "{{count}} kayıt",
+    "loadError": "Audit kayıtları yüklenemedi",
+    "emptyTitle": "Henüz audit kaydı yok",
+    "emptyFiltered": "Bu kriterlere uygun kayıt yok",
+    "emptyFilteredHint": "Filtreleri değiştirip tekrar deneyin.",
+    "date": "Tarih",
+    "account": "Hesap",
+    "change": "Durum değişikliği",
+    "reason": "Sebep",
+    "performedBy": "Yapan",
+    "actions": {
+      "AccountDeactivated": "Pasif yapıldı",
+      "AccountActivated": "Aktif yapıldı"
     }
   }
 }
