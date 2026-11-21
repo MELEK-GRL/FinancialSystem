@@ -56,7 +56,8 @@
     "dateRangeInvalid": "End date cannot be before start date",
     "insufficientBalance": "Amount exceeds the available balance",
     "reasonLength": "Reason must be between 5 and 250 characters",
-    "sameAccount": "You cannot transfer to the same account"
+    "sameAccount": "You cannot transfer to the same account",
+    "amountRangeInvalid": "Maximum amount cannot be less than minimum amount"
   },
   "form": {
     "showPassword": "Show password",
@@ -212,7 +213,9 @@
     "reason": "Reason",
     "reasonHint": "It is recorded (5–250 characters).",
     "statusChanged": "Account status updated",
-    "statusChangeFailed": "Account status could not be changed"
+    "statusChangeFailed": "Account status could not be changed",
+    "history": "Account activity",
+    "historyShort": "View"
   },
   "transfer": {
     "title": "Send money",
@@ -238,5 +241,57 @@
     "done": "Transfer sent",
     "doneBody": "{{amount}} → {{recipient}} · Reference: {{referenceNo}}",
     "failed": "Transfer failed"
+  },
+  "history": {
+    "title": "Account activity",
+    "subtitle": "{{accountNo}} · Balance {{balance}}",
+    "back": "Go back",
+    "accountError": "Account details could not be loaded",
+    "loadError": "Transactions could not be loaded",
+    "listTitle": "Transactions",
+    "count": "{{count}} transactions",
+    "emptyTitle": "No transactions on this account yet",
+    "emptyFiltered": "No transactions match these filters",
+    "emptyFilteredHint": "Change the filters and try again.",
+    "dateRange": "Date range",
+    "from": "From",
+    "to": "To",
+    "all": "All",
+    "minAmount": "Min amount",
+    "maxAmount": "Max amount",
+    "apply": "Filter",
+    "clear": "Clear",
+    "sortLabel": "Sort",
+    "date": "Date",
+    "typeLabel": "Type",
+    "statusLabel": "Status",
+    "counterparty": "Counterparty",
+    "description": "Description",
+    "amount": "Amount",
+    "detailTitle": "Transaction details",
+    "referenceNo": "Reference no",
+    "createdAt": "Date",
+    "completedAt": "Completed",
+    "sender": "Sender account",
+    "recipient": "Recipient account",
+    "failureReason": "Failure reason",
+    "type": {
+      "Deposit": "Deposit",
+      "Withdrawal": "Withdrawal",
+      "Transfer": "Transfer",
+      "TransferIn": "Incoming transfer",
+      "TransferOut": "Outgoing transfer"
+    },
+    "status": {
+      "Success": "Successful",
+      "Failed": "Failed",
+      "Pending": "Pending"
+    },
+    "sort": {
+      "createdAt_desc": "Newest",
+      "createdAt_asc": "Oldest",
+      "amount_desc": "Amount (high)",
+      "amount_asc": "Amount (low)"
+    }
   }
 }

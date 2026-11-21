@@ -56,7 +56,8 @@
     "dateRangeInvalid": "Bitiş tarihi başlangıç tarihinden önce olamaz",
     "insufficientBalance": "Tutar kullanılabilir bakiyeyi aşıyor",
     "reasonLength": "Sebep 5 ile 250 karakter arasında olmalı",
-    "sameAccount": "Aynı hesaba transfer yapılamaz"
+    "sameAccount": "Aynı hesaba transfer yapılamaz",
+    "amountRangeInvalid": "En çok tutar en az tutardan küçük olamaz"
   },
   "form": {
     "showPassword": "Şifreyi göster",
@@ -212,7 +213,9 @@
     "reason": "Sebep",
     "reasonHint": "Kayıt altına alınır (5–250 karakter).",
     "statusChanged": "Hesap durumu güncellendi",
-    "statusChangeFailed": "Hesap durumu değiştirilemedi"
+    "statusChangeFailed": "Hesap durumu değiştirilemedi",
+    "history": "Hesap hareketleri",
+    "historyShort": "Görüntüle"
   },
   "transfer": {
     "title": "Para gönder",
@@ -238,5 +241,57 @@
     "done": "Transfer gönderildi",
     "doneBody": "{{amount}} → {{recipient}} · Referans: {{referenceNo}}",
     "failed": "Transfer gerçekleşmedi"
+  },
+  "history": {
+    "title": "Hesap hareketleri",
+    "subtitle": "{{accountNo}} · Bakiye {{balance}}",
+    "back": "Geri dön",
+    "accountError": "Hesap bilgileri yüklenemedi",
+    "loadError": "İşlemler yüklenemedi",
+    "listTitle": "İşlemler",
+    "count": "{{count}} işlem",
+    "emptyTitle": "Bu hesapta henüz işlem yok",
+    "emptyFiltered": "Bu kriterlere uygun işlem yok",
+    "emptyFilteredHint": "Filtreleri değiştirip tekrar deneyin.",
+    "dateRange": "Tarih aralığı",
+    "from": "Başlangıç",
+    "to": "Bitiş",
+    "all": "Tümü",
+    "minAmount": "En az tutar",
+    "maxAmount": "En çok tutar",
+    "apply": "Filtrele",
+    "clear": "Temizle",
+    "sortLabel": "Sıralama",
+    "date": "Tarih",
+    "typeLabel": "İşlem türü",
+    "statusLabel": "Durum",
+    "counterparty": "Karşı hesap",
+    "description": "Açıklama",
+    "amount": "Tutar",
+    "detailTitle": "İşlem detayı",
+    "referenceNo": "Referans no",
+    "createdAt": "İşlem tarihi",
+    "completedAt": "Tamamlanma",
+    "sender": "Gönderen hesap",
+    "recipient": "Alıcı hesap",
+    "failureReason": "Başarısız olma sebebi",
+    "type": {
+      "Deposit": "Para yatırma",
+      "Withdrawal": "Para çekme",
+      "Transfer": "Transfer",
+      "TransferIn": "Gelen transfer",
+      "TransferOut": "Giden transfer"
+    },
+    "status": {
+      "Success": "Başarılı",
+      "Failed": "Başarısız",
+      "Pending": "Bekliyor"
+    },
+    "sort": {
+      "createdAt_desc": "En yeni",
+      "createdAt_asc": "En eski",
+      "amount_desc": "Tutar (yüksek)",
+      "amount_asc": "Tutar (düşük)"
+    }
   }
 }

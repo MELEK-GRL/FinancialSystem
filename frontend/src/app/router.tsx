@@ -11,6 +11,7 @@ import {
   NotFoundPage,
   ProfilePage,
   RegisterPage,
+  TransactionHistoryPage,
   TransferPage,
 } from './lazyPages'
 import { RouteErrorPage } from './pages/RouteErrorPage'
@@ -36,6 +37,7 @@ export const router = createBrowserRouter(
               element: <AppLayout />,
               children: [
                 { index: true, path: '/', element: <HomePage /> },
+                { path: '/accounts/:id/transactions', element: <TransactionHistoryPage /> },
                 {
                   element: <RequireRole role="CUSTOMER" />,
                   children: [

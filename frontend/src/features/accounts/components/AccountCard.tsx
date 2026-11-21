@@ -1,8 +1,8 @@
-import { ArrowDownToLine, ArrowUpFromLine } from 'lucide-react'
+import { ArrowDownToLine, ArrowUpFromLine, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/hooks'
 import { formatDate } from '@/shared/lib'
-import { Button, MoneyText, Text } from '@/shared/ui'
+import { Button, Link, MoneyText, Text } from '@/shared/ui'
 import type { Account } from '../types'
 import { AccountStatusBadge } from './AccountStatusBadge'
 
@@ -33,6 +33,13 @@ export function AccountCard({ account, onDeposit, onWithdraw }: AccountCardProps
       <div className="flex flex-col gap-0.5">
         <Text variant="muted">{t('accounts.balance')}</Text>
         <MoneyText amount={account.balance} size="lg" />
+        <Link
+          to={`/accounts/${account.id}/transactions`}
+          className="mt-1 inline-flex items-center gap-0.5 self-start text-sm"
+        >
+          {t('accounts.history')}
+          <ChevronRight className="size-4" aria-hidden="true" />
+        </Link>
       </div>
       {active ? (
         <div className="grid grid-cols-2 gap-2">

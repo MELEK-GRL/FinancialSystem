@@ -1,4 +1,4 @@
-export { useLazyLookupAccountQuery, useListAccountsQuery } from './accountsApi'
+export { useGetAccountQuery, useLazyLookupAccountQuery, useListAccountsQuery } from './accountsApi'
 export { AccountsSection } from './components/AccountsSection'
 export { AccountStatusBadge } from './components/AccountStatusBadge'
 export { AccountStatusToggle } from './components/AccountStatusToggle'

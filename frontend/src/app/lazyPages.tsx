@@ -31,3 +31,8 @@ export const MyAccountsPage = lazy(() =>
 export const TransferPage = lazy(() =>
   import('@/features/transactions/pages/TransferPage').then((m) => ({ default: m.TransferPage })),
 )
+export const TransactionHistoryPage = lazy(() =>
+  import('@/features/transactions/pages/TransactionHistoryPage').then((m) => ({
+    default: m.TransactionHistoryPage,
+  })),
+)

@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router'
 import {
   AccountStatusBadge,
   AccountStatusToggle,
@@ -9,6 +10,7 @@ import {
   Card,
   EmptyState,
   ErrorState,
+  Link,
   MoneyText,
   Spinner,
   Table,
@@ -17,6 +19,7 @@ import {
 
 export function CustomerAccounts({ customerId }: { customerId: string }) {
   const { t } = useTranslation()
+  const location = useLocation()
   const { data, isLoading, isError, refetch } = useListAccountsQuery(customerId)
 
   const columns: TableColumn<Account>[] = [
@@ -35,6 +38,19 @@ export function CustomerAccounts({ customerId }: { customerId: string }) {
       header: t('customers.balance'),
       align: 'right',
       render: (a) => <MoneyText amount={a.balance} />,
+    },
+    {
+      key: 'history',
+      header: t('accounts.history'),
+      render: (a) => (
+        <Link
+          to={`/accounts/${a.id}/transactions`}
+          state={{ from: location.pathname + location.search }}
+          className="text-sm"
+        >
+          {t('accounts.historyShort')}
+        </Link>
+      ),
     },
     {
       key: 'action',

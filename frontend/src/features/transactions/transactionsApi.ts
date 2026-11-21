@@ -1,5 +1,12 @@
 import { baseApi } from '@/shared/api'
-import type { MoneyRequest, Transaction, TransferRequest } from './types'
+import type { PagedResult } from '@/shared/types'
+import type {
+  AccountTransaction,
+  HistoryParams,
+  MoneyRequest,
+  Transaction,
+  TransferRequest,
+} from './types'
 
 const withIdempotency =
   (url: string) =>
@@ -14,6 +21,14 @@ const affected = [{ type: 'Accounts' as const, id: 'LIST' }, 'Transactions' as c
 
 export const transactionsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
+    getAccountHistory: build.query<PagedResult<AccountTransaction>, HistoryParams>({
+      query: ({ accountId, ...params }) => ({ url: `/accounts/${accountId}/transactions`, params }),
+      providesTags: ['Transactions'],
+    }),
+    getTransaction: build.query<Transaction, string>({
+      query: (referenceNo) => `/transactions/${referenceNo}`,
+      providesTags: ['Transactions'],
+    }),
     deposit: build.mutation<Transaction, MoneyRequest>({
       query: withIdempotency('/transactions/deposit'),
       invalidatesTags: affected,
@@ -29,4 +44,10 @@ export const transactionsApi = baseApi.injectEndpoints({
   }),
 })
 
-export const { useDepositMutation, useWithdrawMutation, useTransferMutation } = transactionsApi
+export const {
+  useDepositMutation,
+  useWithdrawMutation,
+  useTransferMutation,
+  useGetAccountHistoryQuery,
+  useGetTransactionQuery,
+} = transactionsApi

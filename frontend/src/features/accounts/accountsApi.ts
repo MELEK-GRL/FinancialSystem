@@ -10,6 +10,10 @@ export const accountsApi = baseApi.injectEndpoints({
       }),
       providesTags: [{ type: 'Accounts', id: 'LIST' }],
     }),
+    getAccount: build.query<Account, string>({
+      query: (id) => `/accounts/${id}`,
+      providesTags: [{ type: 'Accounts', id: 'LIST' }],
+    }),
     lookupAccount: build.query<AccountLookup, string>({
       query: (accountNo) => ({ url: '/accounts/lookup', params: { accountNo } }),
     }),
@@ -29,6 +33,7 @@ export const accountsApi = baseApi.injectEndpoints({
 
 export const {
   useListAccountsQuery,
+  useGetAccountQuery,
   useLazyLookupAccountQuery,
   useOpenAccountMutation,
   useChangeAccountStatusMutation,

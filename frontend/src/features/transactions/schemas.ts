@@ -31,3 +31,40 @@ export const transferSchema = (accounts: Account[]) =>
 
 export type TransferFormInput = z.input<ReturnType<typeof transferSchema>>
 export type TransferFormOutput = z.output<ReturnType<typeof transferSchema>>
+
+const optionalText = z.string().transform((value) => value || undefined)
+
+const optionalAmount = z
+  .string()
+  .trim()
+  .transform((value) => value || undefined)
+  .pipe(amountSchema.optional())
+
+export const historyFilterSchema = z
+  .object({
+    from: optionalText,
+    to: optionalText,
+    type: optionalText,
+    status: optionalText,
+    minAmount: optionalAmount,
+    maxAmount: optionalAmount,
+  })
+  .superRefine((form, context) => {
+    if (form.from && form.to && form.to < form.from) {
+      context.addIssue({ code: 'custom', path: ['to'], message: 'validation.dateRangeInvalid' })
+    }
+    if (
+      form.minAmount !== undefined &&
+      form.maxAmount !== undefined &&
+      form.maxAmount < form.minAmount
+    ) {
+      context.addIssue({
+        code: 'custom',
+        path: ['maxAmount'],
+        message: 'validation.amountRangeInvalid',
+      })
+    }
+  })
+
+export type HistoryFilterInput = z.input<typeof historyFilterSchema>
+export type HistoryFilterOutput = z.output<typeof historyFilterSchema>
