@@ -28,3 +28,6 @@ export const CustomerDetailPage = lazy(() =>
 export const MyAccountsPage = lazy(() =>
   import('@/features/accounts/pages/MyAccountsPage').then((m) => ({ default: m.MyAccountsPage })),
 )
+export const TransferPage = lazy(() =>
+  import('@/features/transactions/pages/TransferPage').then((m) => ({ default: m.TransferPage })),
+)

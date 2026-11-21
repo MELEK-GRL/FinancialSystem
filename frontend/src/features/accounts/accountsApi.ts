@@ -1,5 +1,5 @@
 import { baseApi } from '@/shared/api'
-import type { Account, AccountStatus } from './types'
+import type { Account, AccountLookup, AccountStatus } from './types'
 
 export const accountsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -9,6 +9,9 @@ export const accountsApi = baseApi.injectEndpoints({
         params: customerId ? { customerId } : undefined,
       }),
       providesTags: [{ type: 'Accounts', id: 'LIST' }],
+    }),
+    lookupAccount: build.query<AccountLookup, string>({
+      query: (accountNo) => ({ url: '/accounts/lookup', params: { accountNo } }),
     }),
     openAccount: build.mutation<Account, void>({
       query: () => ({ url: '/accounts', method: 'POST' }),
@@ -24,5 +27,9 @@ export const accountsApi = baseApi.injectEndpoints({
   }),
 })
 
-export const { useListAccountsQuery, useOpenAccountMutation, useChangeAccountStatusMutation } =
-  accountsApi
+export const {
+  useListAccountsQuery,
+  useLazyLookupAccountQuery,
+  useOpenAccountMutation,
+  useChangeAccountStatusMutation,
+} = accountsApi

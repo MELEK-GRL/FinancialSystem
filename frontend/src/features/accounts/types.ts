@@ -9,3 +9,9 @@ export type Account = {
   status: AccountStatus
   createdAt: string
 }
+
+export type AccountLookup = {
+  accountNo: string
+  ownerName: string
+  isActive: boolean
+}

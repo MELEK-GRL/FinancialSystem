@@ -56,7 +56,8 @@
     "textTooLong": "Text is too long",
     "dateRangeInvalid": "End date cannot be before start date",
     "insufficientBalance": "Amount exceeds the available balance",
-    "reasonLength": "Reason must be between 5 and 250 characters"
+    "reasonLength": "Reason must be between 5 and 250 characters",
+    "sameAccount": "You cannot transfer to the same account"
   },
   "form": {
     "showPassword": "Show password",
@@ -104,7 +105,8 @@
     "main": "Main menu",
     "profile": "My profile",
     "customers": "Customers",
-    "accounts": "My accounts"
+    "accounts": "My accounts",
+    "transfer": "Send money"
   },
   "roles": {
     "ADMIN": "Administrator",
@@ -212,5 +214,30 @@
     "reasonHint": "It is recorded (5–250 characters).",
     "statusChanged": "Account status updated",
     "statusChangeFailed": "Account status could not be changed"
+  },
+  "transfer": {
+    "title": "Send money",
+    "subtitle": "Transfer between your own accounts or to another customer.",
+    "source": "From account",
+    "sourcePlaceholder": "Select an account",
+    "sourceOption": "{{accountNo}} · {{balance}}",
+    "target": "Recipient account no",
+    "targetHint": "12 characters starting with TR",
+    "amount": "Amount",
+    "description": "Description (optional)",
+    "continue": "Continue",
+    "noActiveAccounts": "You have no active account to transfer from.",
+    "goAccounts": "Go to my accounts",
+    "confirmTitle": "Confirm the transfer",
+    "from": "From",
+    "to": "To",
+    "recipient": "Recipient",
+    "send": "Send",
+    "edit": "Edit",
+    "recipientNotFound": "No account found with this number",
+    "recipientInactive": "Recipient account is not active, transfer is not possible",
+    "done": "Transfer sent",
+    "doneBody": "{{amount}} → {{recipient}} · Reference: {{referenceNo}}",
+    "failed": "Transfer failed"
   }
 }

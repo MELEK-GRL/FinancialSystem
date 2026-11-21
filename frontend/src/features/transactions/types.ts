@@ -22,3 +22,11 @@ export type MoneyRequest = {
   description?: string
   idempotencyKey: string
 }
+
+export type TransferRequest = {
+  sourceAccountId: string
+  targetAccountNo: string
+  amount: number
+  description?: string
+  idempotencyKey: string
+}

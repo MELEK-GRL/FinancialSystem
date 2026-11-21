@@ -11,6 +11,7 @@ import {
   NotFoundPage,
   ProfilePage,
   RegisterPage,
+  TransferPage,
 } from './lazyPages'
 import { RouteErrorPage } from './pages/RouteErrorPage'
 
@@ -39,6 +40,7 @@ export const router = createBrowserRouter(
                   element: <RequireRole role="CUSTOMER" />,
                   children: [
                     { path: '/accounts', element: <MyAccountsPage /> },
+                    { path: '/transfer', element: <TransferPage /> },
                     { path: '/profile', element: <ProfilePage /> },
                   ],
                 },

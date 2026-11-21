@@ -56,7 +56,8 @@
     "textTooLong": "Metin çok uzun",
     "dateRangeInvalid": "Bitiş tarihi başlangıç tarihinden önce olamaz",
     "insufficientBalance": "Tutar kullanılabilir bakiyeyi aşıyor",
-    "reasonLength": "Sebep 5 ile 250 karakter arasında olmalı"
+    "reasonLength": "Sebep 5 ile 250 karakter arasında olmalı",
+    "sameAccount": "Aynı hesaba transfer yapılamaz"
   },
   "form": {
     "showPassword": "Şifreyi göster",
@@ -104,7 +105,8 @@
     "main": "Ana menü",
     "profile": "Profilim",
     "customers": "Müşteriler",
-    "accounts": "Hesaplarım"
+    "accounts": "Hesaplarım",
+    "transfer": "Para gönder"
   },
   "roles": {
     "ADMIN": "Yönetici",
@@ -212,5 +214,30 @@
     "reasonHint": "Kayıt altına alınır (5–250 karakter).",
     "statusChanged": "Hesap durumu güncellendi",
     "statusChangeFailed": "Hesap durumu değiştirilemedi"
+  },
+  "transfer": {
+    "title": "Para gönder",
+    "subtitle": "Kendi hesaplarınız arasında ya da başka bir müşteriye transfer yapın.",
+    "source": "Gönderen hesap",
+    "sourcePlaceholder": "Hesap seçin",
+    "sourceOption": "{{accountNo}} · {{balance}}",
+    "target": "Alıcı hesap no",
+    "targetHint": "TR ile başlayan 12 karakter",
+    "amount": "Tutar",
+    "description": "Açıklama (isteğe bağlı)",
+    "continue": "Devam",
+    "noActiveAccounts": "Transfer için aktif bir hesabınız yok.",
+    "goAccounts": "Hesaplarıma git",
+    "confirmTitle": "Transferi onaylayın",
+    "from": "Gönderen",
+    "to": "Alıcı",
+    "recipient": "Alıcı adı",
+    "send": "Gönder",
+    "edit": "Düzenle",
+    "recipientNotFound": "Bu numarada bir hesap bulunamadı",
+    "recipientInactive": "Alıcı hesap aktif değil, transfer yapılamaz",
+    "done": "Transfer gönderildi",
+    "doneBody": "{{amount}} → {{recipient}} · Referans: {{referenceNo}}",
+    "failed": "Transfer gerçekleşmedi"
   }
 }

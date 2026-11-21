@@ -1,26 +1,32 @@
 import { baseApi } from '@/shared/api'
-import type { MoneyRequest, Transaction } from './types'
+import type { MoneyRequest, Transaction, TransferRequest } from './types'
 
-const moneyRequest =
+const withIdempotency =
   (url: string) =>
-  ({ idempotencyKey, ...body }: MoneyRequest) => ({
+  ({ idempotencyKey, ...body }: MoneyRequest | TransferRequest) => ({
     url,
     method: 'POST',
     body,
     headers: { 'Idempotency-Key': idempotencyKey },
   })
 
+const affected = [{ type: 'Accounts' as const, id: 'LIST' }, 'Transactions' as const]
+
 export const transactionsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     deposit: build.mutation<Transaction, MoneyRequest>({
-      query: moneyRequest('/transactions/deposit'),
-      invalidatesTags: [{ type: 'Accounts', id: 'LIST' }, 'Transactions'],
+      query: withIdempotency('/transactions/deposit'),
+      invalidatesTags: affected,
     }),
     withdraw: build.mutation<Transaction, MoneyRequest>({
-      query: moneyRequest('/transactions/withdraw'),
-      invalidatesTags: [{ type: 'Accounts', id: 'LIST' }, 'Transactions'],
+      query: withIdempotency('/transactions/withdraw'),
+      invalidatesTags: affected,
+    }),
+    transfer: build.mutation<Transaction, TransferRequest>({
+      query: withIdempotency('/transactions/transfer'),
+      invalidatesTags: affected,
     }),
   }),
 })
 
-export const { useDepositMutation, useWithdrawMutation } = transactionsApi
+export const { useDepositMutation, useWithdrawMutation, useTransferMutation } = transactionsApi

@@ -3,7 +3,7 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { Spinner } from '../feedback/Spinner'
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost'
+  variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'inverse'
   size?: 'sm' | 'md'
   loading?: boolean
   icon?: ReactNode
@@ -14,6 +14,7 @@ const variants = {
   secondary: 'border border-neutral-300 bg-white text-neutral-800 hover:bg-neutral-100',
   danger: 'bg-danger text-white hover:bg-danger-hover',
   ghost: 'text-neutral-700 hover:bg-neutral-100',
+  inverse: 'bg-white font-semibold text-primary-dark hover:bg-primary-soft',
 } as const
 
 const sizes = {

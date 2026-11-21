@@ -1,2 +1,8 @@
-export { useDepositMutation, useWithdrawMutation } from './transactionsApi'
-export type { MoneyRequest, Transaction, TransactionStatus, TransactionType } from './types'
+export { useDepositMutation, useTransferMutation, useWithdrawMutation } from './transactionsApi'
+export type {
+  MoneyRequest,
+  Transaction,
+  TransactionStatus,
+  TransactionType,
+  TransferRequest,
+} from './types'
