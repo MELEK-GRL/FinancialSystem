@@ -1,4 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import { sessionExpired } from '@/shared/api/sessionExpired'
 import { isSessionActive, loadSession } from './sessionStorage'
 import type { AuthUser, Session } from './types'
 
@@ -27,6 +28,12 @@ export const authSlice = createSlice({
       state.session = null
       state.user = null
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(sessionExpired, (state) => {
+      state.session = null
+      state.user = null
+    })
   },
   selectors: {
     selectSession: (state) => state.session,
