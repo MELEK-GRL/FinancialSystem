@@ -1,5 +1,5 @@
 import { baseApi } from '@/shared/api'
-import type { Account } from './types'
+import type { Account, AccountStatus } from './types'
 
 export const accountsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -10,7 +10,19 @@ export const accountsApi = baseApi.injectEndpoints({
       }),
       providesTags: [{ type: 'Accounts', id: 'LIST' }],
     }),
+    openAccount: build.mutation<Account, void>({
+      query: () => ({ url: '/accounts', method: 'POST' }),
+      invalidatesTags: [{ type: 'Accounts', id: 'LIST' }],
+    }),
+    changeAccountStatus: build.mutation<
+      Account,
+      { id: string; status: AccountStatus; reason: string }
+    >({
+      query: ({ id, ...body }) => ({ url: `/accounts/${id}/status`, method: 'PATCH', body }),
+      invalidatesTags: [{ type: 'Accounts', id: 'LIST' }],
+    }),
   }),
 })
 
-export const { useListAccountsQuery } = accountsApi
+export const { useListAccountsQuery, useOpenAccountMutation, useChangeAccountStatusMutation } =
+  accountsApi

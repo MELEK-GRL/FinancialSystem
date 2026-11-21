@@ -54,7 +54,9 @@
     "amountPositive": "Tutar 0'dan büyük olmalı",
     "amountLimit": "Tutar işlem limitini aşıyor",
     "textTooLong": "Metin çok uzun",
-    "dateRangeInvalid": "Bitiş tarihi başlangıç tarihinden önce olamaz"
+    "dateRangeInvalid": "Bitiş tarihi başlangıç tarihinden önce olamaz",
+    "insufficientBalance": "Tutar kullanılabilir bakiyeyi aşıyor",
+    "reasonLength": "Sebep 5 ile 250 karakter arasında olmalı"
   },
   "form": {
     "showPassword": "Şifreyi göster",
@@ -101,7 +103,8 @@
     "closeMenu": "Menüyü kapat",
     "main": "Ana menü",
     "profile": "Profilim",
-    "customers": "Müşteriler"
+    "customers": "Müşteriler",
+    "accounts": "Hesaplarım"
   },
   "roles": {
     "ADMIN": "Yönetici",
@@ -111,7 +114,6 @@
     "greeting": "Hoş geldiniz, {{name}}",
     "greetingFallback": "Hoş geldiniz",
     "customerNo": "Müşteri no: {{value}}",
-    "customerIntro": "Hesaplarınız, para transferi ve işlem geçmişi burada yer alacak.",
     "adminIntro": "Müşteri ve hesap yönetimi, raporlar ve audit kayıtları burada yer alacak.",
     "welcomeLabel": "Finans Kuruluşu'na hoş geldiniz"
   },
@@ -170,5 +172,45 @@
   "popup": {
     "sessionExpiredTitle": "Oturumunuz sona erdi",
     "sessionExpiredBody": "Güvenliğiniz için lütfen tekrar giriş yapın."
+  },
+  "accounts": {
+    "title": "Hesaplarım",
+    "subtitle": "Hesaplarınızı görüntüleyin, para yatırın veya çekin.",
+    "totalBalance": "Toplam bakiye",
+    "accountCount": "{{count}} hesap",
+    "open": "Yeni hesap aç",
+    "opened": "Yeni hesabınız açıldı",
+    "openedBody": "Hesap numaranız: {{accountNo}}",
+    "openFailed": "Hesap açılamadı",
+    "emptyTitle": "Henüz hesabınız yok",
+    "emptyDescription": "İlk hesabınızı açarak işlemlere başlayın.",
+    "loadError": "Hesaplar yüklenemedi",
+    "balance": "Bakiye",
+    "openedAt": "Açılış: {{date}}",
+    "viewAll": "Tüm hesaplar",
+    "deposit": "Para yatır",
+    "withdraw": "Para çek",
+    "depositTitle": "Para yatır",
+    "withdrawTitle": "Para çek",
+    "account": "Hesap",
+    "available": "Kullanılabilir bakiye",
+    "amount": "Tutar",
+    "description": "Açıklama (isteğe bağlı)",
+    "confirmDeposit": "Yatır",
+    "confirmWithdraw": "Çek",
+    "depositDone": "Para yatırıldı",
+    "withdrawDone": "Para çekildi",
+    "doneBody": "{{amount}} · Referans: {{referenceNo}}",
+    "operationFailed": "İşlem gerçekleşmedi",
+    "passiveNote": "Pasif hesapta işlem yapılamaz.",
+    "statusAction": "İşlem",
+    "deactivate": "Pasif yap",
+    "activate": "Aktif yap",
+    "deactivateTitle": "Hesabı pasif yap",
+    "activateTitle": "Hesabı aktif yap",
+    "reason": "Sebep",
+    "reasonHint": "Kayıt altına alınır (5–250 karakter).",
+    "statusChanged": "Hesap durumu güncellendi",
+    "statusChangeFailed": "Hesap durumu değiştirilemedi"
   }
 }

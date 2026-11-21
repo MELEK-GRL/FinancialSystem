@@ -54,7 +54,9 @@
     "amountPositive": "Amount must be greater than 0",
     "amountLimit": "Amount exceeds the transaction limit",
     "textTooLong": "Text is too long",
-    "dateRangeInvalid": "End date cannot be before start date"
+    "dateRangeInvalid": "End date cannot be before start date",
+    "insufficientBalance": "Amount exceeds the available balance",
+    "reasonLength": "Reason must be between 5 and 250 characters"
   },
   "form": {
     "showPassword": "Show password",
@@ -101,7 +103,8 @@
     "closeMenu": "Close menu",
     "main": "Main menu",
     "profile": "My profile",
-    "customers": "Customers"
+    "customers": "Customers",
+    "accounts": "My accounts"
   },
   "roles": {
     "ADMIN": "Administrator",
@@ -111,7 +114,6 @@
     "greeting": "Welcome, {{name}}",
     "greetingFallback": "Welcome",
     "customerNo": "Customer no: {{value}}",
-    "customerIntro": "Your accounts, money transfers and transaction history will be here.",
     "adminIntro": "Customer and account management, reports and audit logs will be here.",
     "welcomeLabel": "Welcome to Finans Kuruluşu"
   },
@@ -170,5 +172,45 @@
   "popup": {
     "sessionExpiredTitle": "Your session has ended",
     "sessionExpiredBody": "For your security, please sign in again."
+  },
+  "accounts": {
+    "title": "My accounts",
+    "subtitle": "View your accounts, deposit or withdraw money.",
+    "totalBalance": "Total balance",
+    "accountCount": "{{count}} accounts",
+    "open": "Open new account",
+    "opened": "Your new account is open",
+    "openedBody": "Account number: {{accountNo}}",
+    "openFailed": "Account could not be opened",
+    "emptyTitle": "You have no accounts yet",
+    "emptyDescription": "Open your first account to get started.",
+    "loadError": "Accounts could not be loaded",
+    "balance": "Balance",
+    "openedAt": "Opened: {{date}}",
+    "viewAll": "All accounts",
+    "deposit": "Deposit",
+    "withdraw": "Withdraw",
+    "depositTitle": "Deposit money",
+    "withdrawTitle": "Withdraw money",
+    "account": "Account",
+    "available": "Available balance",
+    "amount": "Amount",
+    "description": "Description (optional)",
+    "confirmDeposit": "Deposit",
+    "confirmWithdraw": "Withdraw",
+    "depositDone": "Money deposited",
+    "withdrawDone": "Money withdrawn",
+    "doneBody": "{{amount}} · Reference: {{referenceNo}}",
+    "operationFailed": "Transaction failed",
+    "passiveNote": "No transactions on a passive account.",
+    "statusAction": "Action",
+    "deactivate": "Deactivate",
+    "activate": "Activate",
+    "deactivateTitle": "Deactivate account",
+    "activateTitle": "Activate account",
+    "reason": "Reason",
+    "reasonHint": "It is recorded (5–250 characters).",
+    "statusChanged": "Account status updated",
+    "statusChangeFailed": "Account status could not be changed"
   }
 }

@@ -1,5 +1,10 @@
 import { useTranslation } from 'react-i18next'
-import { AccountStatusBadge, useListAccountsQuery, type Account } from '@/features/accounts'
+import {
+  AccountStatusBadge,
+  AccountStatusToggle,
+  useListAccountsQuery,
+  type Account,
+} from '@/features/accounts'
 import {
   Card,
   EmptyState,
@@ -30,6 +35,12 @@ export function CustomerAccounts({ customerId }: { customerId: string }) {
       header: t('customers.balance'),
       align: 'right',
       render: (a) => <MoneyText amount={a.balance} />,
+    },
+    {
+      key: 'action',
+      header: t('accounts.statusAction'),
+      align: 'right',
+      render: (a) => <AccountStatusToggle account={a} />,
     },
   ]
 

@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '@/app/hooks'
+import { AccountsSection } from '@/features/accounts'
 import { selectCurrentUser, selectRole } from '@/features/auth'
 import { Card, Text } from '@/shared/ui'
 
@@ -30,9 +31,13 @@ export function HomePage() {
           </div>
         </div>
       </section>
-      <Card>
-        <Text>{role === 'ADMIN' ? t('home.adminIntro') : t('home.customerIntro')}</Text>
-      </Card>
+      {role === 'CUSTOMER' ? (
+        <AccountsSection />
+      ) : (
+        <Card>
+          <Text>{t('home.adminIntro')}</Text>
+        </Card>
+      )}
     </div>
   )
 }

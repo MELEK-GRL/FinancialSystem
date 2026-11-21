@@ -25,3 +25,6 @@ export const CustomerDetailPage = lazy(() =>
     default: m.CustomerDetailPage,
   })),
 )
+export const MyAccountsPage = lazy(() =>
+  import('@/features/accounts/pages/MyAccountsPage').then((m) => ({ default: m.MyAccountsPage })),
+)

@@ -7,6 +7,7 @@ import {
   CustomerListPage,
   HomePage,
   LoginPage,
+  MyAccountsPage,
   NotFoundPage,
   ProfilePage,
   RegisterPage,
@@ -36,7 +37,10 @@ export const router = createBrowserRouter(
                 { index: true, path: '/', element: <HomePage /> },
                 {
                   element: <RequireRole role="CUSTOMER" />,
-                  children: [{ path: '/profile', element: <ProfilePage /> }],
+                  children: [
+                    { path: '/accounts', element: <MyAccountsPage /> },
+                    { path: '/profile', element: <ProfilePage /> },
+                  ],
                 },
                 {
                   element: <RequireRole role="ADMIN" />,
